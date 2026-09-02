@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>CMCC โฮมแคร์ · บันทึกการดูแล</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root{
+    --bg:#EEF3EE;
+    --surface:#FFFFFF;
+    --ink:#1E2E29;
+    --ink-soft:#5B6A63;
+    --teal:#2C6E6B;
+    --teal-dark:#1B4A48;
+    --teal-tint:#E1EEEC;
+    --amber:#E2963A;
+    --amber-tint:#FBEEDA;
+    --rose:#C1685C;
+    --rose-tint:#F6E6E3;
+    --line:#D8E1DB;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'IBM Plex Sans Thai','IBM Plex Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  #app{max-width:480px;margin:0 auto;padding-bottom:48px;}
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    background:var(--teal-dark);
+    color:#fff;
+    padding:18px 18px 16px;
+    border-radius:0 0 20px 20px;
+  }
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand .mark{
+    width:38px;height:38px;border-radius:10px;
+    background:var(--amber);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;color:var(--teal-dark);font-size:15px;flex-shrink:0;
+  }
+  .brand h1{font-size:16px;margin:0;font-weight:600;line-height:1.3;}
+  .brand p{margin:1px 0 0;font-size:11.5px;color:#CFE3E1;}
+  .roleToggle{
+    display:flex;background:rgba(255,255,255,.12);border-radius:999px;
+    margin-top:14px;padding:3px;gap:2px;
+  }
+  .roleToggle button{
+    flex:1;border:none;background:transparent;color:#D9EAE8;
+    padding:9px 4px;border-radius:999px;font-size:13.5px;font-weight:600;
+    font-family:inherit;cursor:pointer;
+  }
+  .roleToggle button.active{background:#fff;color:var(--teal-dark);}
+
+  /* ---------- Section ---------- */
+  .section{padding:16px 16px 4px;}
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px;
+    margin-bottom:14px;
+  }
+  .card h2{
+    font-size:14.5px;margin:0 0 12px;font-weight:600;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card h2 .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);flex-shrink:0;}
+  label{display:block;font-size:12.5px;color:var(--ink-soft);margin:10px 0 6px;font-weight:500;}
+  label:first-child{margin-top:0;}
+  select, input[type=text], input[type=number], input[type=time], input[type=date], textarea{
+    width:100%;border:1px solid var(--line);border-radius:10px;
+    padding:11px 12px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink);
+  }
+  select:focus, input:focus, textarea:focus{outline:2px solid var(--teal);outline-offset:1px;}
+  textarea{resize:vertical;min-height:64px;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    border:1px solid var(--line);background:#fff;color:var(--ink-soft);
+    padding:9px 14px;border-radius:999px;font-size:13.5px;font-weight:500;
+    cursor:pointer;font-family:inherit;
+  }
+  .chip.selected{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .chip.warn.selected{background:var(--rose);border-color:var(--rose);}
+
+  .btn{
+    display:block;width:100%;border:none;border-radius:12px;
+    padding:14px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;
+  }
+  .btn-primary{background:var(--teal);color:#fff;}
+  .btn-secondary{background:var(--teal-tint);color:var(--teal-dark);}
+  .btn-amber{background:var(--amber);color:#472B04;}
+  .btn-ghost{background:transparent;color:var(--teal);border:1px solid var(--teal);}
+  .btn-danger{background:var(--rose-tint);color:var(--rose);}
+  .btn-row{display:flex;gap:10px;}
+  .btn-row .btn{flex:1;}
+
+  .hint{font-size:12px;color:var(--ink-soft);margin-top:8px;line-height:1.5;}
+  .toast{
+    position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+    background:var(--teal-dark);color:#fff;padding:11px 20px;border-radius:999px;
+    font-size:13.5px;font-weight:500;opacity:0;transition:opacity .25s;pointer-events:none;z-index:50;
+    max-width:90%;text-align:center;
+  }
+  .toast.show{opacity:1;}
+
+  .visitItem{
+    border-top:1px solid var(--line);padding:10px 0;font-size:13px;color:var(--ink-soft);
+  }
+  .visitItem:first-child{border-top:none;}
+  .visitItem b{color:var(--ink);}
+
+  .tabs{display:flex;gap:8px;padding:0 16px 10px;}
+  .tabs button{
+    flex:1;border:1px solid var(--line);background:#fff;color:var(--ink-soft);
+    padding:10px;border-radius:10px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;
+  }
+  .tabs button.active{background:var(--teal);color:#fff;border-color:var(--teal);}
+
+  .listRow{
+    display:flex;justify-content:space-between;align-items:center;
+    border-top:1px solid var(--line);padding:10px 0;
+  }
+  .listRow:first-child{border-top:none;}
+  .listRow .name{font-size:14px;font-weight:600;}
+  .listRow .meta{font-size:12px;color:var(--ink-soft);}
+  .iconbtn{border:none;background:var(--rose-tint);color:var(--rose);border-radius:8px;padding:6px 10px;font-size:12px;font-family:inherit;cursor:pointer;}
+
+  .empty{text-align:center;padding:26px 10px;color:var(--ink-soft);font-size:13.5px;}
+
+  /* ---------- Report card ---------- */
+  #reportWrap{padding:0 16px;}
+  #reportCard{
+    background:#fff;border-radius:18px;overflow:hidden;border:1px solid var(--line);
+  }
+  .rc-head{background:var(--teal);color:#fff;padding:18px;}
+  .rc-head .rc-brand{font-size:11px;letter-spacing:.3px;color:#CFE3E1;margin-bottom:6px;}
+  .rc-head .rc-name{font-size:19px;font-weight:700;}
+  .rc-head .rc-sub{font-size:12.5px;color:#D9EAE8;margin-top:3px;}
+  .rc-body{padding:16px 18px 20px;}
+  .rc-sec{margin-bottom:16px;}
+  .rc-sec:last-child{margin-bottom:0;}
+  .rc-sec-title{
+    font-size:12.5px;font-weight:700;color:var(--teal-dark);
+    border-left:3px solid var(--amber);padding-left:8px;margin-bottom:8px;
+  }
+  .rc-visit{
+    background:var(--teal-tint);border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:12.5px;
+  }
+  .rc-visit .t{font-weight:700;color:var(--teal-dark);margin-bottom:3px;}
+  .rc-visit .row{display:flex;justify-content:space-between;color:var(--ink);}
+  .rc-visit .who{color:var(--ink-soft);margin-top:3px;font-size:11.5px;}
+  .rc-note{font-size:12.5px;color:var(--ink-soft);line-height:1.6;}
+  .rc-foot{
+    padding:12px 18px;background:var(--bg);font-size:10.5px;color:var(--ink-soft);
+    display:flex;justify-content:space-between;
+  }
+
+  @media print{
+    body *{visibility:hidden;}
+    #reportCard, #reportCard *{visibility:visible;}
+    #reportCard{position:absolute;top:0;left:0;width:100%;border:none;}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="topbar">
+    <div class="brand">
+      <div class="mark">CC</div>
+      <div>
+        <h1>CMCC โฮมแคร์</h1>
+        <p>บันทึกการดูแลผู้สูงอายุที่บ้าน</p>
+      </div>
+    </div>
+    <div class="roleToggle">
+      <button id="roleCaregiverBtn" class="active">ผู้ดูแล (บันทึก)</button>
+      <button id="roleAdminBtn">แอดมิน</button>
+    </div>
+  </div>
+
+  <div id="caregiverView"></div>
+  <div id="adminView" style="display:none;"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============== CONFIG ============== */
+/* วาง Web app URL ที่ได้จากการ Deploy Google Apps Script (Code.gs) ตรงนี้ */
+const CONFIG = {
+  API_URL: 'https://script.google.com/macros/s/AKfycbz8ZvPCQftgLdolOBaBoM9llE_YUKHHg5lQIX700gSROwtux3lAlc5O8ftSla--hXhV/exec'
+};
+
+/* ============== API HELPERS (Google Apps Script backend) ============== */
+function apiConfigured(){
+  return CONFIG.API_URL && CONFIG.API_URL.indexOf('https://script.google.com') === 0;
+}
+async function apiGet(action, params){
+  if(!apiConfigured()) return [];
+  const url = new URL(CONFIG.API_URL);
+  url.searchParams.set('action', action);
+  if(params) Object.keys(params).forEach(k=>{ if(params[k]!==undefined && params[k]!=='') url.searchParams.set(k, params[k]); });
+  try{
+    const res = await fetch(url.toString());
+    const json = await res.json();
+    if(json && json.error){ console.error(json.error); return []; }
+    return json;
+  }catch(e){ console.error('apiGet error', e); showToast('เชื่อมต่อเซิร์ฟเวอร์ไม่ได้'); return []; }
+}
+async function apiPost(action, data){
+  if(!apiConfigured()){ showToast('ยังไม่ได้ตั้งค่า API_URL'); return {success:false}; }
+  try{
+    const res = await fetch(CONFIG.API_URL, {
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({action, data})
+    });
+    const json = await res.json();
+    if(json && json.error){ console.error(json.error); showToast('เกิดข้อผิดพลาด: '+json.error); }
+    return json;
+  }catch(e){ console.error('apiPost error', e); showToast('เชื่อมต่อเซิร์ฟเวอร์ไม่ได้'); return {success:false}; }
+}
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1800);
+}
+function todayStr(){
+  const d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function nowTime(){
+  const d=new Date();
+  return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+}
+function fmtDate(iso){
+  const d=new Date(iso+'T00:00:00');
+  const days=['อา','จ','อ','พ','พฤ','ศ','ส'];
+  const months=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+  return `วัน${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()+543}`;
+}
+
+/* ============== APP STATE ============== */
+let patients=[], caregivers=[], role='caregiver';
+
+async function loadAll(){
+  if(!apiConfigured()){ patients=[]; caregivers=[]; return; }
+  patients = await apiGet('getPatients');
+  caregivers = await apiGet('getCaregivers');
+}
+
+/* ============== ROLE SWITCH ============== */
+document.getElementById('roleCaregiverBtn').onclick=()=>setRole('caregiver');
+document.getElementById('roleAdminBtn').onclick=()=>setRole('admin');
+function setRole(r){
+  role=r;
+  document.getElementById('roleCaregiverBtn').classList.toggle('active', r==='caregiver');
+  document.getElementById('roleAdminBtn').classList.toggle('active', r==='admin');
+  document.getElementById('caregiverView').style.display = r==='caregiver' ? 'block':'none';
+  document.getElementById('adminView').style.display = r==='admin' ? 'block':'none';
+  if(r==='caregiver') renderCaregiverView(); else renderAdminView();
+}
+
+/* ============== CHIP HELPER ============== */
+function chipGroup(container, options, selectedValue, onChange, multi){
+  container.innerHTML='';
+  container.className='chips';
+  const sel = multi ? new Set(selectedValue||[]) : {v:selectedValue||null};
+  options.forEach(opt=>{
+    const b=document.createElement('button');
+    b.type='button'; b.className='chip'; b.textContent=opt;
+    if(multi ? sel.has(opt) : sel.v===opt) b.classList.add('selected');
+    if(opt.includes('มีแผล')||opt==='สำลัก'||opt==='มีเลือดปน') b.classList.add('warn');
+    b.onclick=()=>{
+      if(multi){
+        if(sel.has(opt)) sel.delete(opt); else sel.add(opt);
+        onChange(Array.from(sel));
+      } else {
+        sel.v = sel.v===opt ? null : opt;
+        onChange(sel.v);
+      }
+      chipGroup(container, options, multi?Array.from(sel):sel.v, onChange, multi);
+    };
+    container.appendChild(b);
+  });
+}
+
+/* ============== CAREGIVER VIEW ============== */
+let formState={};
+function resetForm(keepPatientCaregiver){
+  formState = keepPatientCaregiver ? {patientId:formState.patientId, caregiverName:formState.caregiverName} : {};
+  formState.time = nowTime();
+  formState.mood = [];
+}
+
+async function renderCaregiverView(){
+  await loadAll();
+  if(!formState.time) resetForm(false);
+  const el = document.getElementById('caregiverView');
+
+  if(!apiConfigured()){
+    el.innerHTML = `<div class="section"><div class="card"><div class="empty">ยังไม่ได้ตั้งค่าเชื่อมต่อฐานข้อมูล<br>กรุณาแจ้งแอดมินให้ใส่ Web app URL ของ Google Apps Script ในไฟล์นี้ก่อนใช้งาน (ตัวแปร CONFIG.API_URL)</div></div></div>`;
+    return;
+  }
+
+  if(patients.length===0){
+    el.innerHTML = `<div class="section"><div class="card"><div class="empty">ยังไม่มีรายชื่อผู้สูงอายุในระบบ<br>กรุณาแจ้งแอดมินให้เพิ่มข้อมูลก่อนเริ่มบันทึก</div></div></div>`;
+    return;
+  }
+
+  el.innerHTML = `
+    <div class="section">
+      <div class="card">
+        <h2><span class="dot"></span>ข้อมูลการเยี่ยม</h2>
+        <label>ผู้สูงอายุ</label>
+        <select id="f_patient">
+          <option value="">— เลือกผู้สูงอายุ —</option>
+          ${patients.map(p=>`<option value="${p.id}" ${formState.patientId===p.id?'selected':''}>${p.name}</option>`).join('')}
+        </select>
+        <label>ผู้บันทึก (ผู้ดูแล)</label>
+        <select id="f_caregiver">
+          <option value="">— เลือกชื่อผู้ดูแล —</option>
+          ${caregivers.map(c=>`<option value="${c.name}" ${formState.caregiverName===c.name?'selected':''}>${c.name}</option>`).join('')}
+        </select>
+        <label>เวลาเข้าเยี่ยม</label>
+        <input type="time" id="f_time" value="${formState.time||nowTime()}">
+      </div>
+
+      <div class="card">
+        <h2><span class="dot"></span>สัญญาณชีพ</h2>
+        <label>ความดันโลหิต (บน / ล่าง)</label>
+        <div class="grid2">
+          <input type="number" id="f_sys" placeholder="เช่น 120" inputmode="numeric">
+          <input type="number" id="f_dia" placeholder="เช่น 80" inputmode="numeric">
+        </div>
+        <div class="grid3">
+          <div><label>ชีพจร</label><input type="number" id="f_pulse" placeholder="/นาที" inputmode="numeric"></div>
+          <div><label>อุณหภูมิ</label><input type="number" step="0.1" id="f_temp" placeholder="°C" inputmode="decimal"></div>
+          <div><label>O2 sat</label><input type="number" id="f_spo2" placeholder="%" inputmode="numeric"></div>
+        </div>
+        <label>น้ำตาลปลายนิ้ว (ถ้าตรวจ)</label>
+        <input type="number" id="f_dtx" placeholder="mg/dL" inputmode="numeric">
+      </div>
+
+      <div class="card">
+        <h2><span class="dot"></span>การขับถ่าย</h2>
+        <label>ปัสสาวะ</label>
+        <div id="f_urine" class="chips"></div>
+        <label>อุจจาระ</label>
+        <div id="f_stool" class="chips"></div>
+      </div>
+
+      <div class="card">
+        <h2><span class="dot"></span>การรับประทานอาหาร</h2>
+        <label>มื้อ</label>
+        <div id="f_meal" class="chips"></div>
+        <label>ปริมาณที่ทานได้</label>
+        <div id="f_amount" class="chips"></div>
+        <label>การสำลัก</label>
+        <div id="f_choke" class="chips"></div>
+      </div>
+
+      <div class="card">
+        <h2><span class="dot"></span>ผิวหนัง / แผลกดทับ</h2>
+        <div id="f_wound" class="chips"></div>
+        <div id="woundDetailWrap" style="display:none;">
+          <label>รายละเอียดแผล</label>
+          <textarea id="f_wounddetail" placeholder="ตำแหน่ง ขนาด ลักษณะแผล..."></textarea>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2><span class="dot"></span>สภาวะจิตใจและอารมณ์</h2>
+        <div id="f_mood" class="chips"></div>
+      </div>
+
+      <div class="card">
+        <h2><span class="dot"></span>หมายเหตุเพิ่มเติม</h2>
+        <textarea id="f_notes" placeholder="สิ่งที่อยากแจ้งญาติหรือแอดมิน (ถ้ามี)"></textarea>
+      </div>
+
+      <button class="btn btn-primary" id="submitBtn">บันทึกข้อมูลการเยี่ยมนี้</button>
+
+      <div class="card" style="margin-top:14px;">
+        <h2><span class="dot"></span>รายการที่บันทึกวันนี้</h2>
+        <div id="todayList"></div>
+      </div>
+    </div>
+  `;
+
+  chipGroup(document.getElementById('f_urine'), ['ปกติ','สีเข้ม','มีเลือดปน','ไม่ได้ปัสสาวะ'], formState.urine, v=>formState.urine=v);
+  chipGroup(document.getElementById('f_stool'), ['ปกติ','ท้องเสีย','ท้องผูก','ไม่ถ่าย'], formState.stool, v=>formState.stool=v);
+  chipGroup(document.getElementById('f_meal'), ['เช้า','กลางวัน','เย็น','ว่าง'], formState.meal, v=>formState.meal=v);
+  chipGroup(document.getElementById('f_amount'), ['ทานหมด','ทานได้ครึ่ง','ทานน้อย','ไม่ทาน'], formState.amount, v=>formState.amount=v);
+  chipGroup(document.getElementById('f_choke'), ['ไม่สำลัก','สำลัก'], formState.choke, v=>formState.choke=v);
+  chipGroup(document.getElementById('f_wound'), ['ไม่มีแผล','มีแผล'], formState.wound, v=>{
+    formState.wound=v;
+    document.getElementById('woundDetailWrap').style.display = v==='มีแผล' ? 'block':'none';
+  });
+  if(formState.wound==='มีแผล') document.getElementById('woundDetailWrap').style.display='block';
+  chipGroup(document.getElementById('f_mood'), ['ตื่นตัวดี','ร่าเริง','เงียบขรึม','ซึมเศร้า','สับสน','หงุดหงิด','กระสับกระส่าย','นอนหลับ'], formState.mood, v=>formState.mood=v, true);
+
+  document.getElementById('f_patient').onchange=e=>{ formState.patientId=e.target.value; renderTodayList(); };
+  document.getElementById('f_caregiver').onchange=e=>{ formState.caregiverName=e.target.value; };
+  document.getElementById('f_time').onchange=e=>{ formState.time=e.target.value; };
+
+  document.getElementById('submitBtn').onclick = submitVisit;
+
+  renderTodayList();
+}
+
+async function renderTodayList(){
+  const wrap=document.getElementById('todayList');
+  if(!wrap) return;
+  const pid = document.getElementById('f_patient')?.value || formState.patientId;
+  if(!pid){ wrap.innerHTML='<div class="empty">เลือกผู้สูงอายุเพื่อดูรายการวันนี้</div>'; return; }
+  wrap.innerHTML='<div class="empty">กำลังโหลด...</div>';
+  const today = todayStr();
+  const list = (await apiGet('getRecords', {patientId:pid, date:today})).sort((a,b)=>b.time.localeCompare(a.time));
+  if(list.length===0){ wrap.innerHTML='<div class="empty">ยังไม่มีการบันทึกวันนี้</div>'; return; }
+  wrap.innerHTML = list.map(r=>`
+    <div class="visitItem"><b>${r.time} น.</b> · ${r.caregiverName||'-'}
+      ${r.sys?` · BP ${r.sys}/${r.dia}`:''}${r.pulse?` · PR ${r.pulse}`:''}
+    </div>`).join('');
+}
+
+async function submitVisit(){
+  const pid = document.getElementById('f_patient').value;
+  const caregiverName = document.getElementById('f_caregiver').value;
+  if(!pid){ showToast('กรุณาเลือกผู้สูงอายุ'); return; }
+  if(!caregiverName){ showToast('กรุณาเลือกชื่อผู้ดูแล'); return; }
+
+  const record = {
+    patientId: pid,
+    date: todayStr(),
+    time: document.getElementById('f_time').value || nowTime(),
+    caregiverName,
+    sys: document.getElementById('f_sys').value,
+    dia: document.getElementById('f_dia').value,
+    pulse: document.getElementById('f_pulse').value,
+    temp: document.getElementById('f_temp').value,
+    spo2: document.getElementById('f_spo2').value,
+    dtx: document.getElementById('f_dtx').value,
+    urine: formState.urine||'',
+    stool: formState.stool||'',
+    meal: formState.meal||'',
+    amount: formState.amount||'',
+    choke: formState.choke||'',
+    wound: formState.wound||'',
+    woundDetail: document.getElementById('f_wounddetail')?.value||'',
+    mood: formState.mood||[],
+    notes: document.getElementById('f_notes').value||'',
+  };
+
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true; submitBtn.textContent='กำลังบันทึก...';
+  const result = await apiPost('addRecord', record);
+  submitBtn.disabled = false; submitBtn.textContent='บันทึกข้อมูลการเยี่ยมนี้';
+
+  if(result && result.success){
+    showToast('บันทึกข้อมูลเรียบร้อย');
+    resetForm(true);
+    renderCaregiverView();
+  }
+}
+
+/* ============== ADMIN VIEW ============== */
+let adminTab='report';
+async function renderAdminView(){
+  await loadAll();
+  const el = document.getElementById('adminView');
+  if(!apiConfigured()){
+    el.innerHTML = `<div class="section"><div class="card"><div class="empty">ยังไม่ได้ตั้งค่าเชื่อมต่อฐานข้อมูล<br>กรุณาใส่ Web app URL ของ Google Apps Script ในตัวแปร CONFIG.API_URL ที่ต้นไฟล์นี้ก่อนใช้งาน (ดูวิธีใน Code.gs)</div></div></div>`;
+    return;
+  }
+  el.innerHTML = `
+    <div class="tabs">
+      <button id="tabReport" class="${adminTab==='report'?'active':''}">รายงานประจำวัน</button>
+      <button id="tabManage" class="${adminTab==='manage'?'active':''}">จัดการรายชื่อ</button>
+    </div>
+    <div id="adminContent"></div>
+  `;
+  document.getElementById('tabReport').onclick=()=>{adminTab='report';renderAdminView();};
+  document.getElementById('tabManage').onclick=()=>{adminTab='manage';renderAdminView();};
+  if(adminTab==='report') renderReportTab(); else renderManageTab();
+}
+
+/* ---- Report tab ---- */
+async function renderReportTab(){
+  const c = document.getElementById('adminContent');
+  c.innerHTML = `
+    <div class="section">
+      <div class="card">
+        <label>เลือกผู้สูงอายุ</label>
+        <select id="r_patient">
+          <option value="">— เลือก —</option>
+          ${patients.map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}
+        </select>
+        <label>เลือกวันที่</label>
+        <input type="date" id="r_date" value="${todayStr()}">
+      </div>
+    </div>
+    <div id="reportWrap"></div>
+    <div class="section" id="reportActions" style="display:none;">
+      <div class="btn-row">
+        <button class="btn btn-amber" id="downloadPngBtn">ดาวน์โหลดรูปภาพ (ส่ง LINE)</button>
+      </div>
+      <button class="btn btn-ghost" style="margin-top:10px;" id="printBtn">พิมพ์ / บันทึกเป็น PDF</button>
+    </div>
+  `;
+  document.getElementById('r_patient').onchange = buildReport;
+  document.getElementById('r_date').onchange = buildReport;
+  if(patients.length && patients[0]) {
+    document.getElementById('r_patient').value = patients[0].id;
+    buildReport();
+  }
+}
+
+async function buildReport(){
+  const pid = document.getElementById('r_patient').value;
+  const date = document.getElementById('r_date').value;
+  const wrap = document.getElementById('reportWrap');
+  const actions = document.getElementById('reportActions');
+  if(!pid){ wrap.innerHTML=''; actions.style.display='none'; return; }
+  const patient = patients.find(p=>p.id===pid);
+  wrap.innerHTML = '<div class="section"><div class="empty">กำลังโหลด...</div></div>';
+  const records = (await apiGet('getRecords', {patientId:pid, date})).sort((a,b)=>a.time.localeCompare(b.time));
+
+  actions.style.display = 'block';
+
+  const vitalsRows = records.filter(r=>r.sys||r.pulse||r.temp||r.spo2||r.dtx);
+  const excretionRows = records.filter(r=>r.urine||r.stool);
+  const feedingRows = records.filter(r=>r.meal||r.amount);
+  const woundRows = records.filter(r=>r.wound==='มีแผล');
+  const moodRows = records.filter(r=>r.mood && r.mood.length);
+  const noteRows = records.filter(r=>r.notes);
+
+  function visitLine(r, content){
+    return `<div class="rc-visit"><div class="t">${r.time} น.</div><div class="row">${content}</div><div class="who">บันทึกโดย ${r.caregiverName}</div></div>`;
+  }
+
+  wrap.innerHTML = `
+    <div id="reportCard">
+      <div class="rc-head">
+        <div class="rc-brand">CMCC โฮมแคร์ · บันทึกการดูแลประจำวัน</div>
+        <div class="rc-name">${patient ? patient.name : '-'}</div>
+        <div class="rc-sub">${patient && patient.age ? 'อายุ '+patient.age+' ปี · ' : ''}${fmtDate(date)}</div>
+      </div>
+      <div class="rc-body">
+        ${records.length===0 ? '<div class="empty">ไม่มีข้อมูลการบันทึกในวันนี้</div>' : `
+        ${vitalsRows.length?`<div class="rc-sec"><div class="rc-sec-title">สัญญาณชีพ</div>
+          ${vitalsRows.map(r=>visitLine(r, `
+            <span>BP ${r.sys||'-'}/${r.dia||'-'}</span>
+            <span>PR ${r.pulse||'-'}</span>
+            <span>T ${r.temp||'-'}°C</span>
+            <span>O2 ${r.spo2||'-'}%</span>
+          `)).join('')}
+        </div>`:''}
+
+        ${excretionRows.length?`<div class="rc-sec"><div class="rc-sec-title">การขับถ่าย</div>
+          ${excretionRows.map(r=>visitLine(r, `<span>ปัสสาวะ: ${r.urine||'-'}</span><span>อุจจาระ: ${r.stool||'-'}</span>`)).join('')}
+        </div>`:''}
+
+        ${feedingRows.length?`<div class="rc-sec"><div class="rc-sec-title">การรับประทานอาหาร</div>
+          ${feedingRows.map(r=>visitLine(r, `<span>มื้อ${r.meal||'-'}</span><span>${r.amount||'-'}</span><span>${r.choke||''}</span>`)).join('')}
+        </div>`:''}
+
+        ${woundRows.length?`<div class="rc-sec"><div class="rc-sec-title">ผิวหนัง / แผลกดทับ</div>
+          ${woundRows.map(r=>visitLine(r, `<span>${r.woundDetail||'มีแผล'}</span>`)).join('')}
+        </div>`:''}
+
+        ${moodRows.length?`<div class="rc-sec"><div class="rc-sec-title">สภาวะจิตใจและอารมณ์</div>
+          ${moodRows.map(r=>visitLine(r, `<span>${r.mood.join(', ')}</span>`)).join('')}
+        </div>`:''}
+
+        ${noteRows.length?`<div class="rc-sec"><div class="rc-sec-title">หมายเหตุจากผู้ดูแล</div>
+          ${noteRows.map(r=>`<div class="rc-note">${r.time} น. (${r.caregiverName}): ${r.notes}</div>`).join('')}
+        </div>`:''}
+        `}
+      </div>
+      <div class="rc-foot">
+        <span>จัดทำโดย CMCC โฮมแคร์</span>
+        <span>พิมพ์เมื่อ ${todayStr()}</span>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('downloadPngBtn').onclick = ()=>{
+    html2canvas(document.getElementById('reportCard'), {backgroundColor:'#ffffff', scale:2}).then(canvas=>{
+      const link=document.createElement('a');
+      link.download = `${patient?patient.name:'report'}-${date}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  };
+  document.getElementById('printBtn').onclick = ()=> window.print();
+}
+
+/* ---- Manage tab ---- */
+async function renderManageTab(){
+  const c = document.getElementById('adminContent');
+  c.innerHTML = `
+    <div class="section">
+      <div class="card">
+        <h2><span class="dot"></span>รายชื่อผู้สูงอายุ</h2>
+        <div id="patientList"></div>
+        <div style="margin-top:12px;">
+          <label>ชื่อ-นามสกุล</label>
+          <input type="text" id="np_name" placeholder="ชื่อผู้สูงอายุ">
+          <label>อายุ</label>
+          <input type="number" id="np_age" placeholder="อายุ (ปี)">
+          <button class="btn btn-secondary" style="margin-top:10px;" id="addPatientBtn">+ เพิ่มผู้สูงอายุ</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2><span class="dot"></span>รายชื่อผู้ดูแล (น้องๆ)</h2>
+        <div id="caregiverList"></div>
+        <div style="margin-top:12px;">
+          <label>ชื่อผู้ดูแล</label>
+          <input type="text" id="nc_name" placeholder="ชื่อ-นามสกุลผู้ดูแล">
+          <button class="btn btn-secondary" style="margin-top:10px;" id="addCaregiverBtn">+ เพิ่มผู้ดูแล</button>
+        </div>
+      </div>
+
+      <div class="hint">ข้อมูลทั้งหมดเก็บอยู่ใน Google Sheet ของทีม ผู้ใช้ทุกคนที่เปิดหน้านี้ (ทั้งน้องผู้ดูแลและแอดมิน) จะเห็นและแก้ไขข้อมูลชุดเดียวกันแบบเรียลไทม์</div>
+    </div>
+  `;
+  renderPatientList();
+  renderCaregiverList();
+
+  document.getElementById('addPatientBtn').onclick = async ()=>{
+    const name=document.getElementById('np_name').value.trim();
+    const age=document.getElementById('np_age').value.trim();
+    if(!name){ showToast('กรุณากรอกชื่อ'); return; }
+    const result = await apiPost('addPatient', {name, age});
+    if(result && result.success){
+      patients = await apiGet('getPatients');
+      renderPatientList();
+      document.getElementById('np_name').value='';
+      document.getElementById('np_age').value='';
+      showToast('เพิ่มผู้สูงอายุแล้ว');
+    }
+  };
+  document.getElementById('addCaregiverBtn').onclick = async ()=>{
+    const name=document.getElementById('nc_name').value.trim();
+    if(!name){ showToast('กรุณากรอกชื่อ'); return; }
+    const result = await apiPost('addCaregiver', {name});
+    if(result && result.success){
+      caregivers = await apiGet('getCaregivers');
+      renderCaregiverList();
+      document.getElementById('nc_name').value='';
+      showToast('เพิ่มผู้ดูแลแล้ว');
+    }
+  };
+}
+
+function renderPatientList(){
+  const wrap=document.getElementById('patientList');
+  if(patients.length===0){ wrap.innerHTML='<div class="empty">ยังไม่มีรายชื่อ</div>'; return; }
+  wrap.innerHTML = patients.map(p=>`
+    <div class="listRow">
+      <div><div class="name">${p.name}</div><div class="meta">${p.age?('อายุ '+p.age+' ปี'):''}</div></div>
+      <button class="iconbtn" data-id="${p.id}">ลบ</button>
+    </div>`).join('');
+  wrap.querySelectorAll('.iconbtn').forEach(btn=>{
+    btn.onclick=async()=>{
+      const result = await apiPost('deletePatient', {id:btn.dataset.id});
+      if(result && result.success){
+        patients = patients.filter(p=>p.id!==btn.dataset.id);
+        renderPatientList();
+      }
+    };
+  });
+}
+function renderCaregiverList(){
+  const wrap=document.getElementById('caregiverList');
+  if(caregivers.length===0){ wrap.innerHTML='<div class="empty">ยังไม่มีรายชื่อ</div>'; return; }
+  wrap.innerHTML = caregivers.map(c=>`
+    <div class="listRow">
+      <div class="name">${c.name}</div>
+      <button class="iconbtn" data-id="${c.id}">ลบ</button>
+    </div>`).join('');
+  wrap.querySelectorAll('.iconbtn').forEach(btn=>{
+    btn.onclick=async()=>{
+      const result = await apiPost('deleteCaregiver', {id:btn.dataset.id});
+      if(result && result.success){
+        caregivers = caregivers.filter(c=>c.id!==btn.dataset.id);
+        renderCaregiverList();
+      }
+    };
+  });
+}
+
+/* ============== INIT ============== */
+(async function init(){
+  await loadAll();
+  renderCaregiverView();
+})();
+</script>
+</body>
+</html>
