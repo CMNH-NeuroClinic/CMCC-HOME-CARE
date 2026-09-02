@@ -242,19 +242,41 @@ function calcAge(dobStr){
   return age>=0 ? age : '';
 }
 
+/* ============== LOCAL CACHE (ทำให้หน้าจอขึ้นทันทีโดยไม่ต้องรอโหลด) ============== */
+function cacheGet(key){
+  try{ const v = localStorage.getItem(key); return v ? JSON.parse(v) : null; }
+  catch(e){ return null; }
+}
+function cacheSet(key, value){
+  try{ localStorage.setItem(key, JSON.stringify(value)); }
+  catch(e){ /* localStorage อาจใช้ไม่ได้ในบางสภาพแวดล้อม เช่น พรีวิวในแชท - ข้ามไปเงียบๆ */ }
+}
+
 /* ============== DATA CACHE / PRELOAD ============== */
-let patients=[], caregivers=[];
+let patients = cacheGet('cmcc_patients') || [];
+let caregivers = cacheGet('cmcc_caregivers') || [];
+let initialLoadDone = false;
 let preloadPromise=null;
+
 async function loadAll(){
-  if(!apiConfigured()){ patients=[]; caregivers=[]; return; }
+  if(!apiConfigured()) return;
   const [p, c] = await Promise.all([apiGet('getPatients'), apiGet('getCaregivers')]);
   patients = p; caregivers = c;
+  cacheSet('cmcc_patients', p);
+  cacheSet('cmcc_caregivers', c);
 }
 function preloadData(){
-  if(!preloadPromise) preloadPromise = loadAll();
+  if(!preloadPromise){
+    preloadPromise = loadAll().then(()=>{
+      initialLoadDone = true;
+      // อัปเดตหน้าจอที่เปิดค้างอยู่แบบเงียบๆ ด้วยข้อมูลล่าสุด แต่ไม่รบกวนถ้าผู้ใช้กำลังกรอกฟอร์มบันทึกอยู่
+      if(currentView==='caregiver' && !cgState.action) renderCaregiverView();
+      else if(currentView==='admin' && adminTab==='report') renderAdminView();
+      else if(currentView==='dashboard') renderDashboardView();
+    });
+  }
   return preloadPromise;
 }
-async function ensureData(){ await preloadData(); }
 
 /* ============== NAVIGATION ============== */
 let currentView='home';
@@ -344,7 +366,12 @@ function patientInfoBanner(p){
 }
 
 function renderPatientPicker(container){
-  if(patients.length===0){ container.innerHTML='<div class="empty">ยังไม่มีรายชื่อผู้สูงอายุ กรุณาแจ้งแอดมิน</div>'; return; }
+  if(patients.length===0){
+    container.innerHTML = initialLoadDone
+      ? '<div class="empty">ยังไม่มีรายชื่อผู้สูงอายุ กรุณาแจ้งแอดมิน</div>'
+      : '<div class="empty">กำลังโหลดรายชื่อ...</div>';
+    return;
+  }
   container.innerHTML = patients.map(p=>`
     <button type="button" class="pickRow ${cgState.patientId===p.id?'picked':''}" data-id="${p.id}">
       <span class="prName">${p.name}</span>
@@ -360,7 +387,7 @@ function renderPatientPicker(container){
 }
 
 async function renderCaregiverView(){
-  await ensureData();
+  preloadData();
   const el = document.getElementById('mainContent');
   if(!apiConfigured()){
     el.innerHTML = `<div class="section"><div class="card"><div class="empty">ยังไม่ได้ตั้งค่าเชื่อมต่อฐานข้อมูล<br>กรุณาแจ้งแอดมินให้ใส่ Web app URL ของ Google Apps Script ในไฟล์นี้ก่อนใช้งาน (ตัวแปร CONFIG.API_URL)</div></div></div>`;
@@ -587,9 +614,8 @@ function buildMealForm(card){
 }
 
 async function buildMedicationForm(card){
-  card.innerHTML = '<div class="empty">กำลังโหลดรายการยา...</div>';
-  const meds = await apiGet('getMedications', {patientId: cgState.patientId});
-  if(!card.isConnected) return;
+  const cacheKey = 'cmcc_meds_'+cgState.patientId;
+  let meds = cacheGet(cacheKey) || [];
   let slot=null;
   const rowsState = {};
 
@@ -631,6 +657,16 @@ async function buildMedicationForm(card){
     };
   }
   render();
+
+  // อัปเดตรายการยาล่าสุดจากเซิร์ฟเวอร์เบื้องหลัง โดยไม่รบกวนถ้าผู้ใช้เริ่มติ๊กสถานะยาไปแล้ว
+  apiGet('getMedications', {patientId: cgState.patientId}).then(fresh=>{
+    cacheSet(cacheKey, fresh);
+    if(!card.isConnected) return;
+    if(Object.keys(rowsState).length===0 && !slot){
+      meds = fresh;
+      render();
+    }
+  });
 }
 
 function buildWoundForm(card){
@@ -674,7 +710,7 @@ function buildNoteForm(card){
 
 /* ============== ADMIN VIEW ============== */
 async function renderAdminView(){
-  await ensureData();
+  preloadData();
   const el = document.getElementById('mainContent');
   if(!apiConfigured()){
     el.innerHTML = `<div class="section"><div class="card"><div class="empty">ยังไม่ได้ตั้งค่าเชื่อมต่อฐานข้อมูล<br>กรุณาใส่ Web app URL ของ Google Apps Script ในตัวแปร CONFIG.API_URL ที่ต้นไฟล์นี้ก่อนใช้งาน</div></div></div>`;
@@ -1000,7 +1036,7 @@ async function loadMedList(pid){
 
 function renderPatientList(){
   const wrap=document.getElementById('patientList');
-  if(patients.length===0){ wrap.innerHTML='<div class="empty">ยังไม่มีรายชื่อ</div>'; return; }
+  if(patients.length===0){ wrap.innerHTML = initialLoadDone ? '<div class="empty">ยังไม่มีรายชื่อ</div>' : '<div class="empty">กำลังโหลด...</div>'; return; }
   wrap.innerHTML = patients.map(p=>`
     <div class="listRow">
       <div>
@@ -1055,7 +1091,7 @@ function dashRowHtml(p){
 }
 
 async function renderDashboardView(){
-  await ensureData();
+  preloadData();
   const el = document.getElementById('mainContent');
   if(!apiConfigured()){
     el.innerHTML = `<div class="section"><div class="card"><div class="empty">ยังไม่ได้ตั้งค่าเชื่อมต่อฐานข้อมูล</div></div></div>`;
