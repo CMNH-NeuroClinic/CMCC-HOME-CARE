@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>CMCC โฮมแคร์ · บันทึกการดูแล</title>
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22CMCC%20%E0%B9%82%E0%B8%AE%E0%B8%A1%E0%B9%81%E0%B8%84%E0%B8%A3%E0%B9%8C%22%2C%22short_name%22%3A%22CMCC%20%E0%B9%82%E0%B8%AE%E0%B8%A1%E0%B9%81%E0%B8%84%E0%B8%A3%E0%B9%8C%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23EEF3EE%22%2C%22theme_color%22%3A%22%231B4A48%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%253D'http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg'%2520width%253D'192'%2520height%253D'192'%253E%253Crect%2520width%253D'192'%2520height%253D'192'%2520rx%253D'36'%2520fill%253D'%25231B4A48'%252F%253E%253Ctext%2520x%253D'96'%2520y%253D'128'%2520font-family%253D'sans-serif'%2520font-size%253D'80'%2520font-weight%253D'700'%2520fill%253D'%2523E2963A'%2520text-anchor%253D'middle'%253ECC%253C%252Ftext%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%22%7D%2C%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%253D'http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg'%2520width%253D'192'%2520height%253D'192'%253E%253Crect%2520width%253D'192'%2520height%253D'192'%2520rx%253D'36'%2520fill%253D'%25231B4A48'%252F%253E%253Ctext%2520x%253D'96'%2520y%253D'128'%2520font-family%253D'sans-serif'%2520font-size%253D'80'%2520font-weight%253D'700'%2520fill%253D'%2523E2963A'%2520text-anchor%253D'middle'%253ECC%253C%252Ftext%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%22%7D%5D%7D">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'192'%20height%3D'192'%3E%3Crect%20width%3D'192'%20height%3D'192'%20rx%3D'36'%20fill%3D'%231B4A48'%2F%3E%3Ctext%20x%3D'96'%20y%3D'128'%20font-family%3D'sans-serif'%20font-size%3D'80'%20font-weight%3D'700'%20fill%3D'%23E2963A'%20text-anchor%3D'middle'%3ECC%3C%2Ftext%3E%3C%2Fsvg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'192'%20height%3D'192'%3E%3Crect%20width%3D'192'%20height%3D'192'%20rx%3D'36'%20fill%3D'%231B4A48'%2F%3E%3Ctext%20x%3D'96'%20y%3D'128'%20font-family%3D'sans-serif'%20font-size%3D'80'%20font-weight%3D'700'%20fill%3D'%23E2963A'%20text-anchor%3D'middle'%3ECC%3C%2Ftext%3E%3C%2Fsvg%3E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CMCC โฮมแคร์">
+<meta name="theme-color" content="#1B4A48">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -11,8 +18,8 @@
   :root{
     --bg:#EEF3EE;
     --surface:#FFFFFF;
-    --ink:#1E2E29;
-    --ink-soft:#5B6A63;
+    --ink:#16241F;
+    --ink-soft:#4E5F58;
     --teal:#2C6E6B;
     --teal-dark:#1B4A48;
     --teal-tint:#E1EEEC;
@@ -21,101 +28,190 @@
     --rose:#C1685C;
     --rose-tint:#F6E6E3;
     --line:#D8E1DB;
-    --radius:16px;
+    --radius:22px;
+    --glass-bg:rgba(255,255,255,0.50);
+    --glass-bg-strong:rgba(255,255,255,0.68);
+    --glass-border:rgba(255,255,255,0.65);
+    --glass-shadow:0 8px 32px rgba(20,45,42,0.14);
+    --glass-blur:blur(18px) saturate(160%);
   }
   *{box-sizing:border-box;}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans Thai','IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased;}
+  html{
+    background:
+      radial-gradient(circle at 12% 15%, rgba(44,110,107,0.40), transparent 42%),
+      radial-gradient(circle at 88% 10%, rgba(226,150,58,0.32), transparent 45%),
+      radial-gradient(circle at 82% 78%, rgba(193,104,92,0.30), transparent 48%),
+      radial-gradient(circle at 15% 85%, rgba(44,110,107,0.28), transparent 45%),
+      linear-gradient(160deg, #DCEAE4 0%, #EAF1EC 45%, #F4ECE2 100%);
+    background-attachment:fixed;
+    min-height:100vh;
+  }
+  body{margin:0;background:transparent;color:var(--ink);font-family:'IBM Plex Sans Thai','IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased;font-size:15.5px;min-height:100vh;}
   #app{max-width:480px;margin:0 auto;padding-bottom:48px;}
 
-  .topbar{background:var(--teal-dark);color:#fff;padding:18px 18px 20px;border-radius:0 0 20px 20px;}
+  .topbar{
+    background:linear-gradient(135deg, rgba(27,74,72,0.80), rgba(44,110,107,0.68));
+    -webkit-backdrop-filter:var(--glass-blur); backdrop-filter:var(--glass-blur);
+    border-bottom:1px solid rgba(255,255,255,0.25);
+    color:#fff;padding:18px 18px 20px;border-radius:0 0 26px 26px;
+    box-shadow:0 10px 30px rgba(20,45,42,0.18);
+  }
   .brand{display:flex;align-items:center;gap:10px;}
-  .brand .mark{width:38px;height:38px;border-radius:10px;background:var(--amber);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--teal-dark);font-size:15px;flex-shrink:0;}
+  .brand .mark{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#F3B968,var(--amber));display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--teal-dark);font-size:15px;flex-shrink:0;box-shadow:0 4px 12px rgba(226,150,58,0.4);}
   .brand h1{font-size:16px;margin:0;font-weight:600;line-height:1.3;}
   .brand p{margin:1px 0 0;font-size:11.5px;color:#CFE3E1;}
+  .pendingBadge{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#F3B968,var(--amber));color:#472B04;border:1px solid rgba(255,255,255,0.5);border-radius:999px;padding:5px 11px;font-size:11.5px;font-weight:600;font-family:inherit;cursor:pointer;margin-top:10px;box-shadow:0 4px 14px rgba(226,150,58,0.35);}
 
   /* home landing */
   .homeGrid{display:flex;flex-direction:column;gap:12px;padding:18px 16px 6px;}
-  .homeCard{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;text-align:left;cursor:pointer;font-family:inherit;width:100%;}
-  .homeCard .hIcon{width:46px;height:46px;border-radius:12px;background:var(--teal-tint);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+  .homeCard{
+    display:flex;align-items:center;gap:14px;
+    background:var(--glass-bg);
+    -webkit-backdrop-filter:var(--glass-blur); backdrop-filter:var(--glass-blur);
+    border:1px solid var(--glass-border);border-radius:20px;padding:16px;
+    text-align:left;cursor:pointer;font-family:inherit;width:100%;
+    box-shadow:var(--glass-shadow);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .homeCard:active{transform:scale(0.98);}
+  .homeCard .hIcon{width:46px;height:46px;border-radius:13px;background:rgba(225,238,236,0.85);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.6);}
   .homeCard .hBody{flex:1;min-width:0;}
   .homeCard .hTitle{font-size:15px;font-weight:700;color:var(--ink);}
   .homeCard .hSub{font-size:12px;color:var(--ink-soft);margin-top:2px;}
   .homeCard .hArrow{color:var(--ink-soft);font-size:18px;}
 
   .backRow{display:flex;align-items:center;gap:10px;padding:16px 16px 4px;}
-  .backBtn{border:none;background:var(--teal-tint);color:var(--teal-dark);border-radius:10px;padding:8px 14px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;flex-shrink:0;}
+  .backBtn{
+    border:1px solid var(--glass-border);background:var(--glass-bg-strong);
+    -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+    color:var(--teal-dark);border-radius:11px;padding:8px 14px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;flex-shrink:0;
+  }
   .formTitle{font-size:15px;font-weight:700;}
 
   .section{padding:16px 16px 4px;}
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:14px;}
+  .card{
+    background:var(--glass-bg);
+    -webkit-backdrop-filter:var(--glass-blur); backdrop-filter:var(--glass-blur);
+    border:1px solid var(--glass-border);border-radius:var(--radius);padding:16px;margin-bottom:14px;
+    box-shadow:var(--glass-shadow);
+  }
   .card h2{font-size:14.5px;margin:0 0 12px;font-weight:600;display:flex;align-items:center;gap:8px;}
   .card h2 .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);flex-shrink:0;}
   label{display:block;font-size:12.5px;color:var(--ink-soft);margin:10px 0 6px;font-weight:500;}
   label:first-child{margin-top:0;}
   label.groupLabel{margin-top:18px;font-weight:700;color:var(--teal-dark);font-size:13px;}
   select, input[type=text], input[type=number], input[type=time], input[type=date], textarea{
-    width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 12px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink);
+    width:100%;border:1px solid var(--glass-border);border-radius:12px;padding:11px 12px;font-size:15px;font-family:inherit;
+    background:rgba(255,255,255,0.55);
+    -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+    color:var(--ink);
   }
-  select:focus, input:focus, textarea:focus{outline:2px solid var(--teal);outline-offset:1px;}
+  select:focus, input:focus, textarea:focus{outline:2px solid var(--teal);outline-offset:1px;background:rgba(255,255,255,0.85);}
   textarea{resize:vertical;min-height:64px;}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
 
   .chips{display:flex;flex-wrap:wrap;gap:8px;}
-  .chip{border:1px solid var(--line);background:#fff;color:var(--ink-soft);padding:9px 14px;border-radius:999px;font-size:13.5px;font-weight:500;cursor:pointer;font-family:inherit;}
-  .chip.selected{background:var(--teal);border-color:var(--teal);color:#fff;}
-  .chip.warn.selected{background:var(--rose);border-color:var(--rose);}
+  .chips.chipError{outline:1.5px solid var(--rose);outline-offset:4px;border-radius:12px;}
+  .chip{
+    border:1px solid var(--glass-border);background:rgba(255,255,255,0.5);
+    -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+    color:var(--ink-soft);padding:9px 14px;border-radius:999px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;
+    transition:background .12s ease, box-shadow .12s ease;
+  }
+  .chip.selected{background:linear-gradient(135deg,#3A8481,var(--teal-dark));border-color:transparent;color:#fff;box-shadow:0 4px 14px rgba(44,110,107,0.35);}
+  .chip.warn.selected{background:linear-gradient(135deg,#D67C6E,var(--rose));border-color:transparent;box-shadow:0 4px 14px rgba(193,104,92,0.35);}
 
-  .btn{display:block;width:100%;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;}
-  .btn-primary{background:var(--teal);color:#fff;}
-  .btn-secondary{background:var(--teal-tint);color:var(--teal-dark);}
-  .btn-amber{background:var(--amber);color:#472B04;}
-  .btn-ghost{background:transparent;color:var(--teal);border:1px solid var(--teal);}
+  .ctxBar{
+    position:sticky;top:0;z-index:6;
+    background:linear-gradient(135deg, rgba(27,74,72,0.85), rgba(44,110,107,0.72));
+    -webkit-backdrop-filter:var(--glass-blur); backdrop-filter:var(--glass-blur);
+    color:#fff;padding:9px 16px;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:6px;
+    border-bottom:1px solid rgba(255,255,255,0.2);
+  }
+  .ctxBar .ctxDot{width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0;}
+
+  .searchInput{margin-bottom:10px;}
+
+  .btn{display:block;width:100%;border:none;border-radius:14px;padding:14px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;transition:transform .12s ease;}
+  .btn:active{transform:scale(0.98);}
+  .btn-primary{background:linear-gradient(135deg,#3A8481,var(--teal-dark));color:#fff;box-shadow:0 8px 22px rgba(27,74,72,0.35);border:1px solid rgba(255,255,255,0.2);}
+  .btn-secondary{background:var(--glass-bg-strong);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:var(--teal-dark);border:1px solid var(--glass-border);}
+  .btn-amber{background:linear-gradient(135deg,#F3B968,var(--amber));color:#472B04;box-shadow:0 8px 22px rgba(226,150,58,0.35);border:1px solid rgba(255,255,255,0.25);}
+  .btn-ghost{background:rgba(255,255,255,0.35);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:var(--teal);border:1px solid var(--teal);}
   .btn-row{display:flex;gap:10px;}
   .btn-row .btn{flex:1;}
 
   .hint{font-size:12px;color:var(--ink-soft);margin-top:8px;line-height:1.5;}
-  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--teal-dark);color:#fff;padding:11px 20px;border-radius:999px;font-size:13.5px;font-weight:500;opacity:0;transition:opacity .25s;pointer-events:none;z-index:50;max-width:90%;text-align:center;}
+  .toast{
+    position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+    background:linear-gradient(135deg, rgba(27,74,72,0.92), rgba(44,110,107,0.88));
+    -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+    color:#fff;padding:11px 20px;border-radius:999px;font-size:13.5px;font-weight:500;opacity:0;transition:opacity .25s;pointer-events:none;z-index:50;max-width:90%;text-align:center;
+    border:1px solid rgba(255,255,255,0.2);
+  }
   .toast.show{opacity:1;}
 
   .tabs{display:flex;gap:8px;padding:0 16px 10px;}
-  .tabs button{flex:1;border:1px solid var(--line);background:#fff;color:var(--ink-soft);padding:10px 4px;border-radius:10px;font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer;}
-  .tabs button.active{background:var(--teal);color:#fff;border-color:var(--teal);}
+  .tabs button{
+    flex:1;border:1px solid var(--glass-border);background:var(--glass-bg);
+    -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+    color:var(--ink-soft);padding:10px 4px;border-radius:12px;font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer;
+  }
+  .tabs button.active{background:linear-gradient(135deg,#3A8481,var(--teal-dark));color:#fff;border-color:transparent;box-shadow:0 6px 16px rgba(27,74,72,0.3);}
 
-  .listRow{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding:10px 0;}
+  .listRow{display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(216,225,219,0.6);padding:10px 0;}
   .listRow:first-child{border-top:none;}
   .listRow .name{font-size:14px;font-weight:600;}
   .listRow .meta{font-size:12px;color:var(--ink-soft);}
-  .iconbtn{border:none;background:var(--rose-tint);color:var(--rose);border-radius:8px;padding:6px 10px;font-size:12px;font-family:inherit;cursor:pointer;flex-shrink:0;}
+  .iconbtn{border:1px solid rgba(255,255,255,0.4);background:var(--rose-tint);color:var(--rose);border-radius:9px;padding:6px 10px;font-size:12px;font-family:inherit;cursor:pointer;flex-shrink:0;}
+  .iconbtn.editbtn{background:var(--teal-tint);color:var(--teal-dark);margin-right:6px;}
+  .rowBtns{display:flex;flex-shrink:0;}
 
   .empty{text-align:center;padding:26px 10px;color:var(--ink-soft);font-size:13.5px;}
 
   /* patient picker */
-  .pickRow{display:flex;justify-content:space-between;align-items:center;width:100%;border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:8px;font-family:inherit;cursor:pointer;text-align:left;}
-  .pickRow.picked{border-color:var(--teal);background:var(--teal-tint);}
+  .pickRow{
+    display:flex;justify-content:space-between;align-items:center;width:100%;
+    border:1px solid var(--glass-border);background:rgba(255,255,255,0.45);
+    -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+    border-radius:14px;padding:12px 14px;margin-bottom:8px;font-family:inherit;cursor:pointer;text-align:left;
+    transition:background .12s ease, box-shadow .12s ease;
+  }
+  .pickRow.picked{border-color:var(--teal);background:rgba(225,238,236,0.85);box-shadow:0 4px 14px rgba(44,110,107,0.2);}
   .pickRow .prName{font-size:14px;font-weight:600;color:var(--ink);}
   .pickRow .prMeta{font-size:12px;color:var(--ink-soft);}
 
-  .infoBanner{background:var(--teal-tint);color:var(--teal-dark);border-radius:12px;padding:10px 14px;font-size:12.5px;line-height:1.6;}
-  .infoBanner.warn{background:var(--rose-tint);color:var(--rose);}
+  .infoBanner{background:rgba(225,238,236,0.75);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:var(--teal-dark);border-radius:14px;padding:10px 14px;font-size:12.5px;line-height:1.6;border:1px solid var(--glass-border);}
+  .infoBanner.warn{background:rgba(246,230,227,0.8);color:var(--rose);}
 
   /* action grid (caregiver home) */
   .actionGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
-  .actionBtn{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 10px;text-align:center;cursor:pointer;font-family:inherit;}
+  .actionBtn{
+    background:var(--glass-bg);
+    -webkit-backdrop-filter:var(--glass-blur); backdrop-filter:var(--glass-blur);
+    border:1px solid var(--glass-border);border-radius:18px;padding:16px 10px;text-align:center;cursor:pointer;font-family:inherit;
+    box-shadow:var(--glass-shadow);transition:transform .12s ease;
+  }
+  .actionBtn:active{transform:scale(0.97);}
   .actionBtn .ic{font-size:22px;display:block;margin-bottom:6px;}
   .actionBtn .lb{font-size:12.5px;font-weight:600;color:var(--ink);}
 
   /* feed */
-  .feedItem{display:flex;gap:10px;padding:12px 0;border-top:1px solid var(--line);}
+  .feedItem{display:flex;gap:10px;padding:12px 0;border-top:1px solid rgba(216,225,219,0.6);}
   .feedItem:first-child{border-top:none;}
-  .feedItem .ic{width:34px;height:34px;border-radius:10px;background:var(--teal-tint);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
-  .feedItem.flag .ic{background:var(--rose-tint);}
+  .feedItem .ic{width:34px;height:34px;border-radius:11px;background:rgba(225,238,236,0.85);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+  .feedItem.flag .ic{background:rgba(246,230,227,0.9);}
   .feedItem .body{flex:1;min-width:0;}
   .feedItem .top{font-size:12px;color:var(--ink-soft);margin-bottom:2px;}
   .feedItem .txt{font-size:13.5px;color:var(--ink);line-height:1.5;}
 
   /* medication rows */
-  .medRow{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px;}
+  .medRow{
+    border:1px solid var(--glass-border);background:rgba(255,255,255,0.4);
+    -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+    border-radius:14px;padding:10px 12px;margin-bottom:8px;
+  }
   .medRow .mname{font-size:13.5px;font-weight:600;}
   .medRow .mdose{font-size:11.5px;color:var(--ink-soft);margin-bottom:8px;}
   .medStatusRow{display:flex;gap:8px;}
@@ -129,14 +225,21 @@
 
   /* dashboard */
   .dashSummary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
-  .dashSummary .box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 8px;text-align:center;}
+  .dashSummary .box{
+    background:var(--glass-bg);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+    border:1px solid var(--glass-border);border-radius:16px;padding:12px 8px;text-align:center;box-shadow:var(--glass-shadow);
+  }
   .dashSummary .num{font-size:20px;font-weight:700;color:var(--teal-dark);}
   .dashSummary .lb{font-size:11px;color:var(--ink-soft);margin-top:2px;}
-  .dashRow{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;cursor:pointer;}
+  .dashRow{
+    background:var(--glass-bg);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+    border:1px solid var(--glass-border);border-radius:16px;padding:12px;margin-bottom:10px;cursor:pointer;box-shadow:var(--glass-shadow);
+  }
   .dashRow .name{font-size:14px;font-weight:700;}
   .dashRow .sub{font-size:11.5px;color:var(--ink-soft);margin:2px 0 6px;}
 
-  /* report card */
+  /* report card — พื้นทึบตั้งใจ ไม่ใส่ glass/blur เพราะการ์ดนี้ถูกแคปเป็นรูปส่งเข้า LINE
+     และ html2canvas มักเรนเดอร์ backdrop-filter ผิดเพี้ยน จึงคงพื้นหลังทึบให้อ่านง่ายและถ่ายภาพออกมาถูกต้อง */
   #reportWrap{padding:0 16px;}
   #reportCard{background:#fff;border-radius:18px;overflow:hidden;border:1px solid var(--line);}
   .rc-head{background:var(--teal);color:#fff;padding:18px;}
@@ -160,6 +263,71 @@
     #reportCard, #reportCard *{visibility:visible;}
     #reportCard{position:absolute;top:0;left:0;width:100%;border:none;}
   }
+
+  /* ---------- bottom-sheet modal ---------- */
+  .modalOverlay{
+    position:fixed;inset:0;background:rgba(15,30,27,0.45);
+    -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+    z-index:40;display:flex;align-items:flex-end;justify-content:center;
+  }
+  .modalSheet{
+    width:100%;max-width:480px;max-height:88vh;overflow-y:auto;
+    background:rgba(244,248,246,0.92);
+    -webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);
+    border:1px solid var(--glass-border);border-bottom:none;
+    border-radius:26px 26px 0 0;
+    box-shadow:0 -12px 40px rgba(20,45,42,0.28);
+    padding-bottom:24px;
+    animation:sheetUp .22s ease;
+  }
+  @keyframes sheetUp{ from{transform:translateY(24px);opacity:.6;} to{transform:translateY(0);opacity:1;} }
+  .modalHandle{width:40px;height:4px;border-radius:999px;background:var(--line);margin:10px auto 4px;}
+  .modalHeader{display:flex;align-items:center;justify-content:space-between;padding:6px 18px 4px;}
+  .modalHeader h3{font-size:17px;font-weight:700;margin:0;color:var(--teal-dark);}
+  .modalCloseBtn{
+    width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,255,255,0.6);
+    color:var(--ink-soft);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;
+  }
+
+  .progressWrap{padding:0 18px 6px;}
+  .progressLabel{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-soft);margin-bottom:6px;}
+  .progressLabel b{color:var(--teal-dark);}
+  .progressBar{height:7px;border-radius:999px;background:rgba(216,225,219,0.6);overflow:hidden;}
+  .progressFill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--amber),#3A8481);transition:width .2s ease;}
+
+  /* ---------- avatar + category icons (patient overview) ---------- */
+  .avatarCircle{
+    width:48px;height:48px;border-radius:50%;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:#fff;
+    background:linear-gradient(135deg,#3A8481,var(--teal-dark));
+    box-shadow:0 4px 10px rgba(27,74,72,0.25);
+  }
+  .dashRowTop{display:flex;align-items:center;gap:12px;}
+  .dashRowInfo{flex:1;min-width:0;}
+  .quickAddBtn{
+    width:34px;height:34px;border-radius:50%;border:none;flex-shrink:0;
+    background:linear-gradient(135deg,#F3B968,var(--amber));color:#472B04;
+    font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;
+    box-shadow:0 4px 10px rgba(226,150,58,0.35);
+  }
+  .catIconRow{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
+  .catIcon{
+    width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+    font-size:13px;background:rgba(216,225,219,0.5);opacity:0.4;filter:grayscale(1);
+  }
+  .catIcon.on{background:rgba(225,238,236,0.9);opacity:1;filter:none;box-shadow:0 2px 6px rgba(44,110,107,0.2);}
+
+  /* ---------- report category picker + zoom ---------- */
+  .zoomBar{display:flex;align-items:center;justify-content:center;gap:14px;padding:8px 0 2px;}
+  .zoomBtn{
+    width:36px;height:36px;border-radius:50%;border:1px solid var(--glass-border);background:var(--glass-bg-strong);
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    color:var(--teal-dark);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;
+  }
+  .reportScroll{overflow:auto;max-height:56vh;padding:4px 2px 10px;}
+  .catPickHead{display:flex;justify-content:space-between;align-items:center;padding:0 18px 8px;}
+  .catPickHead .sel{font-size:12px;color:var(--teal-dark);font-weight:600;}
+
 </style>
 </head>
 <body>
@@ -172,6 +340,7 @@
         <p>บันทึกการดูแลผู้สูงอายุที่บ้าน</p>
       </div>
     </div>
+    <button type="button" class="pendingBadge" id="pendingBadge" style="display:none;"></button>
   </div>
   <div id="navArea"></div>
   <div id="mainContent"></div>
@@ -181,7 +350,10 @@
 <script>
 /* ============== CONFIG ============== */
 const CONFIG = {
-  API_URL: 'https://script.google.com/macros/s/AKfycbz8ZvPCQftgLdolOBaBoM9llE_YUKHHg5lQIX700gSROwtux3lAlc5O8ftSla--hXhV/exec'
+  API_URL: 'https://script.google.com/macros/s/AKfycbz8ZvPCQftgLdolOBaBoM9llE_YUKHHg5lQIX700gSROwtux3lAlc5O8ftSla--hXhV/exec',
+  // ตั้งรหัส PIN สำหรับกันเข้าหน้า "แอดมิน" และ "แดชบอร์ด" (น้องผู้ดูแลไม่ต้องใส่ เข้าฝั่งบันทึกได้ตามปกติ)
+  // ถ้าเว้นว่างไว้ (ADMIN_PIN: '') จะปิดการกันรหัสผ่านไปเลย — แนะนำให้เปลี่ยนรหัสนี้ก่อนใช้งานจริง
+  ADMIN_PIN: '1234'
 };
 
 /* ============== API HELPERS ============== */
@@ -217,6 +389,29 @@ function showToast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),1800);
+}
+
+/* ============== GENERIC BOTTOM-SHEET MODAL ============== */
+function openModal(titleText, bodyHtml){
+  closeModal();
+  const overlay=document.createElement('div');
+  overlay.className='modalOverlay';
+  overlay.id='activeModalOverlay';
+  overlay.innerHTML=`
+    <div class="modalSheet" id="activeModalSheet">
+      <div class="modalHandle"></div>
+      <div class="modalHeader"><h3>${titleText}</h3><button type="button" class="modalCloseBtn" id="modalCloseBtn">✕</button></div>
+      <div id="modalBody">${bodyHtml}</div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', e=>{ if(e.target===overlay) closeModal(); });
+  document.getElementById('modalCloseBtn').onclick = closeModal;
+  return document.getElementById('modalBody');
+}
+function closeModal(){
+  const el=document.getElementById('activeModalOverlay');
+  if(el) el.remove();
 }
 function todayStr(){
   const d=new Date();
@@ -255,15 +450,17 @@ function cacheSet(key, value){
 /* ============== DATA CACHE / PRELOAD ============== */
 let patients = cacheGet('cmcc_patients') || [];
 let caregivers = cacheGet('cmcc_caregivers') || [];
+let assignments = cacheGet('cmcc_assignments') || [];
 let initialLoadDone = false;
 let preloadPromise=null;
 
 async function loadAll(){
   if(!apiConfigured()) return;
-  const [p, c] = await Promise.all([apiGet('getPatients'), apiGet('getCaregivers')]);
-  patients = p; caregivers = c;
+  const [p, c, a] = await Promise.all([apiGet('getPatients'), apiGet('getCaregivers'), apiGet('getAssignments')]);
+  patients = p; caregivers = c; assignments = a;
   cacheSet('cmcc_patients', p);
   cacheSet('cmcc_caregivers', c);
+  cacheSet('cmcc_assignments', a);
 }
 function preloadData(){
   if(!preloadPromise){
@@ -280,10 +477,72 @@ function preloadData(){
 
 /* ============== NAVIGATION ============== */
 let currentView='home';
-let cgState = { patientId:'', caregiverName:'', action:null };
+let cgState = { patientId:'', caregiverName: cacheGet('cmcc_last_caregiver') || '', action:null };
 let adminTab='report';
+let editingPatientId=null;
+let pinVerified=false;
+
+/* ============== OFFLINE / RETRY QUEUE ============== */
+function getPendingQueue(){ return cacheGet('cmcc_pending_records') || []; }
+function setPendingQueue(q){ cacheSet('cmcc_pending_records', q); updatePendingBadge(); }
+function updatePendingBadge(){
+  const n = getPendingQueue().length;
+  const badge = document.getElementById('pendingBadge');
+  if(!badge) return;
+  if(n===0){ badge.style.display='none'; return; }
+  badge.style.display='inline-flex';
+  badge.textContent = `⏳ มีข้อมูลรอส่ง ${n} รายการ · แตะเพื่อลองใหม่`;
+}
+async function flushPendingQueue(){
+  const q = getPendingQueue();
+  if(q.length===0) return;
+  const remaining=[];
+  for(const rec of q){
+    const r = await apiPost('addRecord', rec);
+    if(!(r && r.success)) remaining.push(rec);
+  }
+  const sentCount = q.length - remaining.length;
+  setPendingQueue(remaining);
+  if(sentCount>0){
+    showToast(`ส่งข้อมูลที่ค้างไว้สำเร็จ ${sentCount} รายการ`);
+    if(currentView==='caregiver' && !cgState.action) renderCgDynamic();
+  }
+}
+window.addEventListener('online', flushPendingQueue);
+
+function pinRequired(){ return !!(CONFIG.ADMIN_PIN && CONFIG.ADMIN_PIN.length>0); }
+
+function openPinModal(targetView){
+  openModal('ใส่รหัสผ่านแอดมิน', `
+    <div class="section">
+      <label>รหัสผ่าน (PIN)</label>
+      <input type="password" id="pinInput" inputmode="numeric" placeholder="••••" autocomplete="off">
+      <button class="btn btn-primary" id="pinSubmitBtn" style="margin-top:14px;">เข้าสู่ระบบ</button>
+      <div class="hint">สำหรับทีมแอดมินเท่านั้น ถ้าไม่ทราบรหัสผ่านกรุณาติดต่อผู้ดูแลระบบ</div>
+    </div>
+  `);
+  const input = document.getElementById('pinInput');
+  input.focus();
+  function attempt(){
+    if(input.value === CONFIG.ADMIN_PIN){
+      pinVerified = true;
+      closeModal();
+      goTo(targetView);
+    } else {
+      showToast('รหัสผ่านไม่ถูกต้อง');
+      input.value='';
+      input.focus();
+    }
+  }
+  document.getElementById('pinSubmitBtn').onclick = attempt;
+  input.onkeydown = e=>{ if(e.key==='Enter') attempt(); };
+}
 
 async function goTo(view){
+  if((view==='admin' || view==='dashboard') && pinRequired() && !pinVerified){
+    openPinModal(view);
+    return;
+  }
   currentView=view;
   if(view==='caregiver') cgState.action=null;
   await renderApp();
@@ -365,14 +624,26 @@ function patientInfoBanner(p){
   return `<div class="section"><div class="infoBanner ${warn?'warn':''}">${bits.join(' · ')}</div></div>`;
 }
 
-function renderPatientPicker(container){
-  if(patients.length===0){
-    container.innerHTML = initialLoadDone
-      ? '<div class="empty">ยังไม่มีรายชื่อผู้สูงอายุ กรุณาแจ้งแอดมิน</div>'
-      : '<div class="empty">กำลังโหลดรายชื่อ...</div>';
+function getAssignedPatientIds(caregiverName){
+  const cg = caregivers.find(c=>c.name===caregiverName);
+  if(!cg) return null;
+  if(assignments.length===0) return null; // ยังไม่ได้ตั้งค่าระบบมอบหมายเคสเลย -> ไม่กรอง แสดงทุกคน
+  return assignments.filter(a=>a.caregiverId===cg.id).map(a=>a.patientId);
+}
+
+function renderPatientPicker(container, filterText, assignedIds){
+  const filteredByAssignment = assignedIds !== null && assignedIds !== undefined;
+  const basePatients = filteredByAssignment ? patients.filter(p=>assignedIds.includes(p.id)) : patients;
+  if(basePatients.length===0){
+    if(!initialLoadDone){ container.innerHTML='<div class="empty">กำลังโหลดรายชื่อ...</div>'; return; }
+    container.innerHTML = filteredByAssignment
+      ? '<div class="empty">ยังไม่มีเคสที่ได้รับมอบหมายให้คุณ กรุณาแจ้งแอดมิน</div>'
+      : '<div class="empty">ยังไม่มีรายชื่อผู้สูงอายุ กรุณาแจ้งแอดมิน</div>';
     return;
   }
-  container.innerHTML = patients.map(p=>`
+  const list = filterText ? basePatients.filter(p=>p.name.toLowerCase().includes(filterText.toLowerCase())) : basePatients;
+  if(list.length===0){ container.innerHTML='<div class="empty">ไม่พบชื่อที่ค้นหา</div>'; return; }
+  container.innerHTML = list.map(p=>`
     <button type="button" class="pickRow ${cgState.patientId===p.id?'picked':''}" data-id="${p.id}">
       <span class="prName">${p.name}</span>
       <span class="prMeta">${p.age?('อายุ '+p.age+' ปี'):''}</span>
@@ -397,28 +668,41 @@ async function renderCaregiverView(){
   el.innerHTML = `
     <div class="section">
       <div class="card">
-        <h2><span class="dot"></span>เลือกผู้สูงอายุ</h2>
-        <div id="patientPicker"></div>
-      </div>
-    </div>
-    ${cgState.patientId ? `
-    <div class="section">
-      <div class="card">
         <h2><span class="dot"></span>ผู้บันทึก (ผู้ดูแล)</h2>
         <div id="caregiverPicker"></div>
+      </div>
+    </div>
+    ${cgState.caregiverName ? `
+    <div class="section">
+      <div class="card">
+        <h2><span class="dot"></span>เลือกผู้สูงอายุ</h2>
+        ${patients.length>4 ? '<input type="text" id="patientSearch" class="searchInput" placeholder="ค้นหาชื่อผู้สูงอายุ...">' : ''}
+        <div id="patientPicker"></div>
       </div>
     </div>` : ''}
     ${patient ? patientInfoBanner(patient) : ''}
     <div id="cgDynamic"></div>
   `;
-  renderPatientPicker(document.getElementById('patientPicker'));
-  if(cgState.patientId){
-    const cgPicker = document.getElementById('caregiverPicker');
-    if(caregivers.length===0){
-      cgPicker.innerHTML = '<div class="empty">ยังไม่มีรายชื่อผู้ดูแล กรุณาแจ้งแอดมิน</div>';
-    } else {
-      chipGroup(cgPicker, caregivers.map(c=>c.name), cgState.caregiverName, v=>{ cgState.caregiverName=v; renderCaregiverView(); });
-    }
+
+  const cgPicker = document.getElementById('caregiverPicker');
+  if(caregivers.length===0){
+    cgPicker.innerHTML = '<div class="empty">ยังไม่มีรายชื่อผู้ดูแล กรุณาแจ้งแอดมิน</div>';
+  } else {
+    chipGroup(cgPicker, caregivers.map(c=>c.name), cgState.caregiverName, v=>{
+      cgState.caregiverName = v;
+      cacheSet('cmcc_last_caregiver', v);
+      const ids = getAssignedPatientIds(v);
+      if(ids!==null && cgState.patientId && !ids.includes(cgState.patientId)) cgState.patientId='';
+      cgState.action=null;
+      renderCaregiverView();
+    });
+  }
+
+  if(cgState.caregiverName){
+    const assignedIds = getAssignedPatientIds(cgState.caregiverName);
+    renderPatientPicker(document.getElementById('patientPicker'), '', assignedIds);
+    const searchEl = document.getElementById('patientSearch');
+    if(searchEl){ searchEl.oninput = e=> renderPatientPicker(document.getElementById('patientPicker'), e.target.value, assignedIds); }
   }
   renderCgDynamic();
 }
@@ -434,9 +718,15 @@ function renderCgDynamic(){
 function actionButtonHtml(action,icon,label){
   return `<button type="button" class="actionBtn" data-action="${action}"><span class="ic">${icon}</span><span class="lb">${label}</span></button>`;
 }
+function contextBarHtml(){
+  const patient = patients.find(p=>p.id===cgState.patientId);
+  if(!patient) return '';
+  return `<div class="ctxBar"><span class="ctxDot"></span>${patient.name}${cgState.caregiverName?(' · โดย '+cgState.caregiverName):' · ยังไม่เลือกผู้บันทึก'}</div>`;
+}
 
 function renderActionHome(wrap){
   wrap.innerHTML = `
+    ${contextBarHtml()}
     <div class="section">
       <div class="actionGrid">
         ${actionButtonHtml('vitals','🫀','สัญญาณชีพ')}
@@ -493,14 +783,18 @@ async function renderFeed(){
   const list = (await apiGet('getRecords',{patientId:cgState.patientId, date:todayStr()})).sort((a,b)=>b.time.localeCompare(a.time));
   if(!document.getElementById('feedList')) return;
   if(list.length===0){ wrap.innerHTML='<div class="empty">ยังไม่มีการบันทึกวันนี้</div>'; return; }
-  wrap.innerHTML = list.map(r=>`
-    <div class="feedItem ${feedFlag(r)?'flag':''}">
+  wrap.innerHTML = list.map((r,idx)=>`
+    <div class="feedItem ${feedFlag(r)?'flag':''}" data-idx="${idx}" style="cursor:pointer;">
       <div class="ic">${feedIcon(r.type)}</div>
       <div class="body">
         <div class="top">${r.time} น. · ${r.caregiverName||'-'}</div>
         <div class="txt">${feedSummary(r)}</div>
       </div>
+      <div style="align-self:center;color:var(--ink-soft);font-size:15px;padding-left:2px;">›</div>
     </div>`).join('');
+  wrap.querySelectorAll('.feedItem').forEach(el=>{
+    el.onclick = ()=> editRecordModal(list[Number(el.dataset.idx)]);
+  });
 }
 
 function actionTitle(a){
@@ -509,13 +803,13 @@ function actionTitle(a){
 
 async function renderActionForm(wrap, action){
   wrap.innerHTML = `
-    <div class="backRow" style="padding:0 0 4px;">
+    ${contextBarHtml()}
+    <div class="backRow">
       <button class="backBtn" id="cgBackBtn">‹ กลับ</button>
       <div class="formTitle">${actionTitle(action)}</div>
     </div>
-    <div class="card" id="formCard" style="margin-top:12px;"></div>
+    <div class="section" style="padding-top:0;"><div class="card" id="formCard"></div></div>
   `;
-  wrap.firstElementChild.style.padding='0 0 4px';
   document.getElementById('cgBackBtn').onclick=()=>{ cgState.action=null; renderCgDynamic(); };
   const card=document.getElementById('formCard');
   if(action==='vitals') buildVitalsForm(card);
@@ -527,42 +821,77 @@ async function renderActionForm(wrap, action){
   else if(action==='note') buildNoteForm(card);
 }
 
-async function submitTypedRecord(type, extra){
+async function submitTypedRecord(type, extra, existing){
   if(!cgState.caregiverName){ showToast('กรุณาเลือกชื่อผู้ดูแลก่อนบันทึก'); return; }
-  const record = Object.assign({
-    patientId: cgState.patientId,
-    type,
-    date: todayStr(),
-    time: nowTime(),
-    caregiverName: cgState.caregiverName,
-  }, extra);
+  const record = existing
+    ? Object.assign({ id: existing.id, patientId: existing.patientId, type, date: existing.date, time: existing.time, caregiverName: existing.caregiverName }, extra)
+    : Object.assign({ patientId: cgState.patientId, type, date: todayStr(), time: nowTime(), caregiverName: cgState.caregiverName }, extra);
   const btn=document.getElementById('actSubmitBtn');
   if(btn){ btn.disabled=true; btn.textContent='กำลังบันทึก...'; }
-  const result = await apiPost('addRecord', record);
+  const result = await apiPost(existing?'updateRecord':'addRecord', record);
   if(result && result.success){
-    showToast('บันทึกข้อมูลเรียบร้อย');
+    showToast(existing?'บันทึกการแก้ไขแล้ว':'บันทึกข้อมูลเรียบร้อย');
+    if(existing){ closeModal(); }
+    cgState.action=null;
+    renderCgDynamic();
+  } else if(!existing){
+    const q = getPendingQueue();
+    q.push(record);
+    setPendingQueue(q);
+    showToast('เน็ตมีปัญหา บันทึกข้อมูลไว้ในเครื่องแล้ว จะลองส่งใหม่อัตโนมัติ');
     cgState.action=null;
     renderCgDynamic();
   } else if(btn){
-    btn.disabled=false; btn.textContent='บันทึกข้อมูล';
+    btn.disabled=false; btn.textContent='บันทึกการแก้ไข';
+    showToast('บันทึกการแก้ไขไม่สำเร็จ ลองใหม่อีกครั้ง');
   }
 }
 
-function buildVitalsForm(card){
+/* ============== EDIT / DELETE รายการที่บันทึกไปแล้ว ============== */
+function editRecordModal(record){
+  openModal(actionTitle(record.type), `
+    <div class="section" style="padding-top:0;">
+      <div class="card" id="editFormCard"></div>
+      <button class="btn btn-ghost" id="deleteRecordBtn" style="color:var(--rose);border-color:var(--rose);margin-top:2px;">🗑 ลบรายการนี้</button>
+    </div>
+  `);
+  const card = document.getElementById('editFormCard');
+  if(record.type==='vitals') buildVitalsForm(card, record);
+  else if(record.type==='excretion') buildExcretionForm(card, record);
+  else if(record.type==='meal') buildMealForm(card, record);
+  else if(record.type==='medication') buildMedicationForm(card, record);
+  else if(record.type==='wound') buildWoundForm(card, record);
+  else if(record.type==='mood') buildMoodForm(card, record);
+  else if(record.type==='note') buildNoteForm(card, record);
+
+  document.getElementById('deleteRecordBtn').onclick = async ()=>{
+    if(!confirm('ยืนยันลบรายการนี้ใช่หรือไม่? ไม่สามารถกู้คืนได้')) return;
+    const r = await apiPost('deleteRecord', {id: record.id});
+    if(r && r.success){
+      showToast('ลบรายการแล้ว');
+      closeModal();
+      renderFeed();
+    } else {
+      showToast('ลบไม่สำเร็จ ลองใหม่อีกครั้ง');
+    }
+  };
+}
+
+function buildVitalsForm(card, existing){
   card.innerHTML = `
     <label>ความดันโลหิต (บน / ล่าง)</label>
     <div class="grid2">
-      <input type="number" id="v_sys" placeholder="เช่น 120" inputmode="numeric">
-      <input type="number" id="v_dia" placeholder="เช่น 80" inputmode="numeric">
+      <input type="number" id="v_sys" placeholder="เช่น 120" inputmode="numeric" value="${existing?existing.sys||'':''}">
+      <input type="number" id="v_dia" placeholder="เช่น 80" inputmode="numeric" value="${existing?existing.dia||'':''}">
     </div>
     <div class="grid3">
-      <div><label>ชีพจร</label><input type="number" id="v_pulse" placeholder="/นาที" inputmode="numeric"></div>
-      <div><label>อุณหภูมิ</label><input type="number" step="0.1" id="v_temp" placeholder="°C" inputmode="decimal"></div>
-      <div><label>O2 sat</label><input type="number" id="v_spo2" placeholder="%" inputmode="numeric"></div>
+      <div><label>ชีพจร</label><input type="number" id="v_pulse" placeholder="/นาที" inputmode="numeric" value="${existing?existing.pulse||'':''}"></div>
+      <div><label>อุณหภูมิ</label><input type="number" step="0.1" id="v_temp" placeholder="°C" inputmode="decimal" value="${existing?existing.temp||'':''}"></div>
+      <div><label>O2 sat</label><input type="number" id="v_spo2" placeholder="%" inputmode="numeric" value="${existing?existing.spo2||'':''}"></div>
     </div>
     <label>น้ำตาลปลายนิ้ว (ถ้าตรวจ)</label>
-    <input type="number" id="v_dtx" placeholder="mg/dL" inputmode="numeric">
-    <button class="btn btn-primary" id="actSubmitBtn" style="margin-top:14px;">บันทึกข้อมูล</button>
+    <input type="number" id="v_dtx" placeholder="mg/dL" inputmode="numeric" value="${existing?existing.dtx||'':''}">
+    <button class="btn btn-primary" id="actSubmitBtn" style="margin-top:14px;">${existing?'บันทึกการแก้ไข':'บันทึกข้อมูล'}</button>
   `;
   document.getElementById('actSubmitBtn').onclick=()=>submitTypedRecord('vitals', {
     sys: document.getElementById('v_sys').value,
@@ -571,49 +900,93 @@ function buildVitalsForm(card){
     temp: document.getElementById('v_temp').value,
     spo2: document.getElementById('v_spo2').value,
     dtx: document.getElementById('v_dtx').value,
-  });
+  }, existing);
 }
 
-function buildExcretionForm(card){
+function buildExcretionForm(card, existing){
   card.innerHTML = `
     <label>ปัสสาวะ</label><div id="e_urine"></div>
     <label>อุจจาระ</label><div id="e_stool"></div>
-    <button class="btn btn-primary" id="actSubmitBtn" style="margin-top:14px;">บันทึกข้อมูล</button>
+    <button class="btn btn-primary" id="actSubmitBtn" style="margin-top:14px;">${existing?'บันทึกการแก้ไข':'บันทึกข้อมูล'}</button>
   `;
-  const ex={urine:null,stool:null};
-  chipGroup(document.getElementById('e_urine'), ['ปกติ','สีเข้ม','มีเลือดปน','ไม่ได้ปัสสาวะ'], null, v=>ex.urine=v);
-  chipGroup(document.getElementById('e_stool'), ['ปกติ','ท้องเสีย','ท้องผูก','ไม่ถ่าย'], null, v=>ex.stool=v);
-  document.getElementById('actSubmitBtn').onclick=()=>submitTypedRecord('excretion', {urine:ex.urine||'', stool:ex.stool||''});
+  const ex={urine: existing?existing.urine||null:null, stool: existing?existing.stool||null:null};
+  const urineEl=document.getElementById('e_urine'), stoolEl=document.getElementById('e_stool');
+  chipGroup(urineEl, ['ปกติ','สีเข้ม','มีเลือดปน','ไม่ได้ปัสสาวะ'], ex.urine, v=>{ex.urine=v; urineEl.classList.remove('chipError');});
+  chipGroup(stoolEl, ['ปกติ','ท้องเสีย','ท้องผูก','ไม่ถ่าย'], ex.stool, v=>{ex.stool=v; stoolEl.classList.remove('chipError');});
+  document.getElementById('actSubmitBtn').onclick=()=>{
+    let ok=true;
+    if(!ex.urine){ urineEl.classList.add('chipError'); ok=false; }
+    if(!ex.stool){ stoolEl.classList.add('chipError'); ok=false; }
+    if(!ok){ showToast('กรุณาเลือกให้ครบก่อนบันทึก'); return; }
+    submitTypedRecord('excretion', {urine:ex.urine, stool:ex.stool}, existing);
+  };
 }
 
-function buildMealForm(card){
+function buildMealForm(card, existing){
   card.innerHTML = `
     <label>มื้อ</label><div id="m_slot"></div>
     <label>รายการอาหารที่ทาน</label>
-    <input type="text" id="m_food" placeholder="เช่น ข้าวต้ม + ไข่ตุ๋น">
+    <input type="text" id="m_food" placeholder="เช่น ข้าวต้ม + ไข่ตุ๋น" value="${existing?existing.foodItems||'':''}">
     <label>ปริมาณที่ทานได้</label><div id="m_amount"></div>
     <label>วิธีทาน</label><div id="m_route"></div>
     <label>การสำลัก</label><div id="m_choke"></div>
     <label>หมายเหตุ</label>
-    <textarea id="m_notes" placeholder="ถ้ามี"></textarea>
-    <button class="btn btn-primary" id="actSubmitBtn" style="margin-top:14px;">บันทึกข้อมูล</button>
+    <textarea id="m_notes" placeholder="ถ้ามี">${existing?existing.notes||'':''}</textarea>
+    <button class="btn btn-primary" id="actSubmitBtn" style="margin-top:14px;">${existing?'บันทึกการแก้ไข':'บันทึกข้อมูล'}</button>
   `;
-  const mf={slot:null,amount:null,route:null,choke:null};
-  chipGroup(document.getElementById('m_slot'), ['เช้า','กลางวัน','เย็น','ว่าง'], null, v=>mf.slot=v);
-  chipGroup(document.getElementById('m_amount'), ['ทานหมด','ทานได้ครึ่ง','ทานน้อย','ไม่ทาน'], null, v=>mf.amount=v);
-  chipGroup(document.getElementById('m_route'), ['ทางปาก','ทางสายยาง'], null, v=>mf.route=v);
-  chipGroup(document.getElementById('m_choke'), ['ไม่สำลัก','สำลัก'], null, v=>mf.choke=v);
-  document.getElementById('actSubmitBtn').onclick=()=>submitTypedRecord('meal', {
-    mealSlot: mf.slot||'',
-    foodItems: document.getElementById('m_food').value||'',
-    amount: mf.amount||'',
-    route: mf.route||'',
-    choke: mf.choke||'',
-    notes: document.getElementById('m_notes').value||'',
-  });
+  const mf={slot: existing?existing.mealSlot||null:null, amount: existing?existing.amount||null:null, route: existing?existing.route||null:null, choke: existing?existing.choke||null:null};
+  const slotEl=document.getElementById('m_slot'), amountEl=document.getElementById('m_amount');
+  chipGroup(slotEl, ['เช้า','กลางวัน','เย็น','ว่าง'], mf.slot, v=>{mf.slot=v; slotEl.classList.remove('chipError');});
+  chipGroup(amountEl, ['ทานหมด','ทานได้ครึ่ง','ทานน้อย','ไม่ทาน'], mf.amount, v=>{mf.amount=v; amountEl.classList.remove('chipError');});
+  chipGroup(document.getElementById('m_route'), ['ทางปาก','ทางสายยาง'], mf.route, v=>mf.route=v);
+  chipGroup(document.getElementById('m_choke'), ['ไม่สำลัก','สำลัก'], mf.choke, v=>mf.choke=v);
+  document.getElementById('actSubmitBtn').onclick=()=>{
+    let ok=true;
+    if(!mf.slot){ slotEl.classList.add('chipError'); ok=false; }
+    if(!mf.amount){ amountEl.classList.add('chipError'); ok=false; }
+    if(!ok){ showToast('กรุณาเลือกมื้อและปริมาณที่ทานก่อนบันทึก'); return; }
+    submitTypedRecord('meal', {
+      mealSlot: mf.slot,
+      foodItems: document.getElementById('m_food').value||'',
+      amount: mf.amount,
+      route: mf.route||'',
+      choke: mf.choke||'',
+      notes: document.getElementById('m_notes').value||'',
+    }, existing);
+  };
 }
 
-async function buildMedicationForm(card){
+async function buildMedicationForm(card, existing){
+  if(existing){
+    let slot = existing.medSlot||null;
+    let items = (existing.medItems||[]).map(i=>({name:i.name, status:i.status}));
+    function renderEdit(){
+      card.innerHTML = `
+        <label>มื้อยา</label><div id="md_slot"></div>
+        <div id="md_list" style="margin-top:10px;"></div>
+        <label>หมายเหตุ</label>
+        <textarea id="md_notes">${existing.notes||''}</textarea>
+        <button class="btn btn-primary" id="actSubmitBtn" style="margin-top:14px;">บันทึกการแก้ไข</button>
+      `;
+      chipGroup(document.getElementById('md_slot'), ['เช้า','เที่ยง','เย็น','ก่อนนอน'], slot, v=>{ slot=v; });
+      const listEl=document.getElementById('md_list');
+      listEl.innerHTML = items.map((it,idx)=>`
+        <div class="medRow" data-idx="${idx}">
+          <div class="mname">${it.name}</div>
+          <div class="medStatusRow"></div>
+        </div>`).join('');
+      items.forEach((it,idx)=>{
+        const row = listEl.querySelector('.medRow[data-idx="'+idx+'"] .medStatusRow');
+        chipGroup(row, ['ให้แล้ว','ไม่ได้ให้'], it.status, v=>{ items[idx].status=v; });
+      });
+      document.getElementById('actSubmitBtn').onclick = ()=>{
+        submitTypedRecord('medication', {medSlot: slot||'', medItems: items, notes: document.getElementById('md_notes').value||''}, existing);
+      };
+    }
+    renderEdit();
+    return;
+  }
+
   const cacheKey = 'cmcc_meds_'+cgState.patientId;
   let meds = cacheGet(cacheKey) || [];
   let slot=null;
@@ -669,43 +1042,48 @@ async function buildMedicationForm(card){
   });
 }
 
-function buildWoundForm(card){
+function buildWoundForm(card, existing){
   card.innerHTML = `
     <div id="w_status"></div>
-    <div id="w_detailWrap" style="display:none;">
+    <div id="w_detailWrap" style="display:${existing&&existing.wound==='มีแผล'?'block':'none'};">
       <label>รายละเอียดแผล</label>
-      <textarea id="w_detail" placeholder="ตำแหน่ง ขนาด ลักษณะแผล..."></textarea>
+      <textarea id="w_detail" placeholder="ตำแหน่ง ขนาด ลักษณะแผล...">${existing?existing.woundDetail||'':''}</textarea>
     </div>
-    <button class="btn btn-primary" id="actSubmitBtn" style="margin-top:14px;">บันทึกข้อมูล</button>
+    <button class="btn btn-primary" id="actSubmitBtn" style="margin-top:14px;">${existing?'บันทึกการแก้ไข':'บันทึกข้อมูล'}</button>
   `;
-  let wStatus=null;
-  chipGroup(document.getElementById('w_status'), ['ไม่มีแผล','มีแผล'], null, v=>{
+  let wStatus = existing?existing.wound||null:null;
+  const statusEl=document.getElementById('w_status');
+  chipGroup(statusEl, ['ไม่มีแผล','มีแผล'], wStatus, v=>{
     wStatus=v;
+    statusEl.classList.remove('chipError');
     document.getElementById('w_detailWrap').style.display = v==='มีแผล' ? 'block' : 'none';
   });
-  document.getElementById('actSubmitBtn').onclick=()=>submitTypedRecord('wound', {
-    wound: wStatus||'',
-    woundDetail: document.getElementById('w_detail')?.value||'',
-  });
+  document.getElementById('actSubmitBtn').onclick=()=>{
+    if(!wStatus){ statusEl.classList.add('chipError'); showToast('กรุณาเลือกสถานะผิวหนัง/แผลก่อนบันทึก'); return; }
+    submitTypedRecord('wound', {
+      wound: wStatus,
+      woundDetail: document.getElementById('w_detail')?.value||'',
+    }, existing);
+  };
 }
 
-function buildMoodForm(card){
+function buildMoodForm(card, existing){
   card.innerHTML = `
     <div id="mo_mood"></div>
-    <button class="btn btn-primary" id="actSubmitBtn" style="margin-top:14px;">บันทึกข้อมูล</button>
+    <button class="btn btn-primary" id="actSubmitBtn" style="margin-top:14px;">${existing?'บันทึกการแก้ไข':'บันทึกข้อมูล'}</button>
   `;
-  let moodSel=[];
-  chipGroup(document.getElementById('mo_mood'), ['ตื่นตัวดี','ร่าเริง','เงียบขรึม','ซึมเศร้า','สับสน','หงุดหงิด','กระสับกระส่าย','นอนหลับ'], [], v=>moodSel=v, true);
-  document.getElementById('actSubmitBtn').onclick=()=>submitTypedRecord('mood', {mood: moodSel});
+  let moodSel = existing?(existing.mood||[]).slice():[];
+  chipGroup(document.getElementById('mo_mood'), ['ตื่นตัวดี','ร่าเริง','เงียบขรึม','ซึมเศร้า','สับสน','หงุดหงิด','กระสับกระส่าย','นอนหลับ'], moodSel, v=>moodSel=v, true);
+  document.getElementById('actSubmitBtn').onclick=()=>submitTypedRecord('mood', {mood: moodSel}, existing);
 }
 
-function buildNoteForm(card){
+function buildNoteForm(card, existing){
   card.innerHTML = `
     <label>บันทึกทั่วไป</label>
-    <textarea id="n_text" placeholder="สิ่งที่อยากแจ้งญาติหรือแอดมิน"></textarea>
-    <button class="btn btn-primary" id="actSubmitBtn" style="margin-top:14px;">บันทึกข้อมูล</button>
+    <textarea id="n_text" placeholder="สิ่งที่อยากแจ้งญาติหรือแอดมิน">${existing?existing.notes||'':''}</textarea>
+    <button class="btn btn-primary" id="actSubmitBtn" style="margin-top:14px;">${existing?'บันทึกการแก้ไข':'บันทึกข้อมูล'}</button>
   `;
-  document.getElementById('actSubmitBtn').onclick=()=>submitTypedRecord('note', {notes: document.getElementById('n_text').value||''});
+  document.getElementById('actSubmitBtn').onclick=()=>submitTypedRecord('note', {notes: document.getElementById('n_text').value||''}, existing);
 }
 
 /* ============== ADMIN VIEW ============== */
@@ -729,8 +1107,20 @@ async function renderAdminView(){
 }
 
 /* ---- Report tab ---- */
+const REPORT_CATS = [
+  {key:'vitals', label:'สัญญาณชีพ'},
+  {key:'excretion', label:'การขับถ่าย'},
+  {key:'meal', label:'มื้ออาหาร'},
+  {key:'medication', label:'มื้อยา'},
+  {key:'wound', label:'แผล/ผิวหนัง'},
+  {key:'mood', label:'สภาพจิตใจ'},
+  {key:'note', label:'บันทึกทั่วไป'},
+];
+let selectedReportCats = REPORT_CATS.map(c=>c.key);
+
 async function renderReportTab(){
   const c = document.getElementById('adminContent');
+  selectedReportCats = REPORT_CATS.map(c=>c.key);
   c.innerHTML = `
     <div class="section">
       <div class="card">
@@ -741,22 +1131,42 @@ async function renderReportTab(){
         </select>
         <label>เลือกวันที่</label>
         <input type="date" id="r_date" value="${todayStr()}">
+
+        <div class="catPickHead" style="padding-top:14px;">
+          <label style="margin:0;">หมวดที่ต้องการรวมในรายงาน</label>
+          <span class="sel" id="catSelCount">${REPORT_CATS.length}/${REPORT_CATS.length}</span>
+        </div>
+        <div class="btn-row" style="margin:8px 0;">
+          <button class="btn btn-ghost" id="selectAllCatsBtn" style="padding:8px;font-size:12px;">เลือกทั้งหมด</button>
+          <button class="btn btn-ghost" id="clearAllCatsBtn" style="padding:8px;font-size:12px;">ล้างทั้งหมด</button>
+        </div>
+        <div id="r_categories"></div>
+
+        <button class="btn btn-primary" id="openReportBtn" style="margin-top:16px;">ดูรายงาน / ส่งเข้ากลุ่มไลน์</button>
+        <button class="btn btn-secondary" id="openSummaryBtn" style="margin-top:10px;">📈 ดูสรุปแนวโน้มรายสัปดาห์/เดือน</button>
       </div>
-    </div>
-    <div id="reportWrap"></div>
-    <div class="section" id="reportActions" style="display:none;">
-      <div class="btn-row">
-        <button class="btn btn-amber" id="downloadPngBtn">ดาวน์โหลดรูปภาพ (ส่ง LINE)</button>
-      </div>
-      <button class="btn btn-ghost" style="margin-top:10px;" id="printBtn">พิมพ์ / บันทึกเป็น PDF</button>
     </div>
   `;
-  document.getElementById('r_patient').onchange = buildReport;
-  document.getElementById('r_date').onchange = buildReport;
-  if(patients.length){
-    document.getElementById('r_patient').value = patients[0].id;
-    buildReport();
-  }
+  renderCategoryPicker();
+  document.getElementById('selectAllCatsBtn').onclick = ()=>{ selectedReportCats = REPORT_CATS.map(c=>c.key); renderCategoryPicker(); };
+  document.getElementById('clearAllCatsBtn').onclick = ()=>{ selectedReportCats = []; renderCategoryPicker(); };
+  document.getElementById('openReportBtn').onclick = openReportModal;
+  document.getElementById('openSummaryBtn').onclick = openSummaryModal;
+  if(patients.length){ document.getElementById('r_patient').value = patients[0].id; }
+}
+
+function renderCategoryPicker(){
+  const el = document.getElementById('r_categories');
+  if(!el) return;
+  chipGroup(el, REPORT_CATS.map(c=>c.label), selectedReportCats.map(k=>REPORT_CATS.find(c=>c.key===k).label), (vals)=>{
+    selectedReportCats = vals.map(lbl=>REPORT_CATS.find(c=>c.label===lbl).key);
+    updateCatCount();
+  }, true);
+  updateCatCount();
+}
+function updateCatCount(){
+  const el=document.getElementById('catSelCount');
+  if(el) el.textContent = `${selectedReportCats.length}/${REPORT_CATS.length}`;
 }
 
 function visitLine(r, content){
@@ -773,37 +1183,27 @@ function patientAlertLine(p){
   return `<div class="rc-alert">${bits.join(' · ')}</div>`;
 }
 
-async function buildReport(){
-  const pid = document.getElementById('r_patient').value;
-  const date = document.getElementById('r_date').value;
-  const wrap = document.getElementById('reportWrap');
-  const actions = document.getElementById('reportActions');
-  if(!pid){ wrap.innerHTML=''; actions.style.display='none'; return; }
-  const patient = patients.find(p=>p.id===pid);
-  wrap.innerHTML = '<div class="section"><div class="empty">กำลังโหลด...</div></div>';
-  const records = (await apiGet('getRecords', {patientId:pid, date})).sort((a,b)=>a.time.localeCompare(b.time));
-  if(!document.getElementById('reportWrap')) return;
+function buildReportCardHtml(records, patient, date){
+  const has = k=> selectedReportCats.includes(k);
+  const vitalsRows = has('vitals') ? records.filter(r=>r.type==='vitals') : [];
+  const excretionRows = has('excretion') ? records.filter(r=>r.type==='excretion') : [];
+  const mealRows = has('meal') ? records.filter(r=>r.type==='meal') : [];
+  const medRows = has('medication') ? records.filter(r=>r.type==='medication') : [];
+  const woundRows = has('wound') ? records.filter(r=>r.type==='wound' && r.wound==='มีแผล') : [];
+  const moodRows = has('mood') ? records.filter(r=>r.type==='mood' && r.mood && r.mood.length) : [];
+  const noteRows = has('note') ? records.filter(r=>r.type==='note' && r.notes) : [];
+  const anyShown = vitalsRows.length||excretionRows.length||mealRows.length||medRows.length||woundRows.length||moodRows.length||noteRows.length;
 
-  actions.style.display = 'block';
-
-  const vitalsRows = records.filter(r=>r.type==='vitals');
-  const excretionRows = records.filter(r=>r.type==='excretion');
-  const mealRows = records.filter(r=>r.type==='meal');
-  const medRows = records.filter(r=>r.type==='medication');
-  const woundRows = records.filter(r=>r.type==='wound' && r.wound==='มีแผล');
-  const moodRows = records.filter(r=>r.type==='mood' && r.mood && r.mood.length);
-  const noteRows = records.filter(r=>r.type==='note' && r.notes);
-
-  wrap.innerHTML = `
+  return `
     <div id="reportCard">
       <div class="rc-head">
         <div class="rc-brand">CMCC โฮมแคร์ · บันทึกการดูแลประจำวัน</div>
-        <div class="rc-name">${patient ? patient.name : '-'}</div>
+        <div class="rc-name">${patient ? (patient.prefix?patient.prefix+' ':'')+patient.name : '-'}</div>
         <div class="rc-sub">${patient && patient.age ? 'อายุ '+patient.age+' ปี' : ''}${patient && patient.gender ? ' · '+patient.gender : ''} · ${fmtDate(date)}</div>
         ${patient ? patientAlertLine(patient) : ''}
       </div>
       <div class="rc-body">
-        ${records.length===0 ? '<div class="empty">ไม่มีข้อมูลการบันทึกในวันนี้</div>' : `
+        ${!anyShown ? '<div class="empty">ไม่มีข้อมูลในหมวดที่เลือกสำหรับวันนี้</div>' : `
         ${vitalsRows.length?`<div class="rc-sec"><div class="rc-sec-title">สัญญาณชีพ</div>
           ${vitalsRows.map(r=>visitLine(r, `
             <span>BP ${r.sys||'-'}/${r.dia||'-'}</span>
@@ -851,16 +1251,155 @@ async function buildReport(){
       </div>
     </div>
   `;
+}
 
-  document.getElementById('downloadPngBtn').onclick = ()=>{
-    html2canvas(document.getElementById('reportCard'), {backgroundColor:'#ffffff', scale:2}).then(canvas=>{
-      const link=document.createElement('a');
-      link.download = `${patient?patient.name:'report'}-${date}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    });
+async function captureReportCanvas(){
+  const rc=document.getElementById('reportCard');
+  const prevTransform = rc.style.transform;
+  rc.style.transform='none';
+  const canvas = await html2canvas(rc, {backgroundColor:'#ffffff', scale:2});
+  rc.style.transform = prevTransform;
+  return canvas;
+}
+
+async function openReportModal(){
+  const pid = document.getElementById('r_patient').value;
+  const date = document.getElementById('r_date').value;
+  if(!pid){ showToast('กรุณาเลือกผู้สูงอายุ'); return; }
+  const patient = patients.find(p=>p.id===pid);
+
+  openModal('รายงานประจำวัน', `
+    <div class="zoomBar">
+      <button class="zoomBtn" id="zoomOutBtn">−</button>
+      <button class="zoomBtn" id="zoomFitBtn">⤢</button>
+      <button class="zoomBtn" id="zoomInBtn">+</button>
+    </div>
+    <div class="reportScroll"><div id="reportWrap"></div></div>
+    <div class="section" style="padding-top:6px;">
+      <div class="btn-row">
+        <button class="btn btn-amber" id="downloadPngBtn">ดาวน์โหลดรูปภาพ</button>
+        <button class="btn btn-primary" id="shareBtn">แชร์ / ส่ง LINE</button>
+      </div>
+      <button class="btn btn-ghost" style="margin-top:10px;" id="printBtn">พิมพ์ / บันทึกเป็น PDF</button>
+    </div>
+  `);
+  document.getElementById('reportWrap').innerHTML = '<div class="empty">กำลังโหลด...</div>';
+  const records = (await apiGet('getRecords', {patientId:pid, date})).sort((a,b)=>a.time.localeCompare(b.time));
+  const wrapEl = document.getElementById('reportWrap');
+  if(!wrapEl) return; // ผู้ใช้ปิด modal ไปแล้วระหว่างโหลด
+  wrapEl.innerHTML = buildReportCardHtml(records, patient, date);
+
+  let scale=1;
+  function applyZoom(){ const rc=document.getElementById('reportCard'); if(rc){ rc.style.transform=`scale(${scale})`; rc.style.transformOrigin='top center'; } }
+  document.getElementById('zoomInBtn').onclick=()=>{ scale=Math.min(scale+0.15,2); applyZoom(); };
+  document.getElementById('zoomOutBtn').onclick=()=>{ scale=Math.max(scale-0.15,0.5); applyZoom(); };
+  document.getElementById('zoomFitBtn').onclick=()=>{ scale=1; applyZoom(); };
+
+  document.getElementById('downloadPngBtn').onclick = async ()=>{
+    const canvas = await captureReportCanvas();
+    const link=document.createElement('a');
+    link.download = `${patient?patient.name:'report'}-${date}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
   };
   document.getElementById('printBtn').onclick = ()=> window.print();
+  document.getElementById('shareBtn').onclick = async ()=>{
+    const shareBtn=document.getElementById('shareBtn');
+    shareBtn.disabled=true; shareBtn.textContent='กำลังเตรียมไฟล์...';
+    const canvas = await captureReportCanvas();
+    canvas.toBlob(async (blob)=>{
+      shareBtn.disabled=false; shareBtn.textContent='แชร์ / ส่ง LINE';
+      if(!blob){ showToast('สร้างรูปภาพไม่สำเร็จ'); return; }
+      const fileName = `${patient?patient.name:'report'}-${date}.png`;
+      const file = new File([blob], fileName, {type:'image/png'});
+      if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+        try{ await navigator.share({files:[file], title:'รายงานการดูแล', text:`รายงานการดูแล ${patient?patient.name:''} วันที่ ${fmtDate(date)}`}); }
+        catch(e){ /* ผู้ใช้ยกเลิกการแชร์ */ }
+      } else {
+        const link=document.createElement('a');
+        link.download = fileName;
+        link.href = URL.createObjectURL(blob);
+        link.click();
+        showToast('เบราว์เซอร์นี้แชร์ไฟล์โดยตรงไม่ได้ ดาวน์โหลดรูปให้แล้ว นำไปส่งเข้ากลุ่ม LINE ได้เลย');
+      }
+    }, 'image/png');
+  };
+}
+
+/* ---- สรุปแนวโน้มรายสัปดาห์/เดือน ---- */
+async function openSummaryModal(){
+  const pid = document.getElementById('r_patient').value;
+  if(!pid){ showToast('กรุณาเลือกผู้สูงอายุ'); return; }
+  const patient = patients.find(p=>p.id===pid);
+  const today = todayStr();
+  const firstOfMonth = today.slice(0,8)+'01';
+  openModal('สรุปแนวโน้ม · '+(patient?patient.name:''), `
+    <div class="section" style="padding-top:0;">
+      <div class="grid2">
+        <div><label>จากวันที่</label><input type="date" id="sum_start" value="${firstOfMonth}"></div>
+        <div><label>ถึงวันที่</label><input type="date" id="sum_end" value="${today}"></div>
+      </div>
+      <button class="btn btn-secondary" id="sumRefreshBtn" style="margin-top:10px;">ดูสรุป</button>
+      <div id="summaryBody" style="margin-top:14px;"></div>
+    </div>
+  `);
+  document.getElementById('sumRefreshBtn').onclick = ()=> buildSummary(pid);
+  buildSummary(pid);
+}
+
+function buildBpSparkline(series){
+  const pts = series.filter(v=>v.sys && v.dia);
+  if(pts.length===0) return '<div class="empty">ไม่มีข้อมูลความดันในช่วงนี้</div>';
+  const w=280, h=110, pad=10;
+  const sysVals = pts.map(p=>Number(p.sys));
+  const diaVals = pts.map(p=>Number(p.dia));
+  const allVals = sysVals.concat(diaVals);
+  const min = Math.min.apply(null, allVals)-5, max = Math.max.apply(null, allVals)+5;
+  const xStep = pts.length>1 ? (w-2*pad)/(pts.length-1) : 0;
+  const toY = v => (h-pad) - ((v-min)/(max-min))*(h-2*pad);
+  const sysPoints = sysVals.map((v,i)=>`${pad+i*xStep},${toY(v).toFixed(1)}`).join(' ');
+  const diaPoints = diaVals.map((v,i)=>`${pad+i*xStep},${toY(v).toFixed(1)}`).join(' ');
+  return `
+    <svg viewBox="0 0 ${w} ${h}" style="width:100%;height:auto;display:block;">
+      <polyline points="${sysPoints}" fill="none" stroke="#C1685C" stroke-width="2"/>
+      <polyline points="${diaPoints}" fill="none" stroke="#2C6E6B" stroke-width="2"/>
+    </svg>
+    <div style="display:flex;gap:14px;font-size:11.5px;color:var(--ink-soft);margin-top:6px;">
+      <span><span style="display:inline-block;width:8px;height:8px;background:#C1685C;border-radius:50%;margin-right:4px;"></span>Systolic</span>
+      <span><span style="display:inline-block;width:8px;height:8px;background:#2C6E6B;border-radius:50%;margin-right:4px;"></span>Diastolic</span>
+    </div>
+    <div class="hint">${pts.length} ค่าที่บันทึกในช่วงนี้</div>
+  `;
+}
+
+async function buildSummary(pid){
+  const start = document.getElementById('sum_start').value;
+  const end = document.getElementById('sum_end').value;
+  const body = document.getElementById('summaryBody');
+  if(!body) return;
+  body.innerHTML = '<div class="empty">กำลังโหลด...</div>';
+  const data = await apiGet('getSummary', {patientId:pid, startDate:start, endDate:end});
+  if(!document.getElementById('summaryBody')) return;
+  const moodEntries = Object.keys(data.moodCounts||{});
+  const moodBadges = moodEntries.length
+    ? moodEntries.map(m=>`<span class="badge badge-neutral">${m} ×${data.moodCounts[m]}</span>`).join('')
+    : '<span class="hint">ไม่มีข้อมูล</span>';
+  body.innerHTML = `
+    <div class="dashSummary">
+      <div class="box"><div class="num">${data.entryDays}</div><div class="lb">วันที่มีบันทึก</div></div>
+      <div class="box"><div class="num">${data.mealCount}</div><div class="lb">มื้ออาหารรวม</div></div>
+      <div class="box"><div class="num">${data.medCompliancePct!==null?data.medCompliancePct+'%':'-'}</div><div class="lb">ให้ยาครบ</div></div>
+    </div>
+    ${data.woundDays>0?`<div class="infoBanner warn" style="margin-bottom:14px;">พบวันที่มีแผลกดทับ ${data.woundDays} วันในช่วงนี้</div>`:''}
+    <div class="card" style="margin-bottom:14px;">
+      <h2 style="margin-bottom:10px;"><span class="dot"></span>แนวโน้มความดันโลหิต</h2>
+      ${buildBpSparkline(data.vitalsSeries||[])}
+    </div>
+    <div class="card">
+      <h2 style="margin-bottom:10px;"><span class="dot"></span>สภาพจิตใจที่พบบ่อย</h2>
+      <div>${moodBadges}</div>
+    </div>
+  `;
 }
 
 /* ---- Manage tab ---- */
@@ -869,51 +1408,12 @@ async function renderManageTab(){
   c.innerHTML = `
     <div class="section">
       <div class="card">
-        <h2><span class="dot"></span>ลงทะเบียนผู้สูงอายุ (เคสใหม่)</h2>
-        <div id="patientList"></div>
-        <div style="margin-top:14px;">
-          <label>ชื่อ-นามสกุล</label>
-          <input type="text" id="np_name" placeholder="ชื่อผู้สูงอายุ">
-          <div class="grid2">
-            <div><label>วันเกิด</label><input type="date" id="np_dob"></div>
-            <div><label>อายุ (ถ้าไม่ทราบวันเกิด)</label><input type="number" id="np_age" placeholder="ปี"></div>
-          </div>
-          <label>เพศ</label>
-          <div id="np_gender"></div>
-          <label>ที่อยู่</label>
-          <textarea id="np_address" placeholder="ที่อยู่ปัจจุบัน"></textarea>
-
-          <label class="groupLabel">ผู้ติดต่อฉุกเฉิน</label>
-          <div class="grid2">
-            <div><label>ชื่อ</label><input type="text" id="np_ecname" placeholder="ชื่อญาติ"></div>
-            <div><label>ความสัมพันธ์</label><input type="text" id="np_ecrelation" placeholder="เช่น บุตร"></div>
-          </div>
-          <label>เบอร์โทร</label>
-          <input type="text" id="np_ecphone" placeholder="0xx-xxx-xxxx">
-
-          <label class="groupLabel">ข้อมูลทางการแพทย์</label>
-          <label>โรคประจำตัว</label>
-          <input type="text" id="np_conditions" placeholder="เช่น เบาหวาน ความดันสูง">
-          <div class="grid2">
-            <div><label>แพ้อาหาร</label><input type="text" id="np_foodallergy" placeholder="ถ้ามี"></div>
-            <div><label>แพ้ยา</label><input type="text" id="np_drugallergy" placeholder="ถ้ามี"></div>
-          </div>
-          <label>DNR (ปฏิเสธการกู้ชีพ)</label>
-          <div id="np_dnr"></div>
-
-          <label class="groupLabel">ข้อมูลโรงพยาบาล</label>
-          <div class="grid2">
-            <div><label>โรงพยาบาลปัจจุบัน</label><input type="text" id="np_hospital" placeholder="ชื่อโรงพยาบาล"></div>
-            <div><label>สิทธิการรักษา</label><input type="text" id="np_insurance" placeholder="เช่น บัตรทอง"></div>
-          </div>
-          <label>ชื่อแพทย์</label>
-          <input type="text" id="np_doctor" placeholder="ถ้าทราบ">
-
-          <label class="groupLabel">หมายเหตุ / แผนการดูแล</label>
-          <textarea id="np_notes" placeholder="ข้อมูลเพิ่มเติมที่อยากให้ผู้ดูแลทราบ"></textarea>
-
-          <button class="btn btn-secondary" style="margin-top:14px;" id="addPatientBtn">+ ลงทะเบียนผู้สูงอายุ</button>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <h2 style="margin:0;"><span class="dot"></span>รายชื่อผู้สูงอายุ</h2>
+          <button class="btn btn-amber" id="openRegisterBtn" style="width:auto;padding:9px 16px;font-size:13px;">+ ลงทะเบียนเคสใหม่</button>
         </div>
+        ${patients.length>4 ? '<input type="text" id="patientListSearch" class="searchInput" placeholder="ค้นหาชื่อผู้สูงอายุ...">' : ''}
+        <div id="patientList"></div>
       </div>
 
       <div class="card">
@@ -924,6 +1424,17 @@ async function renderManageTab(){
           <input type="text" id="nc_name" placeholder="ชื่อ-นามสกุลผู้ดูแล">
           <button class="btn btn-secondary" style="margin-top:10px;" id="addCaregiverBtn">+ เพิ่มผู้ดูแล</button>
         </div>
+      </div>
+
+      <div class="card">
+        <h2><span class="dot"></span>มอบหมายเคส</h2>
+        <label>เลือกผู้ดูแล</label>
+        <select id="assign_caregiver">
+          <option value="">— เลือก —</option>
+          ${caregivers.map(c=>`<option value="${c.id}">${c.name}</option>`).join('')}
+        </select>
+        <div id="assignList" style="margin-top:10px;"></div>
+        <div class="hint">ติ๊กเลือกเคสที่ผู้ดูแลคนนี้รับผิดชอบ — ผู้ดูแลจะเห็นเฉพาะเคสที่มอบหมายไว้เท่านั้นตอนเข้าไปบันทึกข้อมูล ถ้ายังไม่ได้ตั้งค่าให้ใครเลยสักคน ทุกคนจะยังเห็นรายชื่อทั้งหมดตามปกติ (โหมดยังไม่เปิดใช้งาน)</div>
       </div>
 
       <div class="card">
@@ -951,48 +1462,25 @@ async function renderManageTab(){
   renderPatientList();
   renderCaregiverList();
 
-  let genderSel=null, dnrSel=null, nmSlots=[];
-  chipGroup(document.getElementById('np_gender'), ['ชาย','หญิง'], null, v=>genderSel=v);
-  chipGroup(document.getElementById('np_dnr'), ['ไม่มีคำสั่ง DNR','มีคำสั่ง DNR'], null, v=>dnrSel=v);
+  let nmSlots=[];
   chipGroup(document.getElementById('nm_slots'), ['เช้า','เที่ยง','เย็น','ก่อนนอน'], [], v=>nmSlots=v, true);
   document.getElementById('med_patient').onchange = e=> loadMedList(e.target.value);
+  document.getElementById('assign_caregiver').onchange = e=> loadAssignList(e.target.value);
 
-  document.getElementById('addPatientBtn').onclick = async ()=>{
-    const name=document.getElementById('np_name').value.trim();
-    if(!name){ showToast('กรุณากรอกชื่อ'); return; }
-    const dob=document.getElementById('np_dob').value;
-    const ageManual=document.getElementById('np_age').value.trim();
-    const age = dob ? calcAge(dob) : ageManual;
-    const result = await apiPost('addPatient', {
-      name, dob, age, gender: genderSel||'',
-      address: document.getElementById('np_address').value||'',
-      emergencyName: document.getElementById('np_ecname').value||'',
-      emergencyRelation: document.getElementById('np_ecrelation').value||'',
-      emergencyPhone: document.getElementById('np_ecphone').value||'',
-      conditions: document.getElementById('np_conditions').value||'',
-      foodAllergy: document.getElementById('np_foodallergy').value||'',
-      drugAllergy: document.getElementById('np_drugallergy').value||'',
-      dnr: dnrSel||'',
-      hospital: document.getElementById('np_hospital').value||'',
-      insuranceRight: document.getElementById('np_insurance').value||'',
-      doctorName: document.getElementById('np_doctor').value||'',
-      notes: document.getElementById('np_notes').value||'',
-    });
-    if(result && result.success){
-      patients = await apiGet('getPatients');
-      showToast('ลงทะเบียนผู้สูงอายุแล้ว');
-      renderManageTab();
-    }
-  };
+  const searchEl = document.getElementById('patientListSearch');
+  if(searchEl){ searchEl.oninput = e=> renderPatientList(e.target.value); }
+
+  document.getElementById('openRegisterBtn').onclick = ()=> openPatientFormModal(null);
+
   document.getElementById('addCaregiverBtn').onclick = async ()=>{
     const name=document.getElementById('nc_name').value.trim();
     if(!name){ showToast('กรุณากรอกชื่อ'); return; }
     const result = await apiPost('addCaregiver', {name});
     if(result && result.success){
       caregivers = await apiGet('getCaregivers');
-      renderCaregiverList();
-      document.getElementById('nc_name').value='';
+      cacheSet('cmcc_caregivers', caregivers);
       showToast('เพิ่มผู้ดูแลแล้ว');
+      renderManageTab();
     }
   };
   document.getElementById('addMedBtn').onclick = async ()=>{
@@ -1013,6 +1501,185 @@ async function renderManageTab(){
   };
 }
 
+/* ============== PATIENT REGISTRATION MODAL (ลงทะเบียนเคสใหม่) ============== */
+const REG_FIELD_IDS = ['np_name','np_dob','np_age','np_address','np_servicestart','np_ecname','np_ecrelation','np_ecphone','np_conditions','np_foodallergy','np_drugallergy','np_hospital','np_insurance','np_doctor'];
+const REG_TOTAL_FIELDS = REG_FIELD_IDS.length + 5; // + prefix, gender, bloodType, dnr chips, nickname counted loosely
+
+function openPatientFormModal(editing){
+  const regState = {
+    prefix: editing?editing.prefix:null,
+    gender: editing?editing.gender:null,
+    bloodType: editing?editing.bloodType:null,
+    dnr: editing?editing.dnr:null,
+  };
+  const body = openModal(editing?'แก้ไขข้อมูลเคส':'ลงทะเบียนเคสใหม่', `
+    <div class="progressWrap">
+      <div class="progressLabel"><span>ความสมบูรณ์ของข้อมูล</span><b id="regProgressText">0/19</b></div>
+      <div class="progressBar"><div class="progressFill" id="regProgressFill" style="width:0%;"></div></div>
+    </div>
+    <div class="section" style="padding-top:8px;">
+      <label>คำนำหน้า</label>
+      <div id="np_prefix"></div>
+      <div class="grid2">
+        <div><label>ชื่อ-นามสกุล</label><input type="text" id="np_name" placeholder="ชื่อผู้สูงอายุ" value="${editing?editing.name||'':''}"></div>
+        <div><label>ชื่อเล่น</label><input type="text" id="np_nickname" placeholder="ถ้ามี" value="${editing?editing.nickname||'':''}"></div>
+      </div>
+      <div class="grid2">
+        <div><label>วันเกิด</label><input type="date" id="np_dob" value="${editing?editing.dob||'':''}"></div>
+        <div><label>อายุ (ถ้าไม่ทราบวันเกิด)</label><input type="number" id="np_age" placeholder="ปี" value="${editing?editing.age||'':''}"></div>
+      </div>
+      <label>เพศ</label>
+      <div id="np_gender"></div>
+      <label>กรุ๊ปเลือด</label>
+      <div id="np_bloodtype"></div>
+      <div class="grid2">
+        <div><label>เชื้อชาติ</label><input type="text" id="np_ethnicity" placeholder="เช่น ไทย" value="${editing?editing.ethnicity||'':''}"></div>
+        <div><label>สัญชาติ</label><input type="text" id="np_nationality" placeholder="เช่น ไทย" value="${editing?editing.nationality||'':''}"></div>
+      </div>
+      <label>ศาสนา</label>
+      <input type="text" id="np_religion" placeholder="ถ้าระบุ" value="${editing?editing.religion||'':''}">
+      <label>ที่อยู่</label>
+      <textarea id="np_address" placeholder="ที่อยู่ปัจจุบัน">${editing?editing.address||'':''}</textarea>
+      <label>วันที่เริ่มบริการ</label>
+      <input type="date" id="np_servicestart" value="${editing?editing.serviceStartDate||'':''}">
+
+      <label class="groupLabel">ผู้ติดต่อฉุกเฉิน</label>
+      <div class="grid2">
+        <div><label>ชื่อ</label><input type="text" id="np_ecname" placeholder="ชื่อญาติ" value="${editing?editing.emergencyName||'':''}"></div>
+        <div><label>ความสัมพันธ์</label><input type="text" id="np_ecrelation" placeholder="เช่น บุตร" value="${editing?editing.emergencyRelation||'':''}"></div>
+      </div>
+      <label>เบอร์โทร</label>
+      <input type="text" id="np_ecphone" placeholder="0xx-xxx-xxxx" value="${editing?editing.emergencyPhone||'':''}">
+
+      <label class="groupLabel">ข้อมูลทางการแพทย์</label>
+      <label>โรคประจำตัว</label>
+      <input type="text" id="np_conditions" placeholder="เช่น เบาหวาน ความดันสูง" value="${editing?editing.conditions||'':''}">
+      <div class="grid2">
+        <div><label>แพ้อาหาร</label><input type="text" id="np_foodallergy" placeholder="ถ้ามี" value="${editing?editing.foodAllergy||'':''}"></div>
+        <div><label>แพ้ยา</label><input type="text" id="np_drugallergy" placeholder="ถ้ามี" value="${editing?editing.drugAllergy||'':''}"></div>
+      </div>
+      <label>DNR (ปฏิเสธการกู้ชีพ)</label>
+      <div id="np_dnr"></div>
+
+      <label class="groupLabel">ข้อมูลโรงพยาบาล</label>
+      <div class="grid2">
+        <div><label>โรงพยาบาลปัจจุบัน</label><input type="text" id="np_hospital" placeholder="ชื่อโรงพยาบาล" value="${editing?editing.hospital||'':''}"></div>
+        <div><label>สิทธิการรักษา</label><input type="text" id="np_insurance" placeholder="เช่น บัตรทอง" value="${editing?editing.insuranceRight||'':''}"></div>
+      </div>
+      <label>ชื่อแพทย์</label>
+      <input type="text" id="np_doctor" placeholder="ถ้าทราบ" value="${editing?editing.doctorName||'':''}">
+
+      <label class="groupLabel">หมายเหตุ / แผนการดูแล</label>
+      <textarea id="np_notes" placeholder="ข้อมูลเพิ่มเติมที่อยากให้ผู้ดูแลทราบ">${editing?editing.notes||'':''}</textarea>
+
+      <button class="btn btn-primary" id="savePatientBtn" style="margin-top:16px;">${editing?'บันทึกการแก้ไข':'ลงทะเบียนผู้สูงอายุ'}</button>
+    </div>
+  `);
+
+  chipGroup(document.getElementById('np_prefix'), ['นาย','นาง','นางสาว','คุณ'], regState.prefix, v=>{regState.prefix=v; updateRegProgress();});
+  chipGroup(document.getElementById('np_gender'), ['ชาย','หญิง'], regState.gender, v=>{regState.gender=v; updateRegProgress();});
+  chipGroup(document.getElementById('np_bloodtype'), ['A','B','AB','O','ไม่ทราบ'], regState.bloodType, v=>{regState.bloodType=v; updateRegProgress();});
+  chipGroup(document.getElementById('np_dnr'), ['ไม่มีคำสั่ง DNR','มีคำสั่ง DNR'], regState.dnr, v=>{regState.dnr=v; updateRegProgress();});
+
+  function updateRegProgress(){
+    let filled=0;
+    REG_FIELD_IDS.forEach(id=>{ const el=document.getElementById(id); if(el && el.value && el.value.trim()) filled++; });
+    if(regState.prefix) filled++;
+    if(regState.gender) filled++;
+    if(regState.bloodType) filled++;
+    if(regState.dnr) filled++;
+    if(document.getElementById('np_nickname')?.value.trim()) filled++;
+    const pct = Math.round((filled/REG_TOTAL_FIELDS)*100);
+    const fillEl=document.getElementById('regProgressFill');
+    const textEl=document.getElementById('regProgressText');
+    if(fillEl) fillEl.style.width = Math.min(pct,100)+'%';
+    if(textEl) textEl.textContent = `${Math.min(filled,REG_TOTAL_FIELDS)}/${REG_TOTAL_FIELDS}`;
+  }
+  body.addEventListener('input', updateRegProgress);
+  updateRegProgress();
+
+  document.getElementById('savePatientBtn').onclick = async ()=>{
+    const name=document.getElementById('np_name').value.trim();
+    if(!name){ showToast('กรุณากรอกชื่อ'); return; }
+    const dob=document.getElementById('np_dob').value;
+    const ageManual=document.getElementById('np_age').value.trim();
+    const age = dob ? calcAge(dob) : ageManual;
+    const payload = {
+      prefix: regState.prefix||'', name, nickname: document.getElementById('np_nickname').value||'',
+      dob, age, gender: regState.gender||'', bloodType: regState.bloodType||'',
+      ethnicity: document.getElementById('np_ethnicity').value||'',
+      nationality: document.getElementById('np_nationality').value||'',
+      religion: document.getElementById('np_religion').value||'',
+      address: document.getElementById('np_address').value||'',
+      serviceStartDate: document.getElementById('np_servicestart').value||'',
+      emergencyName: document.getElementById('np_ecname').value||'',
+      emergencyRelation: document.getElementById('np_ecrelation').value||'',
+      emergencyPhone: document.getElementById('np_ecphone').value||'',
+      conditions: document.getElementById('np_conditions').value||'',
+      foodAllergy: document.getElementById('np_foodallergy').value||'',
+      drugAllergy: document.getElementById('np_drugallergy').value||'',
+      dnr: regState.dnr||'',
+      hospital: document.getElementById('np_hospital').value||'',
+      insuranceRight: document.getElementById('np_insurance').value||'',
+      doctorName: document.getElementById('np_doctor').value||'',
+      notes: document.getElementById('np_notes').value||'',
+    };
+    const btn=document.getElementById('savePatientBtn');
+    btn.disabled=true; btn.textContent='กำลังบันทึก...';
+    let result;
+    if(editing){
+      result = await apiPost('updatePatient', Object.assign({id:editing.id}, payload));
+    } else {
+      result = await apiPost('addPatient', payload);
+    }
+    if(result && result.success){
+      patients = await apiGet('getPatients');
+      showToast(editing ? 'บันทึกการแก้ไขแล้ว' : 'ลงทะเบียนผู้สูงอายุแล้ว');
+      closeModal();
+      if(currentView==='admin') renderAdminView();
+    } else {
+      btn.disabled=false; btn.textContent = editing?'บันทึกการแก้ไข':'ลงทะเบียนผู้สูงอายุ';
+    }
+  };
+}
+
+async function loadAssignList(caregiverId){
+  const wrap=document.getElementById('assignList');
+  if(!wrap) return;
+  if(!caregiverId){ wrap.innerHTML='<div class="empty">เลือกผู้ดูแลก่อนเพื่อจัดการเคสที่รับผิดชอบ</div>'; return; }
+  if(patients.length===0){ wrap.innerHTML='<div class="empty">ยังไม่มีรายชื่อผู้สูงอายุ</div>'; return; }
+  wrap.innerHTML='<div class="empty">กำลังโหลด...</div>';
+  const assigned = await apiGet('getAssignments', {caregiverId});
+  if(!document.getElementById('assignList')) return;
+  const assignedMap = {}; // patientId -> assignment id
+  assigned.forEach(a=>{ assignedMap[a.patientId]=a.id; });
+  wrap.innerHTML = patients.map(p=>{
+    const on = !!assignedMap[p.id];
+    return `<div class="listRow">
+      <div class="name">${p.name}</div>
+      <button type="button" class="chip ${on?'selected':''}" data-pid="${p.id}">${on?'✓ มอบหมายแล้ว':'มอบหมาย'}</button>
+    </div>`;
+  }).join('');
+  wrap.querySelectorAll('button[data-pid]').forEach(btn=>{
+    btn.onclick=async()=>{
+      const pid=btn.dataset.pid;
+      const isOn = btn.classList.contains('selected');
+      btn.disabled=true;
+      if(isOn){
+        const aid = assignedMap[pid];
+        if(aid) await apiPost('deleteAssignment', {id:aid});
+      } else {
+        const r = await apiPost('addAssignment', {caregiverId, patientId:pid});
+        if(r && r.success){ /* ok */ }
+      }
+      assignments = await apiGet('getAssignments');
+      cacheSet('cmcc_assignments', assignments);
+      btn.disabled=false;
+      loadAssignList(caregiverId);
+    };
+  });
+}
+
 async function loadMedList(pid){
   const wrap=document.getElementById('medList');
   if(!wrap) return;
@@ -1024,29 +1691,40 @@ async function loadMedList(pid){
   wrap.innerHTML = meds.map(m=>`
     <div class="listRow">
       <div><div class="name">${m.name}</div><div class="meta">${m.dose||''}${m.timeSlots && m.timeSlots.length ? (' · '+m.timeSlots.join(', ')) : ''}</div></div>
-      <button class="iconbtn" data-id="${m.id}">ลบ</button>
+      <button class="iconbtn" data-id="${m.id}" data-name="${m.name}">ลบ</button>
     </div>`).join('');
   wrap.querySelectorAll('.iconbtn').forEach(btn=>{
     btn.onclick=async()=>{
+      if(!confirm(`ยืนยันลบยา "${btn.dataset.name}" ใช่หรือไม่?`)) return;
       const r=await apiPost('deleteMedication', {id:btn.dataset.id});
       if(r && r.success) loadMedList(pid);
     };
   });
 }
 
-function renderPatientList(){
+function renderPatientList(filterText){
   const wrap=document.getElementById('patientList');
+  if(!wrap) return;
   if(patients.length===0){ wrap.innerHTML = initialLoadDone ? '<div class="empty">ยังไม่มีรายชื่อ</div>' : '<div class="empty">กำลังโหลด...</div>'; return; }
-  wrap.innerHTML = patients.map(p=>`
+  const list = filterText ? patients.filter(p=>p.name.toLowerCase().includes(filterText.toLowerCase())) : patients;
+  if(list.length===0){ wrap.innerHTML='<div class="empty">ไม่พบชื่อที่ค้นหา</div>'; return; }
+  wrap.innerHTML = list.map(p=>`
     <div class="listRow">
       <div>
-        <div class="name">${p.name}</div>
+        <div class="name">${p.prefix?p.prefix+' ':''}${p.name}${p.nickname?(' ('+p.nickname+')'):''}</div>
         <div class="meta">${p.gender||''}${p.age?(' · อายุ '+p.age+' ปี'):''}${p.dnr==='มีคำสั่ง DNR'?' · DNR':''}${(p.foodAllergy||p.drugAllergy)?' · มีประวัติแพ้':''}</div>
       </div>
-      <button class="iconbtn" data-id="${p.id}">ลบ</button>
+      <div class="rowBtns">
+        <button class="iconbtn editbtn" data-id="${p.id}">แก้ไข</button>
+        <button class="iconbtn" data-id="${p.id}" data-name="${p.name}">ลบ</button>
+      </div>
     </div>`).join('');
-  wrap.querySelectorAll('.iconbtn').forEach(btn=>{
+  wrap.querySelectorAll('.editbtn').forEach(btn=>{
+    btn.onclick=()=>{ const p=patients.find(x=>x.id===btn.dataset.id); openPatientFormModal(p); };
+  });
+  wrap.querySelectorAll('.iconbtn:not(.editbtn)').forEach(btn=>{
     btn.onclick=async()=>{
+      if(!confirm(`ยืนยันลบเคส "${btn.dataset.name}" ใช่หรือไม่? ประวัติการบันทึกของเคสนี้จะยังอยู่ในชีตแต่จะค้นหาไม่เจอในแอป`)) return;
       const result = await apiPost('deletePatient', {id:btn.dataset.id});
       if(result && result.success){
         patients = patients.filter(p=>p.id!==btn.dataset.id);
@@ -1061,10 +1739,11 @@ function renderCaregiverList(){
   wrap.innerHTML = caregivers.map(c=>`
     <div class="listRow">
       <div class="name">${c.name}</div>
-      <button class="iconbtn" data-id="${c.id}">ลบ</button>
+      <button class="iconbtn" data-id="${c.id}" data-name="${c.name}">ลบ</button>
     </div>`).join('');
   wrap.querySelectorAll('.iconbtn').forEach(btn=>{
     btn.onclick=async()=>{
+      if(!confirm(`ยืนยันลบผู้ดูแล "${btn.dataset.name}" ใช่หรือไม่?`)) return;
       const result = await apiPost('deleteCaregiver', {id:btn.dataset.id});
       if(result && result.success){
         caregivers = caregivers.filter(c=>c.id!==btn.dataset.id);
@@ -1075,6 +1754,15 @@ function renderCaregiverList(){
 }
 
 /* ============== DASHBOARD VIEW ============== */
+function initials(name){
+  if(!name) return '?';
+  const parts = name.trim().split(/\s+/);
+  return parts.length>1 ? (parts[0][0]+parts[1][0]).toUpperCase() : name.slice(0,2).toUpperCase();
+}
+const CAT_ICONS = [
+  {type:'vitals', ic:'🫀'}, {type:'excretion', ic:'🚻'}, {type:'meal', ic:'🍽️'},
+  {type:'medication', ic:'💊'}, {type:'wound', ic:'🩹'}, {type:'mood', ic:'🙂'}, {type:'note', ic:'📝'}
+];
 function dashRowHtml(p){
   const badges=[];
   if(p.entryCount===0) badges.push('<span class="badge badge-neutral">ยังไม่บันทึกวันนี้</span>');
@@ -1082,11 +1770,21 @@ function dashRowHtml(p){
   if(p.medMissed) badges.push('<span class="badge badge-warn">ให้ยาไม่ครบ</span>');
   if(p.woundFlag) badges.push('<span class="badge badge-warn">มีแผล</span>');
   if(p.entryCount>0 && badges.length===0) badges.push('<span class="badge badge-ok">ปกติดี</span>');
+  const flags = p.typeFlags || {};
   return `
     <div class="dashRow" data-id="${p.patientId}">
-      <div class="name">${p.patientName}</div>
-      <div class="sub">${p.entryCount} รายการวันนี้${p.lastTime?(' · ล่าสุด '+p.lastTime+' น.'):''}</div>
+      <div class="dashRowTop">
+        <div class="avatarCircle">${initials(p.patientName)}</div>
+        <div class="dashRowInfo">
+          <div class="name">${p.patientName}</div>
+          <div class="sub">${p.entryCount} รายการวันนี้${p.lastTime?(' · ล่าสุด '+p.lastTime+' น.'):''}</div>
+        </div>
+        <button type="button" class="quickAddBtn" data-quickadd="${p.patientId}" title="บันทึกด่วน">+</button>
+      </div>
       <div>${badges.join('')}</div>
+      <div class="catIconRow">
+        ${CAT_ICONS.map(c=>`<div class="catIcon ${flags[c.type]?'on':''}">${c.ic}</div>`).join('')}
+      </div>
     </div>`;
 }
 
@@ -1128,19 +1826,38 @@ async function buildDashboard(){
     </div>
     ${list.length===0 ? '<div class="empty">ยังไม่มีรายชื่อผู้สูงอายุ</div>' : list.map(dashRowHtml).join('')}
   `;
+  body.querySelectorAll('.quickAddBtn').forEach(btn=>{
+    btn.onclick=async (e)=>{
+      e.stopPropagation();
+      cgState.patientId = btn.dataset.quickadd;
+      cgState.action = null;
+      await goTo('caregiver');
+    };
+  });
   body.querySelectorAll('.dashRow').forEach(row=>{
     row.onclick=async ()=>{
       adminTab='report';
       await goTo('admin');
       const sel=document.getElementById('r_patient');
-      if(sel){ sel.value=row.dataset.id; buildReport(); }
+      if(sel){ sel.value=row.dataset.id; openReportModal(); }
     };
   });
 }
 
+
 /* ============== INIT ============== */
+document.getElementById('pendingBadge').onclick = flushPendingQueue;
+updatePendingBadge();
 preloadData();
-renderApp();
+flushPendingQueue();
+
+// รองรับลิงก์ลัดตามบทบาท เช่น เพิ่มลงหน้าจอหลักด้วย URL ?go=caregiver / ?go=admin / ?go=dashboard
+// เพื่อให้เปิดแอปมาแล้วเจอหน้านั้นทันที ไม่ต้องกดเลือกการ์ดหน้าแรกทุกครั้ง
+renderApp(); // แสดงหน้าแรกไว้ก่อนเป็นพื้นหลัง เผื่อต้องเด้ง PIN ทับ
+const urlGoParam = new URLSearchParams(window.location.search).get('go');
+if(urlGoParam && ['caregiver','admin','dashboard'].includes(urlGoParam)){
+  goTo(urlGoParam);
+}
 </script>
 </body>
 </html>
