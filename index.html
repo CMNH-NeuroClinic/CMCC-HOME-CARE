@@ -184,10 +184,19 @@
   let caregiverName = '';
   let patients = [];
   let currentPatient = null;
+  let isDemoMode = false;
 
   // ลิงก์ Apps Script Web App (deploy แบบ Anyone) — แก้เป็นลิงก์จริงของคุณ
   // รูปแบบ: https://script.google.com/macros/s/xxxxxxxxxxxxx/exec
   const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbwkJjB5Eghdf7jHPzUtwiO7Ok5ELRQ8Zzu62Ps5-gi3P_Snm-zLv-APjRctjqRLoxECpg/exec';
+
+  // โหมดทดสอบ: กรอกรหัสนี้เพื่อลองใช้งานหน้าตาแอปได้ทันที โดยไม่ต้องต่อกับ Google Sheet จริง
+  // (ข้อมูลที่ติ๊ก/บันทึกในโหมดนี้จะไม่ถูกเซฟจริง) — ลบทิ้งได้เมื่อพร้อมใช้งานจริงแล้ว
+  const DEMO_CODE = '0000';
+  const DEMO_PATIENTS = [
+    { name: 'คนไข้ทดสอบ 1 (ครบทุกหมวด)', zone: 'A', categories: null },
+    { name: 'คนไข้ทดสอบ 2 (บางหมวด)', zone: 'B', categories: ['nutrition','medicine','excretion','general'] }
+  ];
 
   // อ่านข้อมูล (GET) — ?action=xxx&...
   function gasGet_(params) {
@@ -221,9 +230,23 @@
   function login(){
     const code = document.getElementById('caregiverCode').value.trim();
     if(!code){ showMsg('loginMsg','กรุณากรอกรหัส','err'); return; }
+
+    if(code === DEMO_CODE){
+      isDemoMode = true;
+      caregiverName = 'ผู้ทดสอบระบบ (โหมดทดลอง)';
+      document.getElementById('caregiverNameLabel').textContent = caregiverName;
+      document.getElementById('loginCard').classList.add('hidden');
+      document.getElementById('mainSection').classList.remove('hidden');
+      document.getElementById('recordDate').value = todayStr();
+      document.getElementById('recordTime').value = nowTimeStr();
+      loadPatients();
+      return;
+    }
+
     showMsg('loginMsg','กำลังตรวจสอบ...','ok');
     gasGet_({ action: 'verify', code: code }).then(function(res){
       if(res.success){
+        isDemoMode = false;
         caregiverName = res.name;
         document.getElementById('caregiverNameLabel').textContent = caregiverName;
         document.getElementById('loginCard').classList.add('hidden');
@@ -245,6 +268,18 @@
 
   // ---------------- Patients ----------------
   function loadPatients(){
+    if(isDemoMode){
+      patients = DEMO_PATIENTS;
+      const sel = document.getElementById('patientSelect');
+      sel.innerHTML = '<option value="">-- เลือกคนไข้ --</option>';
+      patients.forEach(function(p){
+        const opt = document.createElement('option');
+        opt.value = p.name;
+        opt.textContent = p.name + (p.zone ? ' ('+p.zone+')' : '');
+        sel.appendChild(opt);
+      });
+      return;
+    }
     gasGet_({ action: 'patients' }).then(function(res){
       const list = res.patients || res; // เผื่อ backend คืนเป็น array ตรงๆ
       patients = list;
@@ -377,6 +412,18 @@
     };
 
     const btn = document.getElementById('submitBtn');
+
+    if(isDemoMode){
+      showMsg('submitMsg', 'โหมดทดสอบ: ติ๊กได้ปกติ แต่ยังไม่ได้บันทึกลง Google Sheet จริง ('+items.length+' รายการที่ติ๊กไว้)', 'ok');
+      document.querySelectorAll('#checklistContainer input[type=checkbox]').forEach(function(cb){
+        cb.checked = false;
+        const row = cb.closest('.item-row');
+        const detailEl = row.querySelector('.item-detail');
+        if(detailEl){ detailEl.value=''; detailEl.classList.add('hidden'); }
+      });
+      return;
+    }
+
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span>กำลังบันทึก...';
 
@@ -405,6 +452,10 @@
   // ---------------- Daily report ----------------
   function createReport(){
     if(!currentPatient){ showMsg('reportMsg','กรุณาเลือกคนไข้ก่อน','err'); return; }
+    if(isDemoMode){
+      showMsg('reportMsg', 'โหมดทดสอบ: การสร้าง PDF ใช้ได้เฉพาะตอนต่อกับ Google Sheet จริงเท่านั้น', 'err');
+      return;
+    }
     const date = document.getElementById('recordDate').value || todayStr();
     showMsg('reportMsg','กำลังสร้างรายงาน...','ok');
     gasPost_({ action: 'generateReport', patientName: currentPatient.name, date: date }).then(function(res){
