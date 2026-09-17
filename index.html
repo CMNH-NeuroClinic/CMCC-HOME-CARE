@@ -133,20 +133,6 @@
   </div>
 
 <script>
-  // ลิงก์เว็บแอปจริงหลัง deploy (Deploy > New deployment > Web app)
-  // ใช้แสดงเป็นทางลัด/ข้อความเตือน เวลามีคนเปิดไฟล์นี้ตรงๆ แทนที่จะเปิดผ่านลิงก์นี้
-  const APP_URL = 'https://script.google.com/macros/s/AKfycbwkJjB5Eghdf7jHPzUtwiO7Ok5ELRQ8Zzu62Ps5-gi3P_Snm-zLv-APjRctjqRLoxECpg/exec';
-
-  document.addEventListener('DOMContentLoaded', function () {
-    if (typeof google === 'undefined' || !google.script || !google.script.run) {
-      // หน้านี้ถูกเปิดโดยตรง (ไม่ได้เสิร์ฟผ่าน Apps Script) — google.script.run จะใช้งานไม่ได้
-      document.getElementById('loginCard').innerHTML =
-        '<div class="msg err">หน้านี้ถูกเปิดโดยตรง ไม่ผ่านเว็บแอป จึงใช้งานไม่ได้ กรุณาเปิดผ่านลิงก์เว็บแอปที่ deploy ไว้ด้านล่างแทน</div>' +
-        '<a class="linklike" href="' + APP_URL + '" target="_blank" ' +
-        'style="display:block;margin-top:10px;padding:12px;border:1px solid var(--primary);border-radius:8px;text-align:center;text-decoration:none;">เปิดเว็บแอป (ลิงก์จริง)</a>';
-    }
-  });
-
   // -----------------------------------------------------------------------
   // ตั้งค่ารายการที่ให้ติ๊กในแต่ละหมวด — แก้ไข/เพิ่มลดได้ตรงนี้จุดเดียว
   // type: 'check' = ติ๊กเฉยๆ, 'select' = ติ๊กแล้วเลือกจากลิสต์, 'text' = ติ๊กแล้วพิมพ์รายละเอียด
