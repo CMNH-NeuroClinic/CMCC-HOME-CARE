@@ -185,6 +185,27 @@
   let patients = [];
   let currentPatient = null;
 
+  // ลิงก์ Apps Script Web App (deploy แบบ Anyone) — แก้เป็นลิงก์จริงของคุณ
+  // รูปแบบ: https://script.google.com/macros/s/xxxxxxxxxxxxx/exec
+  const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbwkJjB5Eghdf7jHPzUtwiO7Ok5ELRQ8Zzu62Ps5-gi3P_Snm-zLv-APjRctjqRLoxECpg/exec';
+
+  // อ่านข้อมูล (GET) — ?action=xxx&...
+  function gasGet_(params) {
+    const qs = Object.keys(params).map(function (k) {
+      return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+    }).join('&');
+    return fetch(GAS_API_URL + '?' + qs).then(function (r) { return r.json(); });
+  }
+
+  // เขียนข้อมูล (POST) — ใช้ Content-Type: text/plain เพื่อเลี่ยง CORS preflight ที่ Apps Script รองรับไม่ได้
+  function gasPost_(body) {
+    return fetch(GAS_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(body)
+    }).then(function (r) { return r.json(); });
+  }
+
   function todayStr(){
     const d = new Date();
     const pad = n => String(n).padStart(2,'0');
@@ -201,7 +222,7 @@
     const code = document.getElementById('caregiverCode').value.trim();
     if(!code){ showMsg('loginMsg','กรุณากรอกรหัส','err'); return; }
     showMsg('loginMsg','กำลังตรวจสอบ...','ok');
-    google.script.run.withSuccessHandler(function(res){
+    gasGet_({ action: 'verify', code: code }).then(function(res){
       if(res.success){
         caregiverName = res.name;
         document.getElementById('caregiverNameLabel').textContent = caregiverName;
@@ -213,9 +234,9 @@
       } else {
         showMsg('loginMsg', res.message || 'รหัสไม่ถูกต้อง', 'err');
       }
-    }).withFailureHandler(function(err){
-      showMsg('loginMsg', 'เกิดข้อผิดพลาด: '+err.message, 'err');
-    }).verifyCaregiverCode(code);
+    }).catch(function(err){
+      showMsg('loginMsg', 'เชื่อมต่อไม่ได้: '+err.message, 'err');
+    });
   }
 
   function logout(){
@@ -224,7 +245,8 @@
 
   // ---------------- Patients ----------------
   function loadPatients(){
-    google.script.run.withSuccessHandler(function(list){
+    gasGet_({ action: 'patients' }).then(function(res){
+      const list = res.patients || res; // เผื่อ backend คืนเป็น array ตรงๆ
       patients = list;
       const sel = document.getElementById('patientSelect');
       sel.innerHTML = '<option value="">-- เลือกคนไข้ --</option>';
@@ -234,7 +256,9 @@
         opt.textContent = p.name + (p.zone ? ' ('+p.zone+')' : '');
         sel.appendChild(opt);
       });
-    }).getPatients();
+    }).catch(function(err){
+      alert('โหลดรายชื่อคนไข้ไม่สำเร็จ: '+err.message);
+    });
   }
 
   function onPatientChange(){
@@ -356,7 +380,7 @@
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span>กำลังบันทึก...';
 
-    google.script.run.withSuccessHandler(function(res){
+    gasPost_({ action: 'submitRecord', payload: payload }).then(function(res){
       btn.disabled = false;
       btn.textContent = 'บันทึกรายการที่ติ๊กไว้';
       if(res.success){
@@ -371,11 +395,11 @@
       } else {
         showMsg('submitMsg', res.message || 'บันทึกไม่สำเร็จ', 'err');
       }
-    }).withFailureHandler(function(err){
+    }).catch(function(err){
       btn.disabled = false;
       btn.textContent = 'บันทึกรายการที่ติ๊กไว้';
-      showMsg('submitMsg', 'เกิดข้อผิดพลาด: '+err.message, 'err');
-    }).submitRecord(payload);
+      showMsg('submitMsg', 'เชื่อมต่อไม่ได้: '+err.message, 'err');
+    });
   }
 
   // ---------------- Daily report ----------------
@@ -383,16 +407,16 @@
     if(!currentPatient){ showMsg('reportMsg','กรุณาเลือกคนไข้ก่อน','err'); return; }
     const date = document.getElementById('recordDate').value || todayStr();
     showMsg('reportMsg','กำลังสร้างรายงาน...','ok');
-    google.script.run.withSuccessHandler(function(res){
+    gasPost_({ action: 'generateReport', patientName: currentPatient.name, date: date }).then(function(res){
       if(res.success){
         document.getElementById('reportMsg').innerHTML =
           '<div class="msg ok">สร้างรายงานสำเร็จ — <a class="linklike" href="'+res.viewUrl+'" target="_blank">เปิด/ดาวน์โหลด PDF</a></div>';
       } else {
         showMsg('reportMsg', res.message || 'สร้างรายงานไม่สำเร็จ', 'err');
       }
-    }).withFailureHandler(function(err){
-      showMsg('reportMsg', 'เกิดข้อผิดพลาด: '+err.message, 'err');
-    }).generateDailyReport(currentPatient.name, date);
+    }).catch(function(err){
+      showMsg('reportMsg', 'เชื่อมต่อไม่ได้: '+err.message, 'err');
+    });
   }
 
   // ---------------- Helpers ----------------
