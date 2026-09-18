@@ -121,10 +121,28 @@
     /* แอดมิน: กล่อง login ให้ดูแยกจากผู้ดูแลเล็กน้อย */
     #adminLoginCard{border-color:var(--primary);}
 
-    /* แอดมิน: หน้ารายงาน (แสดงผล+พิมพ์ได้) */
-    .report-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-    .report-title{font-size:17px;font-weight:800;color:var(--primary-dark);}
-    .report-patient-box{background:var(--bg);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:14px;line-height:1.6;}
+    /* แอดมิน: หน้ารายงาน (แสดงผล+พิมพ์ได้) — สไตล์ใบสรุป/เอกสารทางการ */
+    .report-header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+    .report-brand{display:flex;align-items:center;gap:8px;flex:1;min-width:180px;}
+    .report-brand .brand-logo{width:36px;height:36px;flex-shrink:0;}
+    .report-brand-name{font-size:13px;font-weight:800;color:var(--primary-dark);line-height:1.3;}
+    .report-brand-sub{font-size:11px;color:var(--muted);}
+    .report-docinfo{text-align:right;font-size:11px;color:var(--muted);line-height:1.6;white-space:nowrap;}
+    .report-docinfo b{color:var(--text);font-size:11.5px;}
+    .report-twocol{display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap;}
+    .report-twocol > div{flex:1;min-width:160px;}
+    .report-col-label{font-size:12px;font-weight:700;color:var(--primary-dark);margin-bottom:3px;}
+    .report-patient-name{font-size:16px;font-weight:800;}
+    .report-patient-zone{font-size:11.5px;color:var(--muted);}
+    .report-summary-line{font-size:12.5px;}
+    .report-detail-box{border:1px solid var(--border);border-radius:8px;margin-bottom:14px;overflow:hidden;}
+    .report-detail-box .row{display:flex;justify-content:space-between;gap:10px;padding:7px 12px;font-size:12.5px;border-bottom:1px solid var(--border);}
+    .report-detail-box .row:last-child{border-bottom:none;}
+    .report-detail-box .row .k{color:var(--muted);}
+    .report-detail-box .row .v{font-weight:700;text-align:right;}
+    .report-list-title{font-size:14px;font-weight:800;color:var(--primary-dark);margin-bottom:8px;}
+    .report-thanks{text-align:center;color:var(--primary-dark);font-size:13px;font-style:italic;margin-top:14px;margin-bottom:4px;}
+    .report-gen-note{text-align:center;color:var(--muted);font-size:11px;}
     .time-group{margin-bottom:12px;}
     .time-group-header{background:var(--primary);color:#fff;font-weight:700;padding:7px 12px;border-radius:8px 8px 0 0;font-size:13px;}
     .time-group-items{border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;overflow:hidden;}
@@ -457,11 +475,6 @@
     });
   }
 
-  // ไอคอนหน้าแต่ละหมวด อิงจากชุดเดียวกับเช็คลิสต์ผู้ดูแล ให้เข้าชุดกัน
-  const CATEGORY_ICON_BY_TITLE_ = {};
-  CATEGORY_CONFIG.forEach(function(c){ CATEGORY_ICON_BY_TITLE_[c.title] = c.icon; });
-  function reportCategoryIcon_(title){ return CATEGORY_ICON_BY_TITLE_[title] || '📋'; }
-
   function escapeHtml_(s){
     return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
       return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
@@ -471,22 +484,48 @@
   function renderReportView(res){
     const el = document.getElementById('reportView');
     el.innerHTML = '';
+    const logoSrc = document.querySelector('.brand-logo').getAttribute('src');
 
+    // หัวกระดาษ: โลโก้+ชื่อศูนย์ (ซ้าย) / เลขที่เอกสาร+วันที่ออกเอกสาร (ขวา)
     const header = document.createElement('div');
     header.className = 'report-header';
-    const logoSrc = document.querySelector('.brand-logo').getAttribute('src');
     header.innerHTML =
-      '<img class="brand-logo" src="'+logoSrc+'" alt="CMCC">' +
-      '<div><div class="report-title">รายงานการดูแลผู้ป่วยประจำวัน</div>' +
-      '<div class="sub" style="margin-bottom:0;">CMCC Home Care by CMNH</div></div>';
+      '<div class="report-brand">' +
+        '<img class="brand-logo" src="'+logoSrc+'" alt="CMCC">' +
+        '<div><div class="report-brand-name">CMCC Home Care by CMNH</div>' +
+        '<div class="report-brand-sub">รายงานการดูแลผู้ป่วยประจำวัน</div></div>' +
+      '</div>' +
+      '<div class="report-docinfo">' +
+        'เลขที่เอกสาร <b>'+escapeHtml_(res.docNumber || '-')+'</b><br>' +
+        'วันที่ออกเอกสาร <b>'+escapeHtml_(res.issueDateThai || '')+'</b>' +
+      '</div>';
     el.appendChild(header);
 
-    const infoBox = document.createElement('div');
-    infoBox.className = 'report-patient-box';
-    infoBox.innerHTML =
-      '<div><b>คนไข้:</b> '+escapeHtml_(res.patientName)+'</div>' +
-      '<div><b>วันที่:</b> '+escapeHtml_(res.dateThai || res.date)+'</div>';
-    el.appendChild(infoBox);
+    // สองคอลัมน์: ผู้รับบริการ / สรุปข้อมูลการบันทึก
+    const twoCol = document.createElement('div');
+    twoCol.className = 'report-twocol';
+    const caregiverNames = res.caregiverNames || [];
+    twoCol.innerHTML =
+      '<div>' +
+        '<div class="report-col-label">ผู้รับบริการ</div>' +
+        '<div class="report-patient-name">'+escapeHtml_(res.patientName)+'</div>' +
+        (res.zone ? '<div class="report-patient-zone">โซน '+escapeHtml_(res.zone)+'</div>' : '') +
+      '</div>' +
+      '<div>' +
+        '<div class="report-col-label">สรุปข้อมูลการบันทึกวันนี้</div>' +
+        '<div class="report-summary-line">จำนวนช่วงเวลาที่บันทึก: '+(res.groups ? res.groups.length : 0)+' ช่วง</div>' +
+        '<div class="report-summary-line">จำนวนรายการทั้งหมด: '+countItems_(res.groups)+' รายการ</div>' +
+      '</div>';
+    el.appendChild(twoCol);
+
+    // กล่องข้อมูลแบบมีเส้นขอบ
+    const detailBox = document.createElement('div');
+    detailBox.className = 'report-detail-box';
+    detailBox.innerHTML =
+      '<div class="row"><span class="k">วันที่บันทึก</span><span class="v">'+escapeHtml_(res.dateThai || res.date)+'</span></div>' +
+      '<div class="row"><span class="k">จำนวนผู้ดูแลที่บันทึกวันนี้</span><span class="v">'+caregiverNames.length+' คน</span></div>' +
+      '<div class="row"><span class="k">ชื่อผู้ดูแล</span><span class="v">'+escapeHtml_(caregiverNames.join(', ') || '-')+'</span></div>';
+    el.appendChild(detailBox);
 
     if(!res.groups || res.groups.length === 0){
       const empty = document.createElement('div');
@@ -496,6 +535,11 @@
       el.appendChild(empty);
       return;
     }
+
+    const listTitle = document.createElement('div');
+    listTitle.className = 'report-list-title';
+    listTitle.textContent = 'รายการที่บันทึกวันนี้';
+    el.appendChild(listTitle);
 
     res.groups.forEach(function(group){
       const wrap = document.createElement('div');
@@ -512,7 +556,7 @@
         const row = document.createElement('div');
         row.className = 'report-item';
         row.innerHTML =
-          '<span class="cat">'+reportCategoryIcon_(it.category)+' ['+escapeHtml_(it.category)+']</span> ' +
+          '<span class="cat">\u2713 ['+escapeHtml_(it.category)+']</span> ' +
           '<b>'+escapeHtml_(it.item)+'</b>' +
           (it.detail ? '  —  '+escapeHtml_(it.detail) : '') +
           '<div class="by">บันทึกโดย '+escapeHtml_(it.caregiver)+'</div>';
@@ -521,6 +565,16 @@
       wrap.appendChild(itemsWrap);
       el.appendChild(wrap);
     });
+
+    const thanks = document.createElement('div');
+    thanks.className = 'report-thanks';
+    thanks.textContent = 'ขอบคุณที่ไว้วางใจให้ CMCC Home Care by CMNH ดูแลคนที่คุณรัก';
+    el.appendChild(thanks);
+  }
+
+  function countItems_(groups){
+    if(!groups) return 0;
+    return groups.reduce(function(sum, g){ return sum + (g.items ? g.items.length : 0); }, 0);
   }
 
   // ---------------- แอดมิน: ประวัติการบันทึกของผู้ดูแลทุกคน ----------------
