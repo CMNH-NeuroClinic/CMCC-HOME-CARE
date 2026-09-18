@@ -537,17 +537,26 @@
   // ลิงก์ Apps Script Web App (deploy แบบ Anyone) — !!! แก้เป็นลิงก์ .../exec จริงของคุณก่อนใช้งาน !!!
   const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbwkJjB5Eghdf7jHPzUtwiO7Ok5ELRQ8Zzu62Ps5-gi3P_Snm-zLv-APjRctjqRLoxECpg/exec';
 
+  // เวลาสูงสุดที่รอ Apps Script ตอบ ก่อนจะถือว่าเชื่อมต่อไม่ได้ (กันค้างจอไม่รู้จบ)
+  const GAS_TIMEOUT_MS = 15000;
+  function fetchWithTimeout_(url, options){
+    const controller = new AbortController();
+    const timer = setTimeout(function(){ controller.abort(); }, GAS_TIMEOUT_MS);
+    return fetch(url, Object.assign({}, options, { signal: controller.signal }))
+      .finally(function(){ clearTimeout(timer); });
+  }
+
   // อ่านข้อมูล (GET) — ?action=xxx&...
   function gasGet_(params) {
     const qs = Object.keys(params).map(function (k) {
       return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
     }).join('&');
-    return fetch(GAS_API_URL + '?' + qs).then(function (r) { return r.json(); });
+    return fetchWithTimeout_(GAS_API_URL + '?' + qs).then(function (r) { return r.json(); });
   }
 
   // เขียนข้อมูล (POST) — ใช้ Content-Type: text/plain เพื่อเลี่ยง CORS preflight ที่ Apps Script รองรับไม่ได้
   function gasPost_(body) {
-    return fetch(GAS_API_URL, {
+    return fetchWithTimeout_(GAS_API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(body)
@@ -600,8 +609,11 @@
     const code = document.getElementById('caregiverCode').value.trim();
     if(!code){ showMsg('loginMsg','กรุณากรอกรหัส','err'); return; }
 
-    showMsg('loginMsg','กำลังตรวจสอบ...','ok');
+    const btn = document.querySelector('#loginCard button');
+    btn.disabled = true;
+    showMsg('loginMsg','<span class="spinner"></span>กำลังตรวจสอบ...','ok');
     gasGet_({ action: 'verify', code: code }).then(function(res){
+      btn.disabled = false;
       if(res.success){
         caregiverName = res.name;
         document.getElementById('caregiverNameLabel').textContent = caregiverName;
@@ -616,7 +628,11 @@
         showMsg('loginMsg', res.message || 'รหัสไม่ถูกต้อง', 'err');
       }
     }).catch(function(err){
-      showMsg('loginMsg', 'เชื่อมต่อไม่ได้: '+err.message, 'err');
+      btn.disabled = false;
+      const msg = err.name === 'AbortError'
+        ? 'เซิร์ฟเวอร์ตอบช้ากว่าปกติ (เกิน 15 วิ) ลองใหม่อีกครั้ง'
+        : 'เชื่อมต่อไม่ได้: '+err.message;
+      showMsg('loginMsg', msg, 'err');
     });
   }
 
@@ -632,8 +648,11 @@
     const code = document.getElementById('adminCode').value.trim();
     if(!code){ showMsg('adminLoginMsg','กรุณากรอกรหัส','err'); return; }
 
-    showMsg('adminLoginMsg','กำลังตรวจสอบ...','ok');
+    const btn = document.querySelector('#adminLoginCard button');
+    btn.disabled = true;
+    showMsg('adminLoginMsg','<span class="spinner"></span>กำลังตรวจสอบ...','ok');
     gasGet_({ action: 'verifyAdmin', code: code }).then(function(res){
+      btn.disabled = false;
       if(res.success){
         adminName = res.name;
         document.getElementById('adminNameLabel').textContent = adminName;
@@ -649,7 +668,11 @@
         showMsg('adminLoginMsg', res.message || 'รหัสไม่ถูกต้อง', 'err');
       }
     }).catch(function(err){
-      showMsg('adminLoginMsg', 'เชื่อมต่อไม่ได้: '+err.message, 'err');
+      btn.disabled = false;
+      const msg = err.name === 'AbortError'
+        ? 'เซิร์ฟเวอร์ตอบช้ากว่าปกติ (เกิน 15 วิ) ลองใหม่อีกครั้ง'
+        : 'เชื่อมต่อไม่ได้: '+err.message;
+      showMsg('adminLoginMsg', msg, 'err');
     });
   }
 
