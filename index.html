@@ -513,6 +513,26 @@
       </div>
       <div id="logMsg" class="sub no-print" style="margin-top:8px;margin-bottom:0;"></div>
     </div>
+
+    <div class="card no-print">
+      <label>ลงทะเบียนผู้ดูแลใหม่</label>
+      <input type="text" id="newCaregiverCode" placeholder="ตั้งรหัสผู้ดูแล (ตัวเลข/ตัวอักษรก็ได้)" inputmode="numeric">
+      <input type="text" id="newCaregiverName" placeholder="ชื่อผู้ดูแล" style="margin-top:8px;">
+      <label style="margin-top:12px;">มอบหมายคนไข้ (ไม่เลือกเลย = ดูแลได้ทุกคนไข้)</label>
+      <div class="chip-row" id="assignPatientChips"></div>
+      <button onclick="registerCaregiver_()">ลงทะเบียนผู้ดูแล</button>
+      <div id="registerCaregiverMsg"></div>
+    </div>
+
+    <div class="card no-print">
+      <label>ลงทะเบียนคนไข้ใหม่</label>
+      <input type="text" id="newPatientName" placeholder="ชื่อคนไข้">
+      <input type="text" id="newPatientZone" placeholder="โซน/พื้นที่ (ไม่บังคับ)" style="margin-top:8px;">
+      <label style="margin-top:12px;">หมวดที่บันทึกให้คนไข้คนนี้ (ไม่เลือกเลย = ทุกหมวด)</label>
+      <div class="chip-row" id="newPatientCategoryChips"></div>
+      <button onclick="registerPatient_()">ลงทะเบียนคนไข้</button>
+      <div id="registerPatientMsg"></div>
+    </div>
   </div>
 
   <!-- แถบบันทึกลอยติดล่างจอ (โผล่เมื่อเลือกคนไข้แล้ว) -->
@@ -599,11 +619,12 @@
   ];
 
   let caregiverName = '';
+  let caregiverCode = '';
   let patients = [];
   let currentPatient = null;
 
   // ลิงก์ Apps Script Web App (deploy แบบ Anyone) — !!! แก้เป็นลิงก์ .../exec จริงของคุณก่อนใช้งาน !!!
-  const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbwkJjB5Eghdf7jHPzUtwiO7Ok5ELRQ8Zzu62Ps5-gi3P_Snm-zLv-APjRctjqRLoxECpg/exec';
+  const GAS_API_URL = 'https://script.google.com/macros/s/AKfycby6nQ7jD9aF6UxmCKYbaFEarIVBM6ggZBcVTa4c2D9HUF6xTv01U4InGR26vHxVEtL5/exec';
 
   // เวลาสูงสุดที่รอ Apps Script ตอบ ก่อนจะถือว่าเชื่อมต่อไม่ได้ (กันค้างจอไม่รู้จบ)
   const GAS_TIMEOUT_MS = 15000;
@@ -684,6 +705,7 @@
       btn.disabled = false;
       if(res.success){
         caregiverName = res.name;
+        caregiverCode = code;
         document.getElementById('caregiverNameLabel').textContent = caregiverName;
         document.getElementById('loginCard').classList.add('hidden');
         document.getElementById('adminLoginCard').classList.add('hidden');
@@ -711,6 +733,7 @@
 
   // ---------------- แอดมิน: เข้าสู่ระบบ ----------------
   let adminName = '';
+  let adminCodeValue = '';
 
   function adminLogin(){
     const code = document.getElementById('adminCode').value.trim();
@@ -723,6 +746,7 @@
       btn.disabled = false;
       if(res.success){
         adminName = res.name;
+        adminCodeValue = code;
         document.getElementById('adminNameLabel').textContent = adminName;
         document.getElementById('loginCard').classList.add('hidden');
         document.getElementById('adminLoginCard').classList.add('hidden');
@@ -750,9 +774,12 @@
   }
 
   // ---------------- แอดมิน: เลือกคนไข้เพื่อดูรายงาน ----------------
+  let adminPatientsList = [];
+
   function loadAdminPatients(){
     gasGet_({ action: 'patients' }).then(function(res){
       const list = res.patients || res;
+      adminPatientsList = list;
       const sel = document.getElementById('adminPatientSelect');
       sel.innerHTML = '<option value="">-- เลือกคนไข้ --</option>';
       list.forEach(function(p){
@@ -761,6 +788,7 @@
         opt.textContent = p.name + (p.zone ? ' ('+p.zone+')' : '');
         sel.appendChild(opt);
       });
+      buildAssignPatientChips_();
     }).catch(function(err){
       showMsg('adminReportMsg', 'โหลดรายชื่อคนไข้ไม่สำเร็จ: '+err.message, 'err');
     });
@@ -953,6 +981,89 @@
     return Array.from(document.querySelectorAll('#logCategoryChips .chip.active')).map(function(c){ return c.dataset.cat; });
   }
 
+  // ---------------- แอดมิน: ลงทะเบียนผู้ดูแล/คนไข้ใหม่ ----------------
+  function buildAssignPatientChips_(){
+    const wrap = document.getElementById('assignPatientChips');
+    if(!wrap) return;
+    wrap.innerHTML = '';
+    if(adminPatientsList.length === 0){
+      wrap.innerHTML = '<div class="sub" style="margin:0;">ยังไม่มีคนไข้ในระบบ — ลงทะเบียนคนไข้ก่อนได้ที่การ์ดด้านล่าง</div>';
+      return;
+    }
+    adminPatientsList.forEach(function(p){
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip';
+      chip.textContent = p.name + (p.zone ? ' ('+p.zone+')' : '');
+      chip.dataset.patient = p.name;
+      chip.onclick = function(){ chip.classList.toggle('active'); };
+      wrap.appendChild(chip);
+    });
+  }
+
+  function buildNewPatientCategoryChips_(){
+    const wrap = document.getElementById('newPatientCategoryChips');
+    if(!wrap || wrap.children.length) return;
+    CATEGORY_CONFIG.forEach(function(cat){
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip';
+      chip.textContent = cat.icon + ' ' + cat.title;
+      chip.dataset.cat = cat.key;
+      chip.onclick = function(){ chip.classList.toggle('active'); };
+      wrap.appendChild(chip);
+    });
+  }
+
+  function registerCaregiver_(){
+    const code = document.getElementById('newCaregiverCode').value.trim();
+    const name = document.getElementById('newCaregiverName').value.trim();
+    if(!code || !name){ showMsg('registerCaregiverMsg','กรุณากรอกรหัสและชื่อผู้ดูแล','err'); return; }
+
+    const assignedPatients = Array.from(document.querySelectorAll('#assignPatientChips .chip.active')).map(function(c){ return c.dataset.patient; });
+
+    showMsg('registerCaregiverMsg','<span class="spinner-dark"></span>กำลังลงทะเบียน...','ok');
+    gasPost_({ action: 'registerCaregiver', payload: {
+      adminCode: adminCodeValue, code: code, name: name, assignedPatients: assignedPatients
+    }}).then(function(res){
+      if(res.success){
+        showMsg('registerCaregiverMsg', 'ลงทะเบียนผู้ดูแล "'+name+'" สำเร็จ', 'ok');
+        document.getElementById('newCaregiverCode').value = '';
+        document.getElementById('newCaregiverName').value = '';
+        document.querySelectorAll('#assignPatientChips .chip.active').forEach(function(c){ c.classList.remove('active'); });
+      } else {
+        showMsg('registerCaregiverMsg', res.message || 'ลงทะเบียนไม่สำเร็จ', 'err');
+      }
+    }).catch(function(err){
+      showMsg('registerCaregiverMsg', 'เชื่อมต่อไม่ได้: '+err.message, 'err');
+    });
+  }
+
+  function registerPatient_(){
+    const name = document.getElementById('newPatientName').value.trim();
+    const zone = document.getElementById('newPatientZone').value.trim();
+    if(!name){ showMsg('registerPatientMsg','กรุณากรอกชื่อคนไข้','err'); return; }
+
+    const categories = Array.from(document.querySelectorAll('#newPatientCategoryChips .chip.active')).map(function(c){ return c.dataset.cat; });
+
+    showMsg('registerPatientMsg','<span class="spinner-dark"></span>กำลังลงทะเบียน...','ok');
+    gasPost_({ action: 'registerPatient', payload: {
+      adminCode: adminCodeValue, name: name, zone: zone, categories: categories
+    }}).then(function(res){
+      if(res.success){
+        showMsg('registerPatientMsg', 'ลงทะเบียนคนไข้ "'+name+'" สำเร็จ', 'ok');
+        document.getElementById('newPatientName').value = '';
+        document.getElementById('newPatientZone').value = '';
+        document.querySelectorAll('#newPatientCategoryChips .chip.active').forEach(function(c){ c.classList.remove('active'); });
+        loadAdminPatients(); // รีเฟรชรายชื่อคนไข้ให้เลือกได้ทันที (ทั้ง dropdown รายงาน และชิปมอบหมายผู้ดูแล)
+      } else {
+        showMsg('registerPatientMsg', res.message || 'ลงทะเบียนไม่สำเร็จ', 'err');
+      }
+    }).catch(function(err){
+      showMsg('registerPatientMsg', 'เชื่อมต่อไม่ได้: '+err.message, 'err');
+    });
+  }
+
   function populateLogFilters_(){
     const caregivers = Array.from(new Set(activityLogData.map(function(r){ return r.caregiverName; }).filter(Boolean))).sort();
     const patients = Array.from(new Set(activityLogData.map(function(r){ return r.patientName; }).filter(Boolean))).sort();
@@ -1013,11 +1124,14 @@
     document.body.classList.remove('print-log');
   });
 
-  document.addEventListener('DOMContentLoaded', buildCategoryChips_);
+  document.addEventListener('DOMContentLoaded', function(){
+    buildCategoryChips_();
+    buildNewPatientCategoryChips_();
+  });
 
   // ---------------- Patients ----------------
   function loadPatients(){
-    gasGet_({ action: 'patients' }).then(function(res){
+    gasGet_({ action: 'patients', caregiverCode: caregiverCode }).then(function(res){
       const list = res.patients || res; // เผื่อ backend คืนเป็น array ตรงๆ
       patients = list;
       const sel = document.getElementById('patientSelect');
@@ -1311,6 +1425,7 @@
       date: date,
       time: time,
       caregiverName: caregiverName,
+      caregiverCode: caregiverCode,
       items: items
     };
 
