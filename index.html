@@ -37,6 +37,43 @@
       margin-right:auto;
     }
     body.has-savebar{padding-bottom:104px;}
+
+    /* ป็อปอัปแสดง PDF รายงาน */
+    .pdf-modal{
+      position:fixed;inset:0;z-index:200;
+      background:rgba(20,30,28,.55);
+      display:flex;align-items:flex-end;justify-content:center;
+    }
+    .pdf-modal-inner{
+      width:100%;max-width:560px;height:88vh;
+      background:var(--clay-surface);
+      border-radius:22px 22px 0 0;
+      display:flex;flex-direction:column;
+      box-shadow: 0 -8px 24px rgba(0,0,0,.25);
+      overflow:hidden;
+    }
+    .pdf-modal-header{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:14px 16px 6px;
+    }
+    .pdf-modal-title{font-family:'Prompt',sans-serif;font-weight:800;font-size:15px;color:var(--primary-dark);}
+    .pdf-modal-close{
+      width:32px;height:32px;border-radius:50%;flex-shrink:0;
+      background:var(--clay-surface-2);color:var(--text);
+      font-size:14px;padding:0;margin:0;
+      box-shadow:2px 2px 5px var(--shadow-d), -2px -2px 5px var(--shadow-l);
+    }
+    .pdf-modal-actions{
+      display:flex;gap:8px;padding:6px 16px 14px;
+    }
+    .pdf-action-btn{
+      flex:1;width:auto;margin-top:0;padding:10px 6px;font-size:12.5px;
+      background:var(--clay-surface);color:var(--primary-dark);
+      box-shadow:4px 4px 9px var(--shadow-d), -4px -4px 9px var(--shadow-l);
+    }
+    .pdf-action-btn:active{box-shadow:inset 3px 3px 6px var(--shadow-d), inset -3px -3px 6px var(--shadow-l);}
+    .pdf-modal-body{flex:1;background:#525659;}
+    .pdf-modal-body iframe{width:100%;height:100%;border:none;}
     h1{font-size:20px;margin:0 0 2px;font-family:'Prompt','Sarabun',sans-serif;}
     .sub{color:var(--muted);font-size:13px;margin-bottom:16px;}
 
@@ -484,6 +521,24 @@
       <div class="save-count" id="saveCount">ติ๊กแล้ว <b>0</b> รายการ</div>
       <button onclick="submitChecklist()" id="submitBtn">บันทึกรายการที่ติ๊กไว้</button>
       <div id="submitMsg"></div>
+    </div>
+  </div>
+
+  <!-- ป็อปอัปโชว์ไฟล์ PDF รายงาน พร้อมปุ่มพิมพ์/บันทึก/ส่งต่อ -->
+  <div id="pdfModal" class="pdf-modal hidden no-print">
+    <div class="pdf-modal-inner">
+      <div class="pdf-modal-header">
+        <div class="pdf-modal-title">รายงาน PDF วันนี้</div>
+        <button type="button" class="pdf-modal-close" onclick="closePdfModal_()">✕</button>
+      </div>
+      <div class="pdf-modal-actions">
+        <button type="button" class="pdf-action-btn" onclick="printPdf_()">🖨️ พิมพ์</button>
+        <button type="button" class="pdf-action-btn" onclick="downloadPdf_()">⬇️ บันทึก PDF</button>
+        <button type="button" class="pdf-action-btn" onclick="sharePdf_()">📤 ส่งต่อ</button>
+      </div>
+      <div class="pdf-modal-body">
+        <iframe id="pdfModalFrame" src="" title="รายงาน PDF"></iframe>
+      </div>
     </div>
   </div>
 
@@ -987,13 +1042,33 @@
       checklistCard.classList.add('hidden');
       saveBar.classList.add('hidden');
       document.body.classList.remove('has-savebar');
+      document.body.style.paddingBottom = '';
       return;
     }
     renderChecklist(currentPatient);
     checklistCard.classList.remove('hidden');
     saveBar.classList.remove('hidden');
     document.body.classList.add('has-savebar');
+    adjustSaveBarSpacing_();
   }
+
+  // กันปุ่ม/ข้อความซ้อนกัน: ปรับระยะห่างล่างของหน้าให้พอดีกับความสูงจริงของแถบบันทึกเสมอ
+  // (แถบนี้สูงไม่เท่ากันตลอด เช่น ตอนมีข้อความ "บันทึกสำเร็จ" โผล่ขึ้นมาเพิ่ม)
+  function adjustSaveBarSpacing_(){
+    const bar = document.getElementById('saveBar');
+    if(!bar || bar.classList.contains('hidden')){
+      document.body.style.paddingBottom = '';
+      return;
+    }
+    document.body.style.paddingBottom = (bar.offsetHeight + 16) + 'px';
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    const bar = document.getElementById('saveBar');
+    if(bar && window.ResizeObserver){
+      new ResizeObserver(adjustSaveBarSpacing_).observe(bar);
+    }
+  });
 
   // เปลี่ยนวันที่ระหว่างเลือกคนไข้อยู่แล้ว -> โหลด draft ของวันนั้นใหม่
   document.addEventListener('DOMContentLoaded', function(){
@@ -1320,17 +1395,63 @@
   function createReport(){
     if(!currentPatient){ showMsg('reportMsg','กรุณาเลือกคนไข้ก่อน','err'); return; }
     const date = document.getElementById('recordDate').value || todayStr();
-    showMsg('reportMsg','กำลังสร้างรายงาน...','ok');
+    showMsg('reportMsg','<span class="spinner-dark"></span>กำลังสร้างรายงาน...','ok');
     gasPost_({ action: 'generateReport', patientName: currentPatient.name, date: date }).then(function(res){
       if(res.success){
         document.getElementById('reportMsg').innerHTML =
-          '<div class="msg ok">สร้างรายงานสำเร็จ — <a class="linklike" href="'+res.viewUrl+'" target="_blank">เปิด/ดาวน์โหลด PDF</a></div>';
+          '<div class="msg ok">สร้างรายงานสำเร็จ — <a class="linklike" href="'+res.viewUrl+'" target="_blank">เปิดในแท็บใหม่</a></div>';
+        openPdfModal_(res.viewUrl, res.downloadUrl);
       } else {
         showMsg('reportMsg', res.message || 'สร้างรายงานไม่สำเร็จ', 'err');
       }
     }).catch(function(err){
       showMsg('reportMsg', 'เชื่อมต่อไม่ได้: '+err.message, 'err');
     });
+  }
+
+  // ---------------- ป็อปอัปแสดง PDF + พิมพ์/บันทึก/ส่งต่อ ----------------
+  let currentPdfUrls_ = { view: '', download: '' };
+
+  function toPdfPreviewUrl_(url){
+    // ลิงก์ไฟล์ Google Drive ปกติ (.../file/d/ID/view...) แปลงเป็นแบบฝังดูตรงๆ ในหน้า (.../preview)
+    return String(url || '').replace(/\/view(\?.*)?$/, '/preview');
+  }
+
+  function openPdfModal_(viewUrl, downloadUrl){
+    currentPdfUrls_ = { view: viewUrl, download: downloadUrl };
+    document.getElementById('pdfModalFrame').src = toPdfPreviewUrl_(viewUrl);
+    document.getElementById('pdfModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePdfModal_(){
+    document.getElementById('pdfModal').classList.add('hidden');
+    document.getElementById('pdfModalFrame').src = '';
+    document.body.style.overflow = '';
+  }
+
+  function printPdf_(){
+    // เปิดไฟล์จริงในแท็บใหม่ ให้ใช้ปุ่มพิมพ์ของตัวแสดงผล PDF ในเบราว์เซอร์/มือถือได้เลย
+    if(currentPdfUrls_.view) window.open(currentPdfUrls_.view, '_blank');
+  }
+
+  function downloadPdf_(){
+    if(currentPdfUrls_.download) window.open(currentPdfUrls_.download, '_blank');
+  }
+
+  function sharePdf_(){
+    if(!currentPdfUrls_.view) return;
+    if(navigator.share){
+      navigator.share({ title: 'รายงานการดูแลผู้ป่วย', url: currentPdfUrls_.view }).catch(function(){});
+      return;
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(currentPdfUrls_.view).then(function(){
+        alert('คัดลอกลิงก์ PDF แล้ว นำไปวางส่งต่อได้เลย');
+      }).catch(function(){ window.open(currentPdfUrls_.view, '_blank'); });
+      return;
+    }
+    window.open(currentPdfUrls_.view, '_blank');
   }
 
   // ---------------- Helpers ----------------
