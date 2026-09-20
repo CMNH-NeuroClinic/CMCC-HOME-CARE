@@ -282,6 +282,29 @@
     .entry-card.active{border-color:rgba(255,255,255,.8);}
     .entry-caregiver{background:linear-gradient(135deg, #7C6FE0, #A78BFA);}
     .entry-admin{background:linear-gradient(135deg, #14B8A6, #3FB39A);}
+    .entry-checkin{background:linear-gradient(135deg, #F0A94E, #F6C667);}
+    .entry-card-wide{grid-column:1 / -1;flex-direction:row;align-items:center;gap:14px;min-height:auto;padding:16px;}
+    .entry-card-wide .entry-icon{margin-bottom:0;flex-shrink:0;}
+    .entry-card-wide .entry-text{flex:1;min-width:0;}
+    .entry-card-wide .entry-title{margin-bottom:1px;white-space:nowrap;}
+    .entry-card-wide .entry-desc{white-space:normal;}
+
+    /* เช็คอิน: พรีวิวรูปที่ถ่าย */
+    .checkin-photo-preview{
+      width:100%;max-height:320px;object-fit:cover;border-radius:16px;margin-top:10px;
+      box-shadow: 4px 4px 10px var(--shadow-d), -4px -4px 10px var(--shadow-l);
+    }
+
+    /* แอดมิน: การ์ดประวัติเช็คอิน */
+    .checkin-record{
+      display:flex;gap:12px;padding:10px;border-radius:14px;margin-bottom:10px;
+      background:var(--clay-surface-2);
+      box-shadow: inset 2px 2px 5px var(--shadow-d-soft), inset -2px -2px 5px var(--shadow-l-soft);
+    }
+    .checkin-record img{width:64px;height:64px;object-fit:cover;border-radius:12px;flex-shrink:0;box-shadow:0 2px 6px rgba(0,0,0,.15);}
+    .checkin-record-info{flex:1;min-width:0;}
+    .checkin-record-name{font-weight:700;font-size:13.5px;}
+    .checkin-record-detail{font-size:12px;color:var(--muted);margin-top:2px;}
     .entry-icon{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:10px;}
     .entry-title{font-family:'Prompt',sans-serif;font-weight:800;font-size:16px;margin-bottom:2px;}
     .entry-desc{font-size:11.5px;opacity:.9;}
@@ -402,6 +425,13 @@
       <div class="entry-title">แอดมิน</div>
       <div class="entry-desc">ดูรายงาน · ประวัติการบันทึก</div>
     </div>
+    <div class="entry-card entry-checkin entry-card-wide" id="entryCheckinBtn" onclick="selectEntry_('checkin')">
+      <div class="entry-icon">📍</div>
+      <div class="entry-text">
+        <div class="entry-title">เช็คอินเข้างาน</div>
+        <div class="entry-desc">ถ่ายรูปหน้าบ้านคนไข้ + แจ้งเวรที่เข้า</div>
+      </div>
+    </div>
   </div>
 
   <!-- LOGIN -->
@@ -418,6 +448,14 @@
     <input type="password" id="adminCode" placeholder="รหัสแอดมิน" inputmode="numeric">
     <button class="secondary" onclick="adminLogin()">เข้าสู่ระบบแอดมิน</button>
     <div id="adminLoginMsg"></div>
+  </div>
+
+  <!-- LOGIN สำหรับเช็คอิน -->
+  <div id="checkinLoginCard" class="card hidden">
+    <label>รหัสผู้ดูแล (สำหรับเช็คอิน)</label>
+    <input type="password" id="checkinCode" placeholder="กรอกรหัสของคุณ" inputmode="numeric">
+    <button onclick="checkinLogin()">เข้าสู่ระบบเพื่อเช็คอิน</button>
+    <div id="checkinLoginMsg"></div>
   </div>
 
   <!-- MAIN -->
@@ -504,6 +542,13 @@
     </div>
 
     <div class="card no-print">
+      <label>การเช็คอินเข้างาน</label>
+      <div class="sub" style="margin-bottom:8px;">รูปถ่ายและเวรที่ผู้ดูแลแจ้งไว้ตอนเช็คอิน เรียงล่าสุดก่อน</div>
+      <div id="checkinRecordsView"></div>
+      <div id="checkinRecordsMsg" class="sub" style="margin-top:8px;margin-bottom:0;"></div>
+    </div>
+
+    <div class="card no-print">
       <label>ลงทะเบียนผู้ดูแลใหม่</label>
       <input type="text" id="newCaregiverCode" placeholder="ตั้งรหัสผู้ดูแล (ตัวเลข/ตัวอักษรก็ได้)" inputmode="numeric">
       <input type="text" id="newCaregiverName" placeholder="ชื่อผู้ดูแล" style="margin-top:8px;">
@@ -521,6 +566,41 @@
       <div class="chip-row" id="newPatientCategoryChips"></div>
       <button onclick="registerPatient_()">ลงทะเบียนคนไข้</button>
       <div id="registerPatientMsg"></div>
+    </div>
+  </div>
+
+  <!-- เช็คอินเข้างาน -->
+  <div id="checkinSection" class="hidden">
+    <div class="topbar">
+      <div class="who">ผู้ดูแล: <b id="checkinNameLabel"></b></div>
+      <a class="linklike" href="#" onclick="logout();return false;">ออกจากระบบ</a>
+    </div>
+
+    <div class="card">
+      <label>ถ่ายรูปหน้าบ้านคนไข้</label>
+      <input type="file" accept="image/*" capture="user" id="checkinPhotoInput" class="hidden" onchange="handlePhotoSelect_(event)">
+      <button type="button" class="secondary" onclick="document.getElementById('checkinPhotoInput').click()">📷 เปิดกล้องถ่ายรูป</button>
+      <img id="checkinPhotoPreview" class="checkin-photo-preview hidden" alt="รูปเช็คอิน">
+
+      <label>คนไข้ที่มาทำงาน</label>
+      <select id="checkinPatientSelect">
+        <option value="">-- เลือกคนไข้ --</option>
+      </select>
+
+      <label>เวรที่เข้า</label>
+      <select id="checkinShiftSelect">
+        <option value="">-- เลือกเวร --</option>
+        <option value="เวรเช้า 8 ชั่วโมง">เวรเช้า 8 ชั่วโมง</option>
+        <option value="เวรเช้า 10 ชั่วโมง">เวรเช้า 10 ชั่วโมง</option>
+        <option value="เวรเช้า 12 ชั่วโมง">เวรเช้า 12 ชั่วโมง</option>
+        <option value="เวรดึก 8 ชั่วโมง">เวรดึก 8 ชั่วโมง</option>
+        <option value="เวรดึก 10 ชั่วโมง">เวรดึก 10 ชั่วโมง</option>
+        <option value="เวรดึก 12 ชั่วโมง">เวรดึก 12 ชั่วโมง</option>
+        <option value="เวรทั้งวัน 24 ชั่วโมง">เวรทั้งวัน 24 ชั่วโมง</option>
+      </select>
+
+      <button id="checkinSubmitBtn" onclick="submitCheckin_()">บันทึกการเช็คอิน</button>
+      <div id="checkinMsg"></div>
     </div>
   </div>
 
@@ -661,21 +741,22 @@
 
   // ---------------- หน้าแรก: เลือกทางเข้า (ผู้ดูแล / แอดมิน) ----------------
   function selectEntry_(which){
-    const loginCard = document.getElementById('loginCard');
-    const adminCard = document.getElementById('adminLoginCard');
-    const caregiverBtn = document.getElementById('entryCaregiverBtn');
-    const adminBtn = document.getElementById('entryAdminBtn');
-    const isCaregiver = which === 'caregiver';
+    const forms = {
+      caregiver: { card: document.getElementById('loginCard'), btn: document.getElementById('entryCaregiverBtn'), input: 'caregiverCode' },
+      admin: { card: document.getElementById('adminLoginCard'), btn: document.getElementById('entryAdminBtn'), input: 'adminCode' },
+      checkin: { card: document.getElementById('checkinLoginCard'), btn: document.getElementById('entryCheckinBtn'), input: 'checkinCode' }
+    };
 
-    loginCard.classList.toggle('hidden', !isCaregiver);
-    adminCard.classList.toggle('hidden', isCaregiver);
-    caregiverBtn.classList.toggle('active', isCaregiver);
-    adminBtn.classList.toggle('active', !isCaregiver);
+    Object.keys(forms).forEach(function(key){
+      const isSelected = key === which;
+      forms[key].card.classList.toggle('hidden', !isSelected);
+      forms[key].btn.classList.toggle('active', isSelected);
+    });
 
     setTimeout(function(){
-      const target = isCaregiver ? loginCard : adminCard;
+      const target = forms[which].card;
       target.scrollIntoView({ behavior:'smooth', block:'center' });
-      const input = document.getElementById(isCaregiver ? 'caregiverCode' : 'adminCode');
+      const input = document.getElementById(forms[which].input);
       if(input) input.focus();
     }, 60);
   }
@@ -702,6 +783,7 @@
         document.getElementById('caregiverNameLabel').textContent = caregiverName;
         document.getElementById('loginCard').classList.add('hidden');
         document.getElementById('adminLoginCard').classList.add('hidden');
+        document.getElementById('checkinLoginCard').classList.add('hidden');
         hideLandingIntro_();
         document.getElementById('mainSection').classList.remove('hidden');
         document.getElementById('recordDate').value = todayStr();
@@ -743,12 +825,14 @@
         document.getElementById('adminNameLabel').textContent = adminName;
         document.getElementById('loginCard').classList.add('hidden');
         document.getElementById('adminLoginCard').classList.add('hidden');
+        document.getElementById('checkinLoginCard').classList.add('hidden');
         hideLandingIntro_();
         document.getElementById('adminSection').classList.remove('hidden');
         document.getElementById('adminReportDateFrom').value = todayStr();
         document.getElementById('adminReportDateTo').value = todayStr();
         loadAdminPatients();
         loadActivityLog();
+        loadCheckInRecords_();
       } else {
         showMsg('adminLoginMsg', res.message || 'รหัสไม่ถูกต้อง', 'err');
       }
@@ -760,6 +844,155 @@
       showMsg('adminLoginMsg', msg, 'err');
     });
   }
+
+  // ---------------- เช็คอินเข้างาน ----------------
+  let checkinName = '';
+  let checkinCode = '';
+  let checkinPhotoDataUrl_ = '';
+
+  function checkinLogin(){
+    const code = document.getElementById('checkinCode').value.trim();
+    if(!code){ showMsg('checkinLoginMsg','กรุณากรอกรหัส','err'); return; }
+
+    const btn = document.querySelector('#checkinLoginCard button');
+    btn.disabled = true;
+    showMsg('checkinLoginMsg','<span class="spinner"></span>กำลังตรวจสอบ...','ok');
+    gasGet_({ action: 'verify', code: code }).then(function(res){
+      btn.disabled = false;
+      if(res.success){
+        checkinName = res.name;
+        checkinCode = code;
+        document.getElementById('checkinNameLabel').textContent = checkinName;
+        document.getElementById('loginCard').classList.add('hidden');
+        document.getElementById('adminLoginCard').classList.add('hidden');
+        document.getElementById('checkinLoginCard').classList.add('hidden');
+        hideLandingIntro_();
+        document.getElementById('checkinSection').classList.remove('hidden');
+        loadCheckinPatients_();
+      } else {
+        showMsg('checkinLoginMsg', res.message || 'รหัสไม่ถูกต้อง', 'err');
+      }
+    }).catch(function(err){
+      btn.disabled = false;
+      showMsg('checkinLoginMsg', 'เชื่อมต่อไม่ได้: '+err.message, 'err');
+    });
+  }
+
+  function loadCheckinPatients_(){
+    gasGet_({ action: 'patients', caregiverCode: checkinCode }).then(function(res){
+      const list = res.patients || res;
+      const sel = document.getElementById('checkinPatientSelect');
+      sel.innerHTML = '<option value="">-- เลือกคนไข้ --</option>';
+      list.forEach(function(p){
+        const opt = document.createElement('option');
+        opt.value = p.name;
+        opt.textContent = p.name + (p.zone ? ' ('+p.zone+')' : '');
+        sel.appendChild(opt);
+      });
+    }).catch(function(err){
+      showMsg('checkinMsg', 'โหลดรายชื่อคนไข้ไม่สำเร็จ: '+err.message, 'err');
+    });
+  }
+
+  // ย่อรูปก่อนส่ง (กว้างไม่เกิน 900px, คุณภาพ 75%) กัน payload ใหญ่เกินไป
+  function handlePhotoSelect_(evt){
+    const file = evt.target.files && evt.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev){
+      const img = new Image();
+      img.onload = function(){
+        const maxW = 900;
+        const scale = Math.min(1, maxW / img.width);
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        checkinPhotoDataUrl_ = canvas.toDataURL('image/jpeg', 0.75);
+        const preview = document.getElementById('checkinPhotoPreview');
+        preview.src = checkinPhotoDataUrl_;
+        preview.classList.remove('hidden');
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function submitCheckin_(){
+    if(!checkinPhotoDataUrl_){ showMsg('checkinMsg','กรุณาถ่ายรูปก่อนเช็คอิน','err'); return; }
+    const patientName = document.getElementById('checkinPatientSelect').value;
+    const shiftType = document.getElementById('checkinShiftSelect').value;
+    if(!patientName){ showMsg('checkinMsg','กรุณาเลือกคนไข้','err'); return; }
+    if(!shiftType){ showMsg('checkinMsg','กรุณาเลือกเวรที่เข้า','err'); return; }
+
+    const btn = document.getElementById('checkinSubmitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>กำลังบันทึก...';
+
+    gasPost_({ action: 'checkIn', payload: {
+      caregiverCode: checkinCode, patientName: patientName, shiftType: shiftType, photoDataUrl: checkinPhotoDataUrl_
+    }}).then(function(res){
+      btn.disabled = false;
+      btn.textContent = 'บันทึกการเช็คอิน';
+      if(res.success){
+        showMsg('checkinMsg', 'เช็คอินสำเร็จ เวลา ' + res.time + ' น.', 'ok');
+        checkinPhotoDataUrl_ = '';
+        document.getElementById('checkinPhotoInput').value = '';
+        document.getElementById('checkinPhotoPreview').classList.add('hidden');
+        document.getElementById('checkinShiftSelect').value = '';
+      } else {
+        showMsg('checkinMsg', res.message || 'เช็คอินไม่สำเร็จ', 'err');
+      }
+    }).catch(function(err){
+      btn.disabled = false;
+      btn.textContent = 'บันทึกการเช็คอิน';
+      showMsg('checkinMsg', 'เชื่อมต่อไม่ได้: '+err.message, 'err');
+    });
+  }
+
+  // ---------------- แอดมิน: ดูประวัติเช็คอิน ----------------
+  function loadCheckInRecords_(){
+    document.getElementById('checkinRecordsMsg').textContent = 'กำลังโหลด...';
+    gasGet_({ action: 'checkIns', limit: 100 }).then(function(res){
+      if(!res.success){
+        document.getElementById('checkinRecordsMsg').textContent = res.message || 'โหลดไม่สำเร็จ';
+        return;
+      }
+      renderCheckInRecords_(res.records || []);
+      document.getElementById('checkinRecordsMsg').textContent = '';
+    }).catch(function(err){
+      document.getElementById('checkinRecordsMsg').textContent = 'เชื่อมต่อไม่ได้: '+err.message;
+    });
+  }
+
+  // แปลงลิงก์ Drive ปกติ (.../file/d/ID/view...) เป็นลิงก์รูปที่ฝังตรงใน <img> ได้ (ต่างจาก toPdfPreviewUrl_ ที่ใช้กับ iframe PDF)
+  function toDriveImageUrl_(url){
+    const m = String(url || '').match(/\/file\/d\/([^/]+)/);
+    return m ? ('https://drive.google.com/uc?export=view&id=' + m[1]) : url;
+  }
+
+  function renderCheckInRecords_(records){
+    const el = document.getElementById('checkinRecordsView');
+    el.innerHTML = '';
+    if(records.length === 0){
+      el.innerHTML = '<div class="sub" style="margin:0;">ยังไม่มีการเช็คอิน</div>';
+      return;
+    }
+    records.forEach(function(r){
+      const row = document.createElement('div');
+      row.className = 'checkin-record';
+      row.innerHTML =
+        (r.photoUrl ? '<img src="'+escapeHtml_(toDriveImageUrl_(r.photoUrl))+'" alt="รูปเช็คอิน">' : '') +
+        '<div class="checkin-record-info">' +
+          '<div class="checkin-record-name">'+escapeHtml_(r.caregiverName)+'</div>' +
+          '<div class="checkin-record-detail">'+escapeHtml_(r.patientName)+' · '+escapeHtml_(r.shiftType)+'</div>' +
+          '<div class="checkin-record-detail">'+escapeHtml_(r.date)+' เวลา '+escapeHtml_(r.time)+' น.</div>' +
+        '</div>';
+      el.appendChild(row);
+    });
+  }
+
 
   function adminLogout(){
     if(!confirm('ต้องการออกจากระบบแอดมินหรือไม่?')) return;
