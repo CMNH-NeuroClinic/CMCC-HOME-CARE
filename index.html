@@ -39,6 +39,29 @@
     body.has-savebar{padding-bottom:104px;}
 
     /* ป็อปอัปแสดง PDF รายงาน */
+    /* ปุ่มฉุกเฉิน (SOS) ลอยมุมล่างขวา กดค้างเพื่อยืนยัน */
+    .sos-fab{
+      position:fixed; right:16px; bottom:calc(104px + env(safe-area-inset-bottom));
+      width:62px; height:62px; border-radius:50%;
+      background:radial-gradient(circle at 32% 28%, #ff7a6e, #d8342a);
+      color:#fff; display:flex; align-items:center; justify-content:center;
+      font-family:'Prompt',sans-serif; font-weight:800; font-size:13px; letter-spacing:.5px;
+      box-shadow:0 6px 16px rgba(200,40,30,.5);
+      z-index:150; -webkit-tap-highlight-color:transparent; user-select:none;
+      overflow:hidden; cursor:pointer;
+    }
+    .sos-fab-fill{
+      position:absolute; left:0; bottom:0; width:100%; height:0%;
+      background:rgba(255,255,255,.4);
+    }
+    .sos-fab-label{position:relative; z-index:1; pointer-events:none;}
+    .sos-toast{
+      position:fixed; left:16px; right:16px; bottom:calc(20px + env(safe-area-inset-bottom));
+      background:#d8342a; color:#fff; padding:12px 16px; border-radius:14px;
+      font-size:13.5px; text-align:center; z-index:160;
+      box-shadow:0 6px 16px rgba(0,0,0,.3);
+    }
+
     .pdf-modal{
       position:fixed;inset:0;z-index:200;
       background:rgba(20,30,28,.55);
@@ -296,6 +319,37 @@
     }
 
     /* แอดมิน: การ์ดประวัติเช็คอิน */
+    /* ตารางเวรล่วงหน้า */
+    .schedule-entry{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:10px 12px;border-radius:12px;margin-bottom:8px;
+      background:var(--clay-surface-2);
+      box-shadow: inset 2px 2px 5px var(--shadow-d-soft), inset -2px -2px 5px var(--shadow-l-soft);
+    }
+    .schedule-entry-info{flex:1;min-width:0;}
+    .schedule-entry-shift{font-weight:700;font-size:13px;color:var(--primary-dark);}
+    .schedule-entry-detail{font-size:12px;color:var(--muted);margin-top:2px;}
+    .schedule-entry-del{
+      width:auto;margin-top:0;flex-shrink:0;padding:6px 10px;font-size:12px;
+      background:var(--danger-bg);color:#a04635;
+      box-shadow:2px 2px 5px var(--shadow-d-soft), -2px -2px 5px var(--shadow-l-soft);
+    }
+
+    /* แอดมิน: การ์ดแจ้งเหตุฉุกเฉิน */
+    .emergency-record{
+      display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:14px;margin-bottom:10px;
+      background:#fdeceb;border-left:4px solid #d8342a;
+      box-shadow: inset 2px 2px 5px rgba(180,60,50,.12);
+    }
+    .emergency-record.acked{background:var(--clay-surface-2);border-left-color:var(--muted);}
+    .emergency-record-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+    .emergency-record-title{font-weight:800;font-size:13.5px;color:#a0342a;}
+    .emergency-record.acked .emergency-record-title{color:var(--text);}
+    .emergency-record-detail{font-size:12px;color:var(--muted);}
+    .emergency-ack-btn{width:auto;margin-top:0;padding:7px 14px;font-size:12px;flex-shrink:0;align-self:flex-start;}
+    .emergency-status-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:#d8342a;color:#fff;flex-shrink:0;}
+    .emergency-status-badge.acked{background:var(--primary);}
+
     .checkin-record{
       display:flex;gap:12px;padding:10px;border-radius:14px;margin-bottom:10px;
       background:var(--clay-surface-2);
@@ -485,6 +539,12 @@
       <div class="sub" style="margin-top:6px;margin-bottom:0;">แก้ไขของเดิมได้: เลือกวันที่/เวลาเดียวกับที่เคยบันทึกไว้ กดลิงก์ด้านบนเพื่อดึงมาแก้ แล้วกด "บันทึก" อีกครั้ง ระบบจะทับของเดิมให้เอง ไม่สร้างรายการซ้ำ</div>
     </div>
 
+    <div class="card" id="myScheduleCard">
+      <label>เวรที่ได้รับมอบหมาย (14 วันข้างหน้า)</label>
+      <div id="myScheduleView"></div>
+      <div id="myScheduleMsg" class="sub" style="margin-top:6px;margin-bottom:0;"></div>
+    </div>
+
     <div id="checklistCard" class="card hidden">
       <div id="checklistContainer"></div>
     </div>
@@ -502,6 +562,12 @@
     <div class="topbar no-print">
       <div class="who">แอดมิน: <b id="adminNameLabel"></b></div>
       <a class="linklike" href="#" onclick="adminLogout();return false;">ออกจากระบบ</a>
+    </div>
+
+    <div class="card no-print" id="emergencyCard">
+      <label>🚨 แจ้งเหตุฉุกเฉิน</label>
+      <div id="emergencyView"></div>
+      <div id="emergencyMsg" class="sub" style="margin-top:8px;margin-bottom:0;"></div>
     </div>
 
     <div class="card no-print">
@@ -549,6 +615,40 @@
     </div>
 
     <div class="card no-print">
+      <label>จัดตารางเวรล่วงหน้า</label>
+      <input type="date" id="scheduleDate">
+      <select id="scheduleCaregiverSelect" style="margin-top:8px;">
+        <option value="">-- เลือกผู้ดูแล --</option>
+      </select>
+      <select id="schedulePatientSelect" style="margin-top:8px;">
+        <option value="">-- เลือกคนไข้ --</option>
+      </select>
+      <select id="scheduleShiftSelect" style="margin-top:8px;">
+        <option value="">-- เลือกเวร --</option>
+        <option value="เวรเช้า 8 ชั่วโมง">เวรเช้า 8 ชั่วโมง</option>
+        <option value="เวรเช้า 10 ชั่วโมง">เวรเช้า 10 ชั่วโมง</option>
+        <option value="เวรเช้า 12 ชั่วโมง">เวรเช้า 12 ชั่วโมง</option>
+        <option value="เวรดึก 8 ชั่วโมง">เวรดึก 8 ชั่วโมง</option>
+        <option value="เวรดึก 10 ชั่วโมง">เวรดึก 10 ชั่วโมง</option>
+        <option value="เวรดึก 12 ชั่วโมง">เวรดึก 12 ชั่วโมง</option>
+        <option value="เวรทั้งวัน 24 ชั่วโมง">เวรทั้งวัน 24 ชั่วโมง</option>
+      </select>
+      <input type="text" id="scheduleNote" placeholder="หมายเหตุ (ไม่บังคับ)" style="margin-top:8px;">
+      <button onclick="addSchedule_()">เพิ่มเวร</button>
+      <div id="scheduleAddMsg"></div>
+
+      <label style="margin-top:18px;">ดูตารางเวรที่จัดไว้</label>
+      <div class="date-range-row">
+        <input type="date" id="scheduleViewFrom">
+        <span class="date-range-sep">ถึง</span>
+        <input type="date" id="scheduleViewTo">
+      </div>
+      <button class="secondary" onclick="loadScheduleView_()">ดูตาราง</button>
+      <div id="scheduleView"></div>
+      <div id="scheduleViewMsg" class="sub" style="margin-top:8px;margin-bottom:0;"></div>
+    </div>
+
+    <div class="card no-print">
       <label>ลงทะเบียนผู้ดูแลใหม่</label>
       <input type="text" id="newCaregiverCode" placeholder="ตั้งรหัสผู้ดูแล (ตัวเลข/ตัวอักษรก็ได้)" inputmode="numeric">
       <input type="text" id="newCaregiverName" placeholder="ชื่อผู้ดูแล" style="margin-top:8px;">
@@ -564,6 +664,9 @@
       <input type="text" id="newPatientZone" placeholder="โซน/พื้นที่ (ไม่บังคับ)" style="margin-top:8px;">
       <label style="margin-top:12px;">หมวดที่บันทึกให้คนไข้คนนี้ (ไม่เลือกเลย = ทุกหมวด)</label>
       <div class="chip-row" id="newPatientCategoryChips"></div>
+      <label style="margin-top:12px;">ช่องทางแจ้งเหตุฉุกเฉินถึงญาติ (ไม่บังคับ)</label>
+      <input type="text" id="newPatientFamilyEmail" placeholder="อีเมลญาติ">
+      <input type="text" id="newPatientFamilyLineToken" placeholder="LINE Notify Token ของญาติ" style="margin-top:8px;">
       <button onclick="registerPatient_()">ลงทะเบียนคนไข้</button>
       <div id="registerPatientMsg"></div>
     </div>
@@ -614,6 +717,13 @@
   </div>
 
   <!-- ป็อปอัปโชว์ไฟล์ PDF รายงาน พร้อมปุ่มพิมพ์/บันทึก/ส่งต่อ -->
+  <!-- ปุ่มฉุกเฉิน (SOS) — ลอยตลอดตอนผู้ดูแล/เช็คอินล็อกอินอยู่ กดค้างเพื่อยืนยัน กันกดโดนพลาด -->
+  <div id="sosButton" class="sos-fab hidden no-print" title="กดค้างเพื่อแจ้งเหตุฉุกเฉิน">
+    <div class="sos-fab-fill" id="sosFabFill"></div>
+    <span class="sos-fab-label">SOS</span>
+  </div>
+  <div id="sosToast" class="sos-toast hidden no-print"></div>
+
   <div id="pdfModal" class="pdf-modal hidden no-print">
     <div class="pdf-modal-inner">
       <div class="pdf-modal-header">
@@ -789,6 +899,8 @@
         document.getElementById('recordDate').value = todayStr();
         document.getElementById('recordTime').value = nowTimeStr();
         loadPatients();
+        loadMySchedule_();
+        showSosFab_();
       } else {
         showMsg('loginMsg', res.message || 'รหัสไม่ถูกต้อง', 'err');
       }
@@ -833,6 +945,12 @@
         loadAdminPatients();
         loadActivityLog();
         loadCheckInRecords_();
+        loadEmergencies_();
+        loadScheduleCaregivers_();
+        document.getElementById('scheduleDate').value = todayStr();
+        document.getElementById('scheduleViewFrom').value = todayStr();
+        document.getElementById('scheduleViewTo').value = todayStr();
+        loadScheduleView_();
       } else {
         showMsg('adminLoginMsg', res.message || 'รหัสไม่ถูกต้อง', 'err');
       }
@@ -869,6 +987,7 @@
         hideLandingIntro_();
         document.getElementById('checkinSection').classList.remove('hidden');
         loadCheckinPatients_();
+        showSosFab_();
       } else {
         showMsg('checkinLoginMsg', res.message || 'รหัสไม่ถูกต้อง', 'err');
       }
@@ -951,6 +1070,80 @@
     });
   }
 
+  // ---------------- ปุ่มฉุกเฉิน (SOS) — กดค้างยืนยัน กันกดโดนพลาด ----------------
+  const SOS_HOLD_MS = 2200;
+  let sosHoldTimer_ = null;
+
+  function showSosFab_(){
+    document.getElementById('sosButton').classList.remove('hidden');
+  }
+  function hideSosFab_(){
+    document.getElementById('sosButton').classList.add('hidden');
+  }
+
+  function sosHoldStart_(e){
+    e.preventDefault();
+    const fill = document.getElementById('sosFabFill');
+    fill.style.transition = 'height ' + SOS_HOLD_MS + 'ms linear';
+    fill.style.height = '100%';
+    sosHoldTimer_ = setTimeout(function(){
+      fireSOS_();
+      sosHoldReset_();
+    }, SOS_HOLD_MS);
+  }
+  function sosHoldCancel_(){
+    if(sosHoldTimer_){ clearTimeout(sosHoldTimer_); sosHoldTimer_ = null; }
+    sosHoldReset_();
+  }
+  function sosHoldReset_(){
+    const fill = document.getElementById('sosFabFill');
+    fill.style.transition = 'none';
+    fill.style.height = '0%';
+  }
+
+  function fireSOS_(){
+    const code = caregiverCode || checkinCode;
+    if(!code){ return; }
+    let patientName = '';
+    if(typeof currentPatient !== 'undefined' && currentPatient) patientName = currentPatient.name;
+    else if(document.getElementById('checkinPatientSelect')) patientName = document.getElementById('checkinPatientSelect').value;
+
+    function send(lat, lng){
+      gasPost_({ action: 'triggerSOS', payload: { caregiverCode: code, patientName: patientName || '', lat: lat, lng: lng } }).then(function(res){
+        showSosToast_(res.success ? ('ส่งแจ้งเตือนฉุกเฉินแล้ว เวลา ' + (res.time || nowTimeStr()) + ' น.') : (res.message || 'ส่งไม่สำเร็จ ลองใหม่อีกครั้ง'));
+      }).catch(function(err){
+        showSosToast_('เชื่อมต่อไม่ได้: ' + err.message);
+      });
+    }
+
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(
+        function(pos){ send(pos.coords.latitude, pos.coords.longitude); },
+        function(){ send(null, null); },
+        { timeout: 4000 }
+      );
+    } else {
+      send(null, null);
+    }
+  }
+
+  function showSosToast_(text){
+    const toast = document.getElementById('sosToast');
+    toast.textContent = text;
+    toast.classList.remove('hidden');
+    setTimeout(function(){ toast.classList.add('hidden'); }, 6000);
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    const btn = document.getElementById('sosButton');
+    if(!btn) return;
+    btn.addEventListener('pointerdown', sosHoldStart_);
+    btn.addEventListener('pointerup', sosHoldCancel_);
+    btn.addEventListener('pointerleave', sosHoldCancel_);
+    btn.addEventListener('pointercancel', sosHoldCancel_);
+  });
+
+
   // ---------------- แอดมิน: ดูประวัติเช็คอิน ----------------
   function loadCheckInRecords_(){
     document.getElementById('checkinRecordsMsg').textContent = 'กำลังโหลด...';
@@ -993,6 +1186,186 @@
     });
   }
 
+  // ---------------- แอดมิน: จัดตารางเวรล่วงหน้า ----------------
+  // ---------------- แอดมิน: ดู/รับทราบการแจ้งเหตุฉุกเฉิน ----------------
+  function loadEmergencies_(){
+    document.getElementById('emergencyMsg').textContent = 'กำลังโหลด...';
+    gasGet_({ action: 'emergencies', limit: 50 }).then(function(res){
+      if(!res.success){ document.getElementById('emergencyMsg').textContent = res.message || 'โหลดไม่สำเร็จ'; return; }
+      renderEmergencies_(res.records || []);
+      document.getElementById('emergencyMsg').textContent = '';
+    }).catch(function(err){
+      document.getElementById('emergencyMsg').textContent = 'เชื่อมต่อไม่ได้: '+err.message;
+    });
+  }
+
+  function renderEmergencies_(records){
+    const el = document.getElementById('emergencyView');
+    el.innerHTML = '';
+    if(records.length === 0){
+      el.innerHTML = '<div class="sub" style="margin:0;">ไม่มีการแจ้งเหตุฉุกเฉิน</div>';
+      return;
+    }
+    records.forEach(function(r){
+      const acked = r.status === 'รับทราบแล้ว';
+      const mapsLink = (r.lat && r.lng) ? ('https://maps.google.com/?q='+r.lat+','+r.lng) : '';
+      const row = document.createElement('div');
+      row.className = 'emergency-record' + (acked ? ' acked' : '');
+      row.innerHTML =
+        '<div class="emergency-record-top">' +
+          '<div>' +
+            '<div class="emergency-record-title">'+escapeHtml_(r.caregiverName)+(r.patientName ? ' · '+escapeHtml_(r.patientName) : '')+'</div>' +
+            '<div class="emergency-record-detail">'+escapeHtml_(r.date)+' เวลา '+escapeHtml_(r.time)+' น.'+(mapsLink ? ' · <a class="linklike" href="'+mapsLink+'" target="_blank">เปิดแผนที่</a>' : '')+'</div>' +
+            (r.message ? '<div class="emergency-record-detail">'+escapeHtml_(r.message)+'</div>' : '') +
+            (acked ? '<div class="emergency-record-detail">รับทราบโดย '+escapeHtml_(r.ackBy)+' เมื่อ '+escapeHtml_(r.ackAt)+'</div>' : '') +
+          '</div>' +
+          '<span class="emergency-status-badge'+(acked ? ' acked' : '')+'">'+escapeHtml_(r.status)+'</span>' +
+        '</div>';
+      if(!acked){
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'emergency-ack-btn';
+        btn.textContent = 'รับทราบแล้ว';
+        btn.onclick = function(){ acknowledgeEmergency_(r.id); };
+        row.appendChild(btn);
+      }
+      el.appendChild(row);
+    });
+  }
+
+  function acknowledgeEmergency_(id){
+    gasPost_({ action: 'acknowledgeEmergency', payload: { adminCode: adminCodeValue, id: id } }).then(function(res){
+      if(res.success){ loadEmergencies_(); }
+      else { alert(res.message || 'ดำเนินการไม่สำเร็จ'); }
+    }).catch(function(err){ alert('เชื่อมต่อไม่ได้: '+err.message); });
+  }
+
+  function loadScheduleCaregivers_(){
+    gasGet_({ action: 'caregiversList', adminCode: adminCodeValue }).then(function(res){
+      if(!res.success){ showMsg('scheduleAddMsg', res.message || 'โหลดรายชื่อผู้ดูแลไม่สำเร็จ', 'err'); return; }
+      const sel = document.getElementById('scheduleCaregiverSelect');
+      sel.innerHTML = '<option value="">-- เลือกผู้ดูแล --</option>';
+      (res.caregivers || []).forEach(function(c){
+        const opt = document.createElement('option');
+        opt.value = c.code; opt.textContent = c.name;
+        sel.appendChild(opt);
+      });
+    }).catch(function(err){
+      showMsg('scheduleAddMsg', 'เชื่อมต่อไม่ได้: '+err.message, 'err');
+    });
+  }
+
+  function addSchedule_(){
+    const date = document.getElementById('scheduleDate').value;
+    const caregiverCode = document.getElementById('scheduleCaregiverSelect').value;
+    const patientName = document.getElementById('schedulePatientSelect').value;
+    const shiftType = document.getElementById('scheduleShiftSelect').value;
+    const note = document.getElementById('scheduleNote').value.trim();
+    if(!date || !caregiverCode || !patientName || !shiftType){
+      showMsg('scheduleAddMsg','กรุณากรอกวันที่ ผู้ดูแล คนไข้ และเวรให้ครบ','err'); return;
+    }
+
+    showMsg('scheduleAddMsg','<span class="spinner-dark"></span>กำลังบันทึก...','ok');
+    gasPost_({ action: 'addSchedule', payload: {
+      adminCode: adminCodeValue, date: date, caregiverCode: caregiverCode, patientName: patientName, shiftType: shiftType, note: note
+    }}).then(function(res){
+      if(res.success){
+        showMsg('scheduleAddMsg','เพิ่มเวรสำเร็จ','ok');
+        document.getElementById('scheduleNote').value = '';
+        loadScheduleView_();
+      } else {
+        showMsg('scheduleAddMsg', res.message || 'เพิ่มเวรไม่สำเร็จ', 'err');
+      }
+    }).catch(function(err){
+      showMsg('scheduleAddMsg', 'เชื่อมต่อไม่ได้: '+err.message, 'err');
+    });
+  }
+
+  function loadScheduleView_(){
+    const from = document.getElementById('scheduleViewFrom').value || todayStr();
+    const to = document.getElementById('scheduleViewTo').value || from;
+    document.getElementById('scheduleViewMsg').textContent = 'กำลังโหลด...';
+    gasGet_({ action: 'schedule', dateFrom: from, dateTo: to }).then(function(res){
+      if(!res.success){
+        document.getElementById('scheduleViewMsg').textContent = res.message || 'โหลดไม่สำเร็จ';
+        return;
+      }
+      renderScheduleView_(res.entries || [], document.getElementById('scheduleView'), true);
+      document.getElementById('scheduleViewMsg').textContent = '';
+    }).catch(function(err){
+      document.getElementById('scheduleViewMsg').textContent = 'เชื่อมต่อไม่ได้: '+err.message;
+    });
+  }
+
+  // ใช้ร่วมกันทั้งฝั่งแอดมิน (showDelete=true, โชว์คนไข้+ผู้ดูแล) และฝั่งผู้ดูแล (showDelete=false, โชว์แค่คนไข้)
+  function renderScheduleView_(entries, container, showDelete){
+    container.innerHTML = '';
+    if(entries.length === 0){
+      container.innerHTML = '<div class="sub" style="margin:8px 0 0;">ไม่มีเวรในช่วงนี้</div>';
+      return;
+    }
+    const byDate = {};
+    const dates = [];
+    entries.forEach(function(e){
+      if(!byDate[e.date]){ byDate[e.date] = []; dates.push(e.date); }
+      byDate[e.date].push(e);
+    });
+    dates.sort();
+    dates.forEach(function(d){
+      const dh = document.createElement('div');
+      dh.className = 'report-day-heading';
+      dh.textContent = formatThaiDateClient_(d);
+      container.appendChild(dh);
+
+      byDate[d].forEach(function(e){
+        const row = document.createElement('div');
+        row.className = 'schedule-entry';
+        const infoHtml =
+          '<div class="schedule-entry-shift">'+escapeHtml_(e.shiftType)+'</div>' +
+          '<div class="schedule-entry-detail">' + (showDelete ? escapeHtml_(e.patientName)+' · '+escapeHtml_(e.caregiverName) : escapeHtml_(e.patientName)) + '</div>' +
+          (e.note ? '<div class="schedule-entry-detail">'+escapeHtml_(e.note)+'</div>' : '');
+        row.innerHTML = '<div class="schedule-entry-info">'+infoHtml+'</div>';
+        if(showDelete){
+          const delBtn = document.createElement('button');
+          delBtn.type = 'button';
+          delBtn.className = 'schedule-entry-del';
+          delBtn.textContent = 'ลบ';
+          delBtn.onclick = function(){ deleteSchedule_(e.id); };
+          row.appendChild(delBtn);
+        }
+        container.appendChild(row);
+      });
+    });
+  }
+
+  function deleteSchedule_(id){
+    if(!confirm('ลบเวรนี้ออกจากตารางหรือไม่?')) return;
+    gasPost_({ action: 'deleteSchedule', payload: { adminCode: adminCodeValue, id: id } }).then(function(res){
+      if(res.success){ loadScheduleView_(); }
+      else { alert(res.message || 'ลบไม่สำเร็จ'); }
+    }).catch(function(err){ alert('เชื่อมต่อไม่ได้: '+err.message); });
+  }
+
+  // ---------------- ผู้ดูแล: ดูเวรที่ได้รับมอบหมายของตัวเอง ----------------
+  function loadMySchedule_(){
+    const from = todayStr();
+    const d = new Date(); d.setDate(d.getDate() + 14);
+    const pad = n => String(n).padStart(2,'0');
+    const to = d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+    document.getElementById('myScheduleMsg').textContent = 'กำลังโหลด...';
+    gasGet_({ action: 'schedule', dateFrom: from, dateTo: to, caregiverCode: caregiverCode }).then(function(res){
+      if(!res.success){
+        document.getElementById('myScheduleMsg').textContent = res.message || 'โหลดไม่สำเร็จ';
+        return;
+      }
+      renderScheduleView_(res.entries || [], document.getElementById('myScheduleView'), false);
+      document.getElementById('myScheduleMsg').textContent = '';
+    }).catch(function(err){
+      document.getElementById('myScheduleMsg').textContent = 'เชื่อมต่อไม่ได้: '+err.message;
+    });
+  }
+
+
 
   function adminLogout(){
     if(!confirm('ต้องการออกจากระบบแอดมินหรือไม่?')) return;
@@ -1008,11 +1381,16 @@
       adminPatientsList = list;
       const sel = document.getElementById('adminPatientSelect');
       sel.innerHTML = '<option value="">-- เลือกคนไข้ --</option>';
+      const schedSel = document.getElementById('schedulePatientSelect');
+      schedSel.innerHTML = '<option value="">-- เลือกคนไข้ --</option>';
       list.forEach(function(p){
+        const label = p.name + (p.zone ? ' ('+p.zone+')' : '');
         const opt = document.createElement('option');
-        opt.value = p.name;
-        opt.textContent = p.name + (p.zone ? ' ('+p.zone+')' : '');
+        opt.value = p.name; opt.textContent = label;
         sel.appendChild(opt);
+        const opt2 = document.createElement('option');
+        opt2.value = p.name; opt2.textContent = label;
+        schedSel.appendChild(opt2);
       });
       buildAssignPatientChips_();
     }).catch(function(err){
@@ -1283,18 +1661,23 @@
   function registerPatient_(){
     const name = document.getElementById('newPatientName').value.trim();
     const zone = document.getElementById('newPatientZone').value.trim();
+    const familyEmail = document.getElementById('newPatientFamilyEmail').value.trim();
+    const familyLineToken = document.getElementById('newPatientFamilyLineToken').value.trim();
     if(!name){ showMsg('registerPatientMsg','กรุณากรอกชื่อคนไข้','err'); return; }
 
     const categories = Array.from(document.querySelectorAll('#newPatientCategoryChips .chip.active')).map(function(c){ return c.dataset.cat; });
 
     showMsg('registerPatientMsg','<span class="spinner-dark"></span>กำลังลงทะเบียน...','ok');
     gasPost_({ action: 'registerPatient', payload: {
-      adminCode: adminCodeValue, name: name, zone: zone, categories: categories
+      adminCode: adminCodeValue, name: name, zone: zone, categories: categories,
+      familyEmail: familyEmail, familyLineToken: familyLineToken
     }}).then(function(res){
       if(res.success){
         showMsg('registerPatientMsg', 'ลงทะเบียนคนไข้ "'+name+'" สำเร็จ', 'ok');
         document.getElementById('newPatientName').value = '';
         document.getElementById('newPatientZone').value = '';
+        document.getElementById('newPatientFamilyEmail').value = '';
+        document.getElementById('newPatientFamilyLineToken').value = '';
         document.querySelectorAll('#newPatientCategoryChips .chip.active').forEach(function(c){ c.classList.remove('active'); });
         loadAdminPatients(); // รีเฟรชรายชื่อคนไข้ให้เลือกได้ทันที (ทั้ง dropdown รายงาน และชิปมอบหมายผู้ดูแล)
       } else {
