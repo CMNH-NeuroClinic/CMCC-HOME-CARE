@@ -313,9 +313,6 @@
       background:linear-gradient(145deg, var(--primary-light), var(--primary));
       color:#fff;font-weight:700;padding:8px 14px;border-radius:14px 14px 0 0;font-size:13px;
     }
-    .time-group-header .cat{margin-right:4px;}
-    .time-group-header .topic-count{float:right;font-weight:600;font-size:11.5px;opacity:.9;}
-    .report-item .entry-time{color:var(--primary-dark);}
     .time-group-items{background:var(--clay-surface-2);border-radius:0 0 14px 14px;overflow:hidden;}
     .report-item{padding:9px 14px;font-size:13.5px;border-bottom:1px solid rgba(140,164,157,.18);}
     .report-item:last-child{border-bottom:none;}
@@ -345,17 +342,15 @@
       background:linear-gradient(145deg, var(--primary-light), var(--primary));color:#fff;
       box-shadow: inset 2px 2px 5px rgba(0,50,42,.3), inset -2px -2px 5px rgba(255,255,255,.2);
     }
+    /* แอดมิน: ประวัติการบันทึก (การ์ดแบบเดียวกับรายงานหลัก) */
     .log-print-header{font-size:12px;color:var(--muted);margin:10px 0;}
-
-    /* แอดมิน: ตารางประวัติการบันทึก */
     .filter-row{display:flex;gap:10px;margin-bottom:12px;}
     .filter-row select{flex:1;}
-    .table-scroll{overflow:auto;max-height:420px;border-radius:16px;background:var(--clay-surface-2);
-      box-shadow: inset 3px 3px 7px var(--shadow-d-soft), inset -3px -3px 7px var(--shadow-l-soft);}
-    .log-table{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap;}
-    .log-table th,.log-table td{padding:8px 10px;text-align:left;}
-    .log-table th{background:var(--clay-surface-2);color:var(--primary-dark);position:sticky;top:0;}
-    .log-table td{border-top:1px solid rgba(140,164,157,.18);}
+    .log-patient-heading{
+      font-family:'Prompt',sans-serif;font-weight:800;font-size:14px;color:var(--primary-dark);
+      margin:18px 0 8px;padding-bottom:5px;border-bottom:2px solid var(--primary-light);
+    }
+    .log-patient-heading:first-of-type{margin-top:4px;}
 
     /* โหมดพิมพ์: ตัดเงา/ความนูนออกให้เอกสารเรียบ อ่าน+พิมพ์ง่าย เหลือแค่โครงสร้าง */
     /* ค่าเริ่มต้นตอนพิมพ์คือพิมพ์ "รายงาน" (print-report-only) ส่วน "ประวัติการบันทึก" (print-log-only) จะซ่อนไว้ */
@@ -369,8 +364,6 @@
 
       body.print-log .print-report-only{display:none !important;}
       body.print-log .print-log-only{display:block !important;}
-      body.print-log .table-scroll{box-shadow:none;background:#fff;max-height:none;overflow:visible;}
-      body.print-log .log-table th{background:#f3f3f3;}
     }
   </style>
 </head>
@@ -484,8 +477,6 @@
         <span class="date-range-sep">ถึง</span>
         <input type="date" id="adminReportDateTo">
       </div>
-      <label>หมวดหมู่ที่ต้องการแสดง <span class="sub" style="font-weight:400;">(ไม่เลือก = ทุกหมวด)</span></label>
-      <div class="chip-row" id="adminReportCategoryChips"></div>
       <button onclick="loadAdminReport()">ดูรายงาน</button>
       <div id="adminReportMsg"></div>
     </div>
@@ -508,16 +499,7 @@
       </div>
       <button class="secondary no-print" onclick="printLog_()">🖨️ พิมพ์รายการนี้</button>
       <div id="logPrintHeader" class="log-print-header"></div>
-      <div class="table-scroll">
-        <table class="log-table" id="logTable">
-          <thead>
-            <tr>
-              <th>วันที่</th><th>เวลา</th><th>คนไข้</th><th>หมวด</th><th>รายการ</th><th>รายละเอียด</th><th>ผู้บันทึก</th><th>บันทึกเมื่อ</th>
-            </tr>
-          </thead>
-          <tbody id="logTableBody"></tbody>
-        </table>
-      </div>
+      <div id="logReportView"></div>
       <div id="logMsg" class="sub no-print" style="margin-top:8px;margin-bottom:0;"></div>
     </div>
 
@@ -806,30 +788,6 @@
   }
 
   // ---------------- แอดมิน: หน้ารายงาน (ดูสวยๆ ในเว็บ + พิมพ์ได้) ----------------
-  let adminReportData = null;
-
-  // ชิปเลือกหมวดของ "รายงาน" — ไม่เลือกเลย = แสดงทุกหมวด
-  function buildReportCategoryChips_(){
-    const wrap = document.getElementById('adminReportCategoryChips');
-    if(!wrap || wrap.children.length) return;
-    CATEGORY_CONFIG.forEach(function(cat){
-      const chip = document.createElement('button');
-      chip.type = 'button';
-      chip.className = 'chip';
-      chip.textContent = cat.icon + ' ' + cat.title;
-      chip.dataset.cat = cat.title;
-      chip.onclick = function(){
-        chip.classList.toggle('active');
-        if(adminReportData) renderReportView(adminReportData); // กรองใหม่ทันทีโดยไม่ต้องโหลดซ้ำ
-      };
-      wrap.appendChild(chip);
-    });
-  }
-
-  function getSelectedReportCategories_(){
-    return Array.from(document.querySelectorAll('#adminReportCategoryChips .chip.active')).map(function(c){ return c.dataset.cat; });
-  }
-
   function loadAdminReport(){
     const patientName = document.getElementById('adminPatientSelect').value;
     const dateFrom = document.getElementById('adminReportDateFrom').value || todayStr();
@@ -845,7 +803,6 @@
         return;
       }
       document.getElementById('adminReportMsg').innerHTML = '';
-      adminReportData = res;
       renderReportView(res);
       document.getElementById('printArea').classList.remove('hidden');
       if(!res.days || res.days.length === 0){
@@ -878,14 +835,10 @@
     const el = document.getElementById('reportView');
     el.innerHTML = '';
     const logoSrc = document.querySelector('.brand-logo').getAttribute('src');
+    const days = res.days || [];
     const isRange = res.dateFrom !== res.dateTo;
-
-    // กรองตามหมวดที่เลือก (ถ้าไม่เลือกเลย = ทุกหมวด) แล้วตัดวัน/ช่วงเวลาที่ไม่เหลือรายการทิ้ง
-    const selectedCats = getSelectedReportCategories_();
-    const days = filterDaysByCategories_(res.days || [], selectedCats);
-
-    const totalGroups = days.reduce(function(sum, d){ return sum + d.groups.length; }, 0);
-    const totalItems = days.reduce(function(sum, d){ return sum + countItems_(d.groups); }, 0);
+    const totalTopics = days.reduce(function(sum, d){ return sum + (d.itemGroups ? d.itemGroups.length : 0); }, 0);
+    const totalItems = days.reduce(function(sum, d){ return sum + countOccurrences_(d.itemGroups); }, 0);
 
     // หัวกระดาษ: โลโก้+ชื่อศูนย์ (ซ้าย) / เลขที่เอกสาร+วันที่ออกเอกสาร (ขวา)
     const header = document.createElement('div');
@@ -905,12 +858,7 @@
     // สองคอลัมน์: ผู้รับบริการ / สรุปข้อมูลการบันทึก
     const twoCol = document.createElement('div');
     twoCol.className = 'report-twocol';
-    const caregiverNames = selectedCats.length
-      ? Array.from(new Set(days.reduce(function(acc, d){
-          d.groups.forEach(function(g){ g.items.forEach(function(it){ if(it.caregiver) acc.push(it.caregiver); }); });
-          return acc;
-        }, [])))
-      : (res.caregiverNames || []);
+    const caregiverNames = res.caregiverNames || [];
     twoCol.innerHTML =
       '<div>' +
         '<div class="report-col-label">ผู้รับบริการ</div>' +
@@ -920,7 +868,7 @@
       '<div>' +
         '<div class="report-col-label">สรุปข้อมูลการบันทึก</div>' +
         '<div class="report-summary-line">จำนวนวันที่มีบันทึก: '+days.length+' วัน</div>' +
-        '<div class="report-summary-line">จำนวนช่วงเวลาที่บันทึก: '+totalGroups+' ช่วง</div>' +
+        '<div class="report-summary-line">จำนวนหัวข้อที่บันทึก: '+totalTopics+' หัวข้อ</div>' +
         '<div class="report-summary-line">จำนวนรายการทั้งหมด: '+totalItems+' รายการ</div>' +
       '</div>';
     el.appendChild(twoCol);
@@ -934,27 +882,21 @@
     detailBox.innerHTML =
       '<div class="row"><span class="k">ช่วงวันที่บันทึก</span><span class="v">'+dateRangeText+'</span></div>' +
       '<div class="row"><span class="k">จำนวนผู้ดูแลที่บันทึก</span><span class="v">'+caregiverNames.length+' คน</span></div>' +
-      '<div class="row"><span class="k">ชื่อผู้ดูแล</span><span class="v">'+escapeHtml_(caregiverNames.join(', ') || '-')+'</span></div>' +
-      (selectedCats.length
-        ? '<div class="row"><span class="k">กรองเฉพาะหมวด</span><span class="v">'+escapeHtml_(selectedCats.join(', '))+'</span></div>'
-        : '');
+      '<div class="row"><span class="k">ชื่อผู้ดูแล</span><span class="v">'+escapeHtml_(caregiverNames.join(', ') || '-')+'</span></div>';
     el.appendChild(detailBox);
 
     if(days.length === 0){
       const empty = document.createElement('div');
       empty.className = 'sub';
       empty.style.marginBottom = '0';
-      empty.textContent = selectedCats.length
-        ? 'ไม่มีบันทึกในหมวดที่เลือกสำหรับช่วงวันที่นี้'
-        : 'ไม่มีบันทึกของช่วงวันที่นี้';
+      empty.textContent = 'ไม่มีบันทึกของช่วงวันที่นี้';
       el.appendChild(empty);
       return;
     }
 
     const listTitle = document.createElement('div');
     listTitle.className = 'report-list-title';
-    listTitle.textContent = (isRange ? 'รายการที่บันทึกในช่วงวันที่นี้' : 'รายการที่บันทึกวันนี้') +
-      (selectedCats.length ? ' (เฉพาะหมวด ' + selectedCats.join(', ') + ')' : '');
+    listTitle.textContent = isRange ? 'รายการที่บันทึกในช่วงวันที่นี้' : 'รายการที่บันทึกวันนี้';
     el.appendChild(listTitle);
 
     days.forEach(function(day){
@@ -965,48 +907,28 @@
         el.appendChild(dayHeading);
       }
 
-      // จัดกลุ่มใหม่: ใช้ "หัวข้อรายการ" เป็นหัวเรื่อง (แถบสี) แล้วให้แต่ละครั้งที่บันทึก
-      // (เวลา / รายละเอียด / ผู้บันทึก) เป็นข้อย่อยอยู่ใต้หัวข้อเดียวกัน
-      const topicOrder = [];
-      const topicMap = {};
-      day.groups.forEach(function(group){
-        group.items.forEach(function(it){
-          const key = it.category + '||' + it.item;
-          if(!topicMap[key]){
-            topicMap[key] = { category: it.category, item: it.item, entries: [] };
-            topicOrder.push(key);
-          }
-          topicMap[key].entries.push({ time: group.time, detail: it.detail, caregiver: it.caregiver });
-        });
-      });
-
-      topicOrder.forEach(function(key){
-        const topic = topicMap[key];
+      (day.itemGroups || []).forEach(function(grp){
         const wrap = document.createElement('div');
         wrap.className = 'time-group';
 
         const h = document.createElement('div');
         h.className = 'time-group-header';
-        h.innerHTML = '<span class="cat">'+reportCategoryIcon_(topic.category)+'</span> '+escapeHtml_(topic.item) +
-          '<span class="topic-count">'+topic.entries.length+' ครั้ง</span>';
+        h.innerHTML = '<span class="cat">'+reportCategoryIcon_(grp.category)+'</span> '+escapeHtml_(grp.item);
         wrap.appendChild(h);
 
         const itemsWrap = document.createElement('div');
         itemsWrap.className = 'time-group-items';
-        topic.entries.sort(function(a, b){ return a.time < b.time ? -1 : (a.time > b.time ? 1 : 0); });
-        topic.entries.forEach(function(en){
+        grp.occurrences.forEach(function(occ){
           const row = document.createElement('div');
           row.className = 'report-item';
-          const parts = en.detail ? en.detail.split('  —  ').map(function(s){ return s.trim(); }).filter(Boolean) : [];
-          let html = '<b class="entry-time">เวลา '+escapeHtml_(en.time)+' น.</b>';
+          const parts = occ.detail ? occ.detail.split('  —  ').map(function(s){ return s.trim(); }).filter(Boolean) : [];
+          let html = '<b>เวลา '+escapeHtml_(occ.time)+' น.</b>';
           if(parts.length === 1){
-            html += '  —  '+escapeHtml_(parts[0]);
+            html += '   —   '+escapeHtml_(parts[0]);
           } else if(parts.length > 1){
             html += '<div class="detail-sub-list">' + parts.map(function(p){ return '<div class="detail-sub">•  '+escapeHtml_(p)+'</div>'; }).join('') + '</div>';
           }
-          if(en.caregiver){
-            html += '<div class="by">บันทึกโดย '+escapeHtml_(en.caregiver)+'</div>';
-          }
+          html += '<div class="by">บันทึกโดย '+escapeHtml_(occ.caregiver)+'</div>';
           row.innerHTML = html;
           itemsWrap.appendChild(row);
         });
@@ -1021,20 +943,9 @@
     el.appendChild(thanks);
   }
 
-  // คืนค่าโครงสร้าง days ชุดใหม่ที่เหลือเฉพาะหมวดที่เลือก (ไม่แตะข้อมูลต้นฉบับ เพื่อให้กดชิปสลับไปมาได้)
-  function filterDaysByCategories_(days, cats){
-    if(!cats || cats.length === 0) return days;
-    return days.map(function(day){
-      const groups = day.groups.map(function(g){
-        return { time: g.time, items: g.items.filter(function(it){ return cats.indexOf(it.category) !== -1; }) };
-      }).filter(function(g){ return g.items.length > 0; });
-      return { date: day.date, dateThai: day.dateThai, groups: groups };
-    }).filter(function(day){ return day.groups.length > 0; });
-  }
-
-  function countItems_(groups){
-    if(!groups) return 0;
-    return groups.reduce(function(sum, g){ return sum + (g.items ? g.items.length : 0); }, 0);
+  function countOccurrences_(itemGroups){
+    if(!itemGroups) return 0;
+    return itemGroups.reduce(function(sum, g){ return sum + (g.occurrences ? g.occurrences.length : 0); }, 0);
   }
 
   // ---------------- แอดมิน: ประวัติการบันทึกของผู้ดูแลทุกคน ----------------
@@ -1176,8 +1087,6 @@
     const cFilter = document.getElementById('logCaregiverFilter').value;
     const pFilter = document.getElementById('logPatientFilter').value;
     const selectedCats = getSelectedLogCategories_();
-    const tbody = document.getElementById('logTableBody');
-    tbody.innerHTML = '';
 
     const rows = activityLogData.filter(function(r){
       return (!cFilter || r.caregiverName === cFilter) &&
@@ -1192,24 +1101,101 @@
     document.getElementById('logPrintHeader').textContent =
       (parts.length ? 'กรองโดย — ' + parts.join(' · ') : 'แสดงรายการทั้งหมด') + ' (' + rows.length + ' รายการ)';
 
+    renderLogReportView_(rows);
+  }
+
+  // แสดงประวัติที่กรองแล้วเป็นการ์ด "หัวข้อ → เวลาที่บันทึก" แบบเดียวกับรายงานหลัก
+  // (เผื่อกรณีไม่ได้เลือกคนไข้คนเดียว จะมีหัวข้อชื่อคนไข้คั่นอีกชั้นก่อนแบ่งตามวันที่)
+  function renderLogReportView_(rows){
+    const el = document.getElementById('logReportView');
+    el.innerHTML = '';
     if(rows.length === 0){
-      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:14px;">ไม่มีข้อมูล</td></tr>';
+      el.innerHTML = '<div class="sub" style="margin:0;">ไม่มีข้อมูล</div>';
       return;
     }
 
-    rows.forEach(function(r){
-      const tr = document.createElement('tr');
-      tr.innerHTML =
-        '<td>'+escapeHtml_(r.date)+'</td>' +
-        '<td>'+escapeHtml_(r.time)+'</td>' +
-        '<td>'+escapeHtml_(r.patientName)+'</td>' +
-        '<td>'+escapeHtml_(r.category)+'</td>' +
-        '<td>'+escapeHtml_(r.item)+'</td>' +
-        '<td>'+escapeHtml_(r.detail)+'</td>' +
-        '<td>'+escapeHtml_(r.caregiverName)+'</td>' +
-        '<td>'+escapeHtml_(r.loggedAt)+'</td>';
-      tbody.appendChild(tr);
+    const patients = Array.from(new Set(rows.map(function(r){ return r.patientName; }).filter(Boolean)));
+    const showPatientHeading = patients.length > 1;
+
+    patients.forEach(function(patientName){
+      if(showPatientHeading){
+        const ph = document.createElement('div');
+        ph.className = 'log-patient-heading';
+        ph.textContent = '👤 ' + patientName;
+        el.appendChild(ph);
+      }
+
+      const patientRows = rows.filter(function(r){ return r.patientName === patientName; });
+      const dates = Array.from(new Set(patientRows.map(function(r){ return r.date; }))).sort();
+      const showDateHeading = dates.length > 1;
+
+      dates.forEach(function(d){
+        if(showDateHeading){
+          const dh = document.createElement('div');
+          dh.className = 'report-day-heading';
+          dh.textContent = formatThaiDateClient_(d);
+          el.appendChild(dh);
+        }
+
+        const dateRows = patientRows.filter(function(r){ return r.date === d; });
+        buildItemGroupsFromLogRows_(dateRows).forEach(function(grp){
+          const wrap = document.createElement('div');
+          wrap.className = 'time-group';
+
+          const h = document.createElement('div');
+          h.className = 'time-group-header';
+          h.innerHTML = '<span class="cat">'+reportCategoryIcon_(grp.category)+'</span> '+escapeHtml_(grp.item);
+          wrap.appendChild(h);
+
+          const itemsWrap = document.createElement('div');
+          itemsWrap.className = 'time-group-items';
+          grp.occurrences.forEach(function(occ){
+            const row = document.createElement('div');
+            row.className = 'report-item';
+            const detailParts = occ.detail ? occ.detail.split('  —  ').map(function(s){ return s.trim(); }).filter(Boolean) : [];
+            let html = '<b>เวลา '+escapeHtml_(occ.time)+' น.</b>';
+            if(detailParts.length === 1){
+              html += '   —   '+escapeHtml_(detailParts[0]);
+            } else if(detailParts.length > 1){
+              html += '<div class="detail-sub-list">' + detailParts.map(function(p){ return '<div class="detail-sub">•  '+escapeHtml_(p)+'</div>'; }).join('') + '</div>';
+            }
+            html += '<div class="by">บันทึกโดย '+escapeHtml_(occ.caregiver)+'</div>';
+            row.innerHTML = html;
+            itemsWrap.appendChild(row);
+          });
+          wrap.appendChild(itemsWrap);
+          el.appendChild(wrap);
+        });
+      });
     });
+  }
+
+  // จัดกลุ่มแถวประวัติ (ของคนไข้+วันเดียว) ตามหัวข้อรายการ เรียงเวลาเหมือนกับ buildItemGroupsForDay_ ฝั่ง Code.gs
+  function buildItemGroupsFromLogRows_(rows){
+    const groupMap = {};
+    const order = [];
+    rows.forEach(function(r){
+      const key = r.category + '|||' + r.item;
+      if(!groupMap[key]){ groupMap[key] = { category: r.category, item: r.item, occurrences: [] }; order.push(key); }
+      groupMap[key].occurrences.push({ time: r.time, detail: r.detail, caregiver: r.caregiverName });
+    });
+    order.forEach(function(key){
+      groupMap[key].occurrences.sort(function(a,b){ return a.time < b.time ? -1 : (a.time > b.time ? 1 : 0); });
+    });
+    order.sort(function(a,b){
+      const ta = groupMap[a].occurrences[0].time, tb = groupMap[b].occurrences[0].time;
+      return ta < tb ? -1 : (ta > tb ? 1 : 0);
+    });
+    return order.map(function(key){ return groupMap[key]; });
+  }
+
+  const THAI_MONTHS_CLIENT_ = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+  function formatThaiDateClient_(dateStr){
+    const p = String(dateStr).split('-');
+    if(p.length !== 3) return dateStr;
+    const y = parseInt(p[0],10) + 543, m = parseInt(p[1],10) - 1, d = parseInt(p[2],10);
+    if(isNaN(y) || isNaN(m) || isNaN(d) || m < 0 || m > 11) return dateStr;
+    return d + ' ' + THAI_MONTHS_CLIENT_[m] + ' ' + y;
   }
 
   // พิมพ์เฉพาะการ์ด "ประวัติการบันทึก" (ตามตัวกรองที่เลือกอยู่) แทนการพิมพ์การ์ดรายงาน
@@ -1223,7 +1209,6 @@
 
   document.addEventListener('DOMContentLoaded', function(){
     buildCategoryChips_();
-    buildReportCategoryChips_();
     buildNewPatientCategoryChips_();
   });
 
