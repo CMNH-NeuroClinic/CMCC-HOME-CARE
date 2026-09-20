@@ -171,6 +171,8 @@
     .item-label{font-size:14px;}
     .item-detail{margin-top:8px;}
     .item-detail input, .item-detail select{font-size:13px;padding:9px 12px;border-radius:12px;}
+    .item-detail-group{margin-top:8px;display:flex;flex-direction:column;gap:8px;}
+    .item-detail-group select, .item-detail-group input{font-size:13px;padding:9px 12px;border-radius:12px;}
 
     .msg{font-size:13px;margin-top:10px;padding:10px 14px;border-radius:14px;}
     .msg.ok{background:var(--ok-bg);color:var(--primary-dark);box-shadow:inset 2px 2px 5px rgba(140,164,157,.25);}
@@ -180,6 +182,7 @@
     .who{font-size:13px;color:var(--muted);}
     a.linklike{color:var(--primary-dark);font-size:13px;font-weight:600;text-decoration:none;}
     .spinner{display:inline-block;width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:6px;}
+    .spinner-dark{display:inline-block;width:14px;height:14px;border:2px solid var(--primary-dark);border-top-color:transparent;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:6px;}
     @keyframes spin{to{transform:rotate(360deg);}}
 
     /* แถบบันทึกแบบลอยติดล่างจอ */
@@ -403,6 +406,10 @@
         <input type="time" id="recordTime">
         <button type="button" class="btn-now" onclick="setNowTime()">ใช้เวลาปัจจุบัน</button>
       </div>
+      <div style="margin-top:10px;">
+        <a href="#" class="linklike" onclick="loadExistingForTime_();return false;">🔄 โหลดข้อมูลที่เคยบันทึกไว้ของวันเวลานี้ (ถ้ามี)</a>
+      </div>
+      <div class="sub" style="margin-top:6px;margin-bottom:0;">แก้ไขของเดิมได้: เลือกวันที่/เวลาเดียวกับที่เคยบันทึกไว้ กดลิงก์ด้านบนเพื่อดึงมาแก้ แล้วกด "บันทึก" อีกครั้ง ระบบจะทับของเดิมให้เอง ไม่สร้างรายการซ้ำ</div>
     </div>
 
     <div id="checklistCard" class="card hidden">
@@ -488,15 +495,21 @@
   // -----------------------------------------------------------------------
   const CATEGORY_CONFIG = [
     { key: 'nutrition', icon: '🍽️', title: 'โภชนาการ / น้ำ', items: [
-      { key: 'meal', label: 'ทานอาหารแล้ว', type: 'select', options: ['ทานหมด','ทานได้ครึ่งหนึ่ง','ทานได้เล็กน้อย','ไม่ทาน'] },
-      { key: 'water', label: 'ดื่มน้ำ/ของเหลวแล้ว', type: 'check' }
+      { key: 'meal', label: 'ทานอาหารแล้ว', type: 'select', options: ['ทานได้ 2-5 คำ','ทานได้ 5-8 คำ','ทานได้ครึ่งจาน','ทานได้หมดจาน'] },
+      { key: 'water', label: 'ดื่มน้ำ/ของเหลวแล้ว', type: 'text', textPlaceholder: 'ระบุจำนวนแก้ว หรือนมกล่อง (เล็ก 125มล / ใหญ่ 250มล)' }
     ]},
     { key: 'medicine', icon: '💊', title: 'ยา', items: [
-      { key: 'med', label: 'ทานยาแล้ว', type: 'text' /* ระบุชื่อ/มื้อยา */ }
+      { key: 'med', label: 'ทานยาแล้ว', type: 'select_text',
+        options: ['ก่อนอาหาร-เช้า','ก่อนอาหาร-กลางวัน','ก่อนอาหาร-เย็น','หลังอาหาร-เช้า','หลังอาหาร-กลางวัน','หลังอาหาร-เย็น','ก่อนนอน'],
+        textPlaceholder: 'จำนวนเม็ดยา เช่น 0.5' }
     ]},
     { key: 'excretion', icon: '🚻', title: 'ขับถ่าย', items: [
-      { key: 'urine', label: 'ปัสสาวะแล้ว', type: 'select', options: ['ปกติ','สีเข้ม/ผิดปกติ'] },
-      { key: 'stool', label: 'อุจจาระแล้ว', type: 'select', options: ['ปกติ','ท้องเสีย','ท้องผูก'] }
+      { key: 'urine', label: 'ปัสสาวะแล้ว', type: 'select_text',
+        options: ['ปัสสาวะในแพมเพิส (เต็มแผ่น)','ปัสสาวะในแพมเพิส (ครึ่งแผ่น)','ปัสสาวะในถุง (เทออก)'],
+        textPlaceholder: 'จำนวนครั้ง/ปริมาณ (ซีซี)' },
+      { key: 'stool', label: 'อุจจาระแล้ว', type: 'select_text',
+        options: ['ปกติ','ถ่ายเหลวเป็นน้ำ','ถ่ายดำ','ถ่ายลำบาก (ล้วงอุจจาระช่วย)','สวน Unison'],
+        textPlaceholder: 'จำนวนครั้ง' }
     ]},
     { key: 'hygiene', icon: '🧼', title: 'สุขอนามัย', items: [
       { key: 'bath', label: 'เช็ดตัว/อาบน้ำแล้ว', type: 'check' },
@@ -504,7 +517,7 @@
       { key: 'diaper', label: 'เปลี่ยนผ้าอ้อม/ทำความสะอาดจุดซับ', type: 'check' }
     ]},
     { key: 'mobility', icon: '🚶', title: 'การเคลื่อนไหว / ป้องกันแผลกดทับ', items: [
-      { key: 'turn', label: 'พลิกตัว/เปลี่ยนท่า', type: 'check' },
+      { key: 'turn', label: 'พลิกตัว/เปลี่ยนท่า', type: 'select', options: ['ตะแคงขวา','ตะแคงซ้าย','นอนหงาย','จัดท่านั่งหัวสูง'] },
       { key: 'physio', label: 'ทำกายภาพ/ขยับข้อ', type: 'check' },
       { key: 'walk', label: 'ลุกเดิน/นั่งรถเข็น', type: 'check' }
     ]},
@@ -520,8 +533,8 @@
       { key: 'wound', label: 'ตรวจแผลกดทับ/บาดแผล', type: 'text' }
     ]},
     { key: 'general', icon: '📋', title: 'สภาพทั่วไป', items: [
-      { key: 'sleep', label: 'นอนหลับพักผ่อน', type: 'check' },
-      { key: 'mood', label: 'อารมณ์/สภาพจิตใจ', type: 'select', options: ['ร่าเริง','ปกติ','ซึม','กระสับกระส่าย'] }
+      { key: 'sleep', label: 'นอนหลับพักผ่อน', type: 'select', options: ['หลับดี','ไม่หลับ','วุ่นวาย/เสียงดัง','หลับๆตื่นๆ'] },
+      { key: 'mood', label: 'อารมณ์/สภาพจิตใจ', type: 'select', options: ['ปกติดี สดชื่นแจ่มใส','อารมณ์แปรปรวน (Bipolar)','อารมณ์ฉุนเฉียว ก้าวร้าว'] }
     ]},
     { key: 'incident', icon: '⚠️', title: 'เหตุการณ์พิเศษ', items: [
       { key: 'fall', label: 'มีอุบัติเหตุ/พลัดตกหกล้ม', type: 'text' },
@@ -1071,7 +1084,28 @@
           detailEl = document.createElement('input');
           detailEl.type = 'text';
           detailEl.className = 'item-detail hidden';
-          detailEl.placeholder = 'รายละเอียด...';
+          detailEl.placeholder = item.textPlaceholder || 'รายละเอียด...';
+          bodyDiv.appendChild(detailEl);
+        } else if(item.type === 'select_text'){
+          // ชิ้นส่วนคู่: เลือกจากลิสต์ + พิมพ์รายละเอียดเพิ่ม (เช่น มื้อยา + จำนวนเม็ด)
+          detailEl = document.createElement('div');
+          detailEl.className = 'item-detail-group hidden';
+          const sel = document.createElement('select');
+          sel.className = 'item-detail-select';
+          const blank = document.createElement('option');
+          blank.value=''; blank.textContent='-- เลือก --';
+          sel.appendChild(blank);
+          item.options.forEach(function(opt){
+            const o = document.createElement('option');
+            o.value = opt; o.textContent = opt;
+            sel.appendChild(o);
+          });
+          const txt = document.createElement('input');
+          txt.type = 'text';
+          txt.className = 'item-detail-text';
+          txt.placeholder = item.textPlaceholder || 'ระบุเพิ่มเติม...';
+          detailEl.appendChild(sel);
+          detailEl.appendChild(txt);
           bodyDiv.appendChild(detailEl);
         }
 
@@ -1106,6 +1140,19 @@
     saveDraft();
   }
 
+  // คืนค่าช่องกรอกรายละเอียดทั้งหมดของแถวนั้น (1 ช่องปกติ หรือ 2 ช่องกรณี select_text)
+  function getRowDetailFields_(row){
+    return Array.from(row.querySelectorAll('.item-detail, .item-detail-select, .item-detail-text'));
+  }
+  // รวมค่าจากช่องกรอกรายละเอียดทั้งหมดของแถวเป็นข้อความเดียว (เว้นช่องว่างที่ไม่ได้กรอก)
+  function getRowDetailValue_(row){
+    return getRowDetailFields_(row).map(function(f){ return f.value.trim(); }).filter(Boolean).join('  —  ');
+  }
+  // ช่องครอบ (สำหรับ toggle hidden) ไม่ว่าจะเป็น .item-detail เดี่ยว หรือ .item-detail-group คู่
+  function getRowDetailWrap_(row){
+    return row.querySelector('.item-detail-group') || row.querySelector('.item-detail');
+  }
+
   function updateAllBadges(){
     document.querySelectorAll('#checklistContainer .category').forEach(function(catDiv){
       const badge = catDiv.querySelector('.category-badge');
@@ -1134,8 +1181,8 @@
     document.querySelectorAll('#checklistContainer input[type=checkbox]').forEach(function(cb){
       if(cb.checked){
         const row = cb.closest('.item-row');
-        const detailEl = row.querySelector('.item-detail');
-        state[cb.id] = { detail: detailEl ? detailEl.value : '' };
+        const values = getRowDetailFields_(row).map(function(f){ return f.value; });
+        state[cb.id] = { values: values };
       }
     });
     try{ localStorage.setItem(draftKey_(), JSON.stringify(state)); }catch(e){}
@@ -1150,11 +1197,11 @@
       if(!cb) return;
       cb.checked = true;
       const row = cb.closest('.item-row');
-      const detailEl = row.querySelector('.item-detail');
-      if(detailEl){
-        detailEl.value = state[id].detail || '';
-        detailEl.classList.remove('hidden');
-      }
+      const fields = getRowDetailFields_(row);
+      const values = state[id].values || (state[id].detail !== undefined ? [state[id].detail] : []);
+      fields.forEach(function(f, i){ f.value = values[i] || ''; });
+      const wrap = getRowDetailWrap_(row);
+      if(wrap) wrap.classList.remove('hidden');
       const catDiv = cb.closest('.category');
       if(catDiv) catDiv.classList.add('open');
     });
@@ -1177,11 +1224,10 @@
     const items = [];
     checkboxes.forEach(function(cb){
       const row = cb.closest('.item-row');
-      const detailEl = row.querySelector('.item-detail');
       items.push({
         category: cb.dataset.catTitle,
         item: cb.dataset.itemLabel,
-        detail: detailEl ? detailEl.value : ''
+        detail: getRowDetailValue_(row)
       });
     });
 
@@ -1201,13 +1247,20 @@
       btn.disabled = false;
       btn.textContent = 'บันทึกรายการที่ติ๊กไว้';
       if(res.success){
-        showMsg('submitMsg', 'บันทึกสำเร็จ ('+res.count+' รายการ)', 'ok');
+        let msg = 'บันทึกสำเร็จ';
+        if(res.updated){
+          msg += ' (เพิ่มใหม่ ' + (res.added || 0) + ' รายการ · แก้ไขทับของเดิม ' + res.updated + ' รายการ)';
+        } else {
+          msg += ' (' + (res.count != null ? res.count : items.length) + ' รายการ)';
+        }
+        showMsg('submitMsg', msg, 'ok');
         // เคลียร์ติ๊กหลังบันทึกสำเร็จ เพื่อรอรอบเวลาถัดไป
         document.querySelectorAll('#checklistContainer input[type=checkbox]').forEach(function(cb){
           cb.checked = false;
           const row = cb.closest('.item-row');
-          const detailEl = row.querySelector('.item-detail');
-          if(detailEl){ detailEl.value=''; detailEl.classList.add('hidden'); }
+          getRowDetailFields_(row).forEach(function(f){ f.value = ''; });
+          const wrap = getRowDetailWrap_(row);
+          if(wrap) wrap.classList.add('hidden');
         });
         clearDraft_();
         updateAllBadges();
@@ -1218,6 +1271,47 @@
     }).catch(function(err){
       btn.disabled = false;
       btn.textContent = 'บันทึกรายการที่ติ๊กไว้';
+      showMsg('submitMsg', 'เชื่อมต่อไม่ได้: '+err.message, 'err');
+    });
+  }
+
+  // ---------------- แก้ไขข้อมูลเดิม: โหลดบันทึกที่มีอยู่แล้วของวันเวลานี้มาแก้ ----------------
+  function loadExistingForTime_(){
+    if(!currentPatient){ showMsg('submitMsg','กรุณาเลือกคนไข้ก่อน','err'); return; }
+    const date = document.getElementById('recordDate').value;
+    const time = document.getElementById('recordTime').value;
+    if(!date || !time){ showMsg('submitMsg','กรุณาเลือกวันที่และเวลาก่อน','err'); return; }
+
+    showMsg('submitMsg','<span class="spinner-dark"></span>กำลังตรวจสอบข้อมูลเดิม...','ok');
+    gasGet_({ action: 'existingRecords', patientName: currentPatient.name, date: date, time: time }).then(function(res){
+      if(!res.success){ showMsg('submitMsg', res.message || 'ตรวจสอบไม่สำเร็จ', 'err'); return; }
+      if(!res.items || res.items.length === 0){
+        showMsg('submitMsg','ยังไม่มีข้อมูลที่บันทึกไว้ของวันเวลานี้ — กรอกรายการใหม่ได้เลย','ok');
+        return;
+      }
+      // ล้างค่าติ๊ก/รายละเอียดทั้งหมดก่อน แล้วค่อยเติมจากข้อมูลเดิม
+      document.querySelectorAll('#checklistContainer input[type=checkbox]').forEach(function(cb){
+        cb.checked = false;
+        const row = cb.closest('.item-row');
+        getRowDetailFields_(row).forEach(function(f){ f.value = ''; });
+        const wrap = getRowDetailWrap_(row);
+        if(wrap) wrap.classList.add('hidden');
+
+        const match = res.items.find(function(it){ return it.category === cb.dataset.catTitle && it.item === cb.dataset.itemLabel; });
+        if(match){
+          cb.checked = true;
+          const fields = getRowDetailFields_(row);
+          const parts = match.detail ? match.detail.split('  —  ') : [];
+          fields.forEach(function(f, i){ f.value = parts[i] || (i === 0 ? match.detail : ''); });
+          if(wrap) wrap.classList.remove('hidden');
+          const catDiv = cb.closest('.category');
+          if(catDiv) catDiv.classList.add('open');
+        }
+      });
+      updateAllBadges();
+      updateGlobalCount();
+      showMsg('submitMsg', 'พบข้อมูลเดิม ' + res.items.length + ' รายการ — แก้ไขแล้วกด "บันทึกรายการที่ติ๊กไว้" เพื่อบันทึกทับของเดิม', 'ok');
+    }).catch(function(err){
       showMsg('submitMsg', 'เชื่อมต่อไม่ได้: '+err.message, 'err');
     });
   }
