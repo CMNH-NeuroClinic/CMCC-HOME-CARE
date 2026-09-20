@@ -598,14 +598,18 @@
     ]},
     { key: 'vitals', icon: '❤️', title: 'สัญญาณชีพ', items: [
       { key: 'bp', label: 'ความดันโลหิต', type: 'text' },
-      { key: 'pulse_temp', label: 'ชีพจร/อุณหภูมิ', type: 'text' },
+      { key: 'heart_rate', label: 'อัตราการเต้นของหัวใจ', type: 'text' },
+      { key: 'temperature', label: 'อุณหภูมิ', type: 'text' },
       { key: 'spo2', label: 'ออกซิเจนปลายนิ้ว (SpO2)', type: 'text' },
       { key: 'sugar', label: 'ระดับน้ำตาลในเลือด', type: 'text' }
     ]},
-    { key: 'devices', icon: '🩺', title: 'อุปกรณ์ทางการแพทย์', items: [
+    { key: 'devices', icon: '🩺', title: 'การดูแล/หัตถการ', items: [
       { key: 'ng', label: 'ตรวจ/ดูแลสายให้อาหาร (NG tube)', type: 'check' },
       { key: 'foley', label: 'ตรวจ/ดูแลสายสวนปัสสาวะ (Foley)', type: 'check' },
-      { key: 'wound', label: 'ตรวจแผลกดทับ/บาดแผล', type: 'text' }
+      { key: 'wound', label: 'ตรวจแผลกดทับ/บาดแผล', type: 'text' },
+      { key: 'suction', label: 'การดูดเสมหะ', type: 'select_select',
+        label1: 'ลักษณะสีเสมหะ', options: ['ขาวขุ่น','เขียวเหลือง','ปนเลือด','ขาวใส'],
+        label2: 'ปริมาณ', options2: ['มาก (เต็มสายดูดเสมหะ/ดูด 3-4 ครั้ง/รอบ)','ปานกลาง (ดูด 1-2 ครั้ง/รอบ)','น้อย (ดูดเสมหะได้ไม่เต็มสาย)'] }
     ]},
     { key: 'general', icon: '📋', title: 'สภาพทั่วไป', items: [
       { key: 'sleep', label: 'นอนหลับพักผ่อน', type: 'select', options: ['หลับดี','ไม่หลับ','วุ่นวาย/เสียงดัง','หลับๆตื่นๆ'] },
@@ -1295,6 +1299,33 @@
           txt.placeholder = item.textPlaceholder || 'ระบุเพิ่มเติม...';
           detailEl.appendChild(sel);
           detailEl.appendChild(txt);
+          bodyDiv.appendChild(detailEl);
+        } else if(item.type === 'select_select'){
+          // สองช่องเลือก คู่กัน (เช่น ลักษณะสีเสมหะ + ปริมาณ)
+          detailEl = document.createElement('div');
+          detailEl.className = 'item-detail-group hidden';
+          const sel1 = document.createElement('select');
+          sel1.className = 'item-detail-select';
+          const blank1 = document.createElement('option');
+          blank1.value=''; blank1.textContent = item.label1 ? ('-- '+item.label1+' --') : '-- เลือก --';
+          sel1.appendChild(blank1);
+          item.options.forEach(function(opt){
+            const o = document.createElement('option');
+            o.value = opt; o.textContent = opt;
+            sel1.appendChild(o);
+          });
+          const sel2 = document.createElement('select');
+          sel2.className = 'item-detail-select';
+          const blank2 = document.createElement('option');
+          blank2.value=''; blank2.textContent = item.label2 ? ('-- '+item.label2+' --') : '-- เลือก --';
+          sel2.appendChild(blank2);
+          item.options2.forEach(function(opt){
+            const o = document.createElement('option');
+            o.value = opt; o.textContent = opt;
+            sel2.appendChild(o);
+          });
+          detailEl.appendChild(sel1);
+          detailEl.appendChild(sel2);
           bodyDiv.appendChild(detailEl);
         }
 
