@@ -40,6 +40,29 @@
 
     /* ป็อปอัปแสดง PDF รายงาน */
     /* ปุ่มฉุกเฉิน (SOS) ลอยมุมล่างขวา กดค้างเพื่อยืนยัน */
+    /* แอดมิน: แถบเมนูล่าง (bottom tab bar) แทนการเลื่อนหน้ายาวๆ */
+    body.admin-tabs-active{padding-bottom:calc(88px + env(safe-area-inset-bottom));}
+    .admin-tab-panel{display:none;}
+    .admin-tab-panel.active{display:block;}
+    .admin-tabbar{
+      position:fixed;left:0;right:0;bottom:0;z-index:140;
+      display:flex;background:var(--clay-surface);
+      padding:8px 4px calc(8px + env(safe-area-inset-bottom));
+      box-shadow:0 -4px 14px rgba(0,0,0,.12);
+    }
+    .admin-tab-btn{
+      flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+      background:none;border:none;width:auto;margin:0;padding:6px 2px;
+      font-family:'Sarabun',sans-serif;font-size:11px;color:var(--muted);
+      box-shadow:none;position:relative;
+    }
+    .admin-tab-btn .admin-tab-icon{font-size:21px;}
+    .admin-tab-btn.active{color:var(--primary-dark);font-weight:700;}
+    .admin-tab-badge{
+      position:absolute;top:2px;right:22%;width:9px;height:9px;border-radius:50%;
+      background:#d8342a;border:2px solid var(--clay-surface);
+    }
+
     .sos-fab{
       position:fixed; right:16px; bottom:calc(104px + env(safe-area-inset-bottom));
       width:62px; height:62px; border-radius:50%;
@@ -335,6 +358,41 @@
       box-shadow:2px 2px 5px var(--shadow-d-soft), -2px -2px 5px var(--shadow-l-soft);
     }
 
+    /* ผู้ดูแล: ประวัติการบันทึกของวันนั้น (เวลาไหนบันทึกไว้บ้าง) */
+    .daily-time-entry{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:10px 12px;border-radius:12px;margin-bottom:8px;
+      background:var(--clay-surface-2);
+      box-shadow: inset 2px 2px 5px var(--shadow-d-soft), inset -2px -2px 5px var(--shadow-l-soft);
+    }
+    .daily-time-entry-info{flex:1;min-width:0;}
+    .daily-time-entry-time{font-weight:700;font-size:13px;color:var(--primary-dark);}
+    .daily-time-entry-count{font-size:12px;color:var(--muted);margin-top:2px;}
+    .daily-time-entry-actions{display:flex;gap:6px;flex-shrink:0;}
+    .daily-time-btn{
+      width:auto;margin-top:0;padding:6px 10px;font-size:12px;
+      background:var(--clay-surface);color:var(--primary-dark);
+      box-shadow:2px 2px 5px var(--shadow-d-soft), -2px -2px 5px var(--shadow-l-soft);
+    }
+
+    /* แอดมิน: บัญชี/ค่าตอบแทนผู้ดูแล */
+    .payrate-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 0;}
+    .payrate-row label{margin:0;font-size:13px;font-weight:600;flex:1;}
+    .payrate-row input{width:120px;flex-shrink:0;}
+    .payroll-row{
+      padding:12px;border-radius:14px;margin-bottom:10px;
+      background:var(--clay-surface-2);
+      box-shadow: inset 2px 2px 5px var(--shadow-d-soft), inset -2px -2px 5px var(--shadow-l-soft);
+    }
+    .payroll-row-top{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+    .payroll-row-name{font-weight:800;font-size:14px;color:var(--primary-dark);}
+    .payroll-row-total{font-weight:800;font-size:15px;color:var(--text);}
+    .payroll-row-detail{font-size:12px;color:var(--muted);margin-top:6px;}
+    .payroll-grand-total{
+      text-align:right;font-weight:800;font-size:16px;color:var(--primary-dark);
+      padding:10px 4px;border-top:2px solid var(--primary-light);margin-top:6px;
+    }
+
     /* แอดมิน: การ์ดแจ้งเหตุฉุกเฉิน */
     .emergency-record{
       display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:14px;margin-bottom:10px;
@@ -388,9 +446,15 @@
     .time-group{margin-bottom:12px;}
     .time-group-header{
       background:linear-gradient(145deg, var(--primary-light), var(--primary));
-      color:#fff;font-weight:700;padding:8px 14px;border-radius:14px 14px 0 0;font-size:13px;
+      color:#fff;font-weight:700;padding:8px 14px;border-radius:14px;font-size:13px;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      cursor:pointer;-webkit-tap-highlight-color:transparent;
     }
-    .time-group-items{background:var(--clay-surface-2);border-radius:0 0 14px 14px;overflow:hidden;}
+    .time-group.open .time-group-header{border-radius:14px 14px 0 0;}
+    .time-group-header .tg-chevron{font-size:12px;transition:transform .2s ease;flex-shrink:0;}
+    .time-group.open .time-group-header .tg-chevron{transform:rotate(180deg);}
+    .time-group-items{display:none;background:var(--clay-surface-2);border-radius:0 0 14px 14px;overflow:hidden;}
+    .time-group.open .time-group-items{display:block;}
     .report-item{padding:9px 14px;font-size:13.5px;border-bottom:1px solid rgba(140,164,157,.18);}
     .report-item:last-child{border-bottom:none;}
     .report-item .cat{font-size:14px;margin-right:2px;}
@@ -430,17 +494,26 @@
     .log-patient-heading:first-of-type{margin-top:4px;}
 
     /* โหมดพิมพ์: ตัดเงา/ความนูนออกให้เอกสารเรียบ อ่าน+พิมพ์ง่าย เหลือแค่โครงสร้าง */
-    /* ค่าเริ่มต้นตอนพิมพ์คือพิมพ์ "รายงาน" (print-report-only) ส่วน "ประวัติการบันทึก" (print-log-only) จะซ่อนไว้ */
-    /* เมื่อกดปุ่มพิมพ์ประวัติ จะสลับด้วย body.print-log ให้กลับกัน */
+    /* ค่าเริ่มต้นตอนพิมพ์คือพิมพ์ "รายงาน" (print-report-only) ส่วน "ประวัติการบันทึก" (print-log-only)
+       และ "ช่วงเวลาเดียว" (print-time-only) จะซ่อนไว้ — สลับด้วย body.print-log / body.print-time */
     @media print{
       body{max-width:100%;padding:0;background:#fff;}
       .no-print{display:none !important;}
+      .admin-tab-panel{display:block !important;}
       .print-log-only{display:none !important;}
+      .print-time-only{display:none !important;}
       #printArea{background:#fff;box-shadow:none;padding:0;border-radius:0;}
       .report-detail-box, .time-group-items{box-shadow:none;background:#fdfdfd;}
+      .time-group-items{display:block !important;}
+      .time-group-header{border-radius:14px 14px 0 0 !important;cursor:default;}
+      .time-group-header .tg-chevron{display:none;}
 
       body.print-log .print-report-only{display:none !important;}
       body.print-log .print-log-only{display:block !important;}
+
+      body.print-time .print-report-only{display:none !important;}
+      body.print-time .print-log-only{display:none !important;}
+      body.print-time .print-time-only{display:block !important;background:#fff;box-shadow:none;padding:0;border-radius:0;}
     }
   </style>
 </head>
@@ -545,6 +618,13 @@
       <div id="myScheduleMsg" class="sub" style="margin-top:6px;margin-bottom:0;"></div>
     </div>
 
+    <div class="card" id="dailyTimesCard">
+      <label>ประวัติการบันทึกของวันที่เลือก</label>
+      <div class="sub" style="margin-bottom:8px;">เลือกคนไข้และวันที่ด้านบนก่อน จะเห็นว่าบันทึกไปแล้วกี่เวลา แก้ไขหรือพิมพ์เฉพาะเวลานั้นได้เลย</div>
+      <div id="dailyTimesView"></div>
+      <div id="dailyTimesMsg" class="sub" style="margin-top:6px;margin-bottom:0;"></div>
+    </div>
+
     <div id="checklistCard" class="card hidden">
       <div id="checklistContainer"></div>
     </div>
@@ -564,111 +644,161 @@
       <a class="linklike" href="#" onclick="adminLogout();return false;">ออกจากระบบ</a>
     </div>
 
-    <div class="card no-print" id="emergencyCard">
-      <label>🚨 แจ้งเหตุฉุกเฉิน</label>
-      <div id="emergencyView"></div>
-      <div id="emergencyMsg" class="sub" style="margin-top:8px;margin-bottom:0;"></div>
-    </div>
-
-    <div class="card no-print">
-      <label>ดูรายงานการบันทึก</label>
-      <select id="adminPatientSelect">
-        <option value="">-- เลือกคนไข้ --</option>
-      </select>
-      <label>ช่วงวันที่</label>
-      <div class="date-range-row">
-        <input type="date" id="adminReportDateFrom">
-        <span class="date-range-sep">ถึง</span>
-        <input type="date" id="adminReportDateTo">
+    <div class="admin-tab-panel active" data-tab="overview">
+      <div class="card no-print" id="emergencyCard">
+        <label>🚨 แจ้งเหตุฉุกเฉิน</label>
+        <div id="emergencyView"></div>
+        <div id="emergencyMsg" class="sub" style="margin-top:8px;margin-bottom:0;"></div>
       </div>
-      <button onclick="loadAdminReport()">ดูรายงาน</button>
-      <div id="adminReportMsg"></div>
     </div>
 
-    <div id="printArea" class="card hidden print-report-only">
-      <div id="reportView"></div>
-      <button class="secondary no-print" style="margin-top:12px;" onclick="window.print()">🖨️ พิมพ์รายงานนี้</button>
-    </div>
-
-    <div class="card print-log-only" id="logCard">
-      <label class="no-print">ประวัติการบันทึกของผู้ดูแล</label>
-      <div class="chip-row no-print" id="logCategoryChips"></div>
-      <div class="filter-row no-print">
-        <select id="logCaregiverFilter" onchange="renderActivityLog()">
-          <option value="">ผู้ดูแลทั้งหมด</option>
+    <div class="admin-tab-panel" data-tab="reports">
+      <div class="card no-print">
+        <label>ดูรายงานการบันทึก</label>
+        <select id="adminPatientSelect">
+          <option value="">-- เลือกคนไข้ --</option>
         </select>
-        <select id="logPatientFilter" onchange="renderActivityLog()">
-          <option value="">คนไข้ทั้งหมด</option>
+        <label>ช่วงวันที่</label>
+        <div class="date-range-row">
+          <input type="date" id="adminReportDateFrom">
+          <span class="date-range-sep">ถึง</span>
+          <input type="date" id="adminReportDateTo">
+        </div>
+        <button onclick="loadAdminReport()">ดูรายงาน</button>
+        <div id="adminReportMsg"></div>
+      </div>
+
+      <div id="printArea" class="card hidden print-report-only">
+        <div id="reportView"></div>
+        <button class="secondary no-print" style="margin-top:12px;" onclick="window.print()">🖨️ พิมพ์รายงานนี้</button>
+      </div>
+    </div>
+
+    <div class="admin-tab-panel" data-tab="log">
+      <div class="card print-log-only" id="logCard">
+        <label class="no-print">ประวัติการบันทึกของผู้ดูแล</label>
+        <div class="chip-row no-print" id="logCategoryChips"></div>
+        <div class="filter-row no-print">
+          <select id="logCaregiverFilter" onchange="renderActivityLog()">
+            <option value="">ผู้ดูแลทั้งหมด</option>
+          </select>
+          <select id="logPatientFilter" onchange="renderActivityLog()">
+            <option value="">คนไข้ทั้งหมด</option>
+          </select>
+        </div>
+        <button class="secondary no-print" onclick="printLog_()">🖨️ พิมพ์รายการนี้</button>
+        <div id="logPrintHeader" class="log-print-header"></div>
+        <div id="logReportView"></div>
+        <div id="logMsg" class="sub no-print" style="margin-top:8px;margin-bottom:0;"></div>
+      </div>
+    </div>
+
+    <div class="admin-tab-panel" data-tab="checkin">
+      <div class="card no-print">
+        <label>การเช็คอินเข้างาน</label>
+        <div class="sub" style="margin-bottom:8px;">รูปถ่ายและเวรที่ผู้ดูแลแจ้งไว้ตอนเช็คอิน เรียงล่าสุดก่อน</div>
+        <div id="checkinRecordsView"></div>
+        <div id="checkinRecordsMsg" class="sub" style="margin-top:8px;margin-bottom:0;"></div>
+      </div>
+    </div>
+
+    <div class="admin-tab-panel" data-tab="team">
+      <div class="card no-print">
+        <label>บัญชี · ค่าตอบแทนผู้ดูแล</label>
+        <div class="sub" style="margin-bottom:8px;">คำนวณจากประวัติเช็คอินจริง (ไม่ใช่ตารางที่วางแผนไว้) × อัตราต่อเวรที่ตั้งไว้ด้านล่าง</div>
+
+        <label>อัตราค่าตอบแทนต่อเวร (บาท)</label>
+        <div id="payRatesView"></div>
+        <button class="secondary" onclick="savePayRates_()">บันทึกอัตราค่าตอบแทน</button>
+        <div id="payRatesMsg"></div>
+
+        <label style="margin-top:18px;">คำนวณค่าตอบแทนตามช่วงวันที่</label>
+        <div class="date-range-row">
+          <input type="date" id="payrollFrom">
+          <span class="date-range-sep">ถึง</span>
+          <input type="date" id="payrollTo">
+        </div>
+        <button onclick="loadPayrollSummary_()">คำนวณค่าตอบแทน</button>
+        <div id="payrollView"></div>
+        <div id="payrollMsg" class="sub" style="margin-top:8px;margin-bottom:0;"></div>
+        <button class="secondary" style="margin-top:10px;" onclick="downloadPayrollCsv_()">⬇️ ดาวน์โหลด Excel (CSV)</button>
+      </div>
+
+      <div class="card no-print">
+        <label>จัดตารางเวรล่วงหน้า</label>
+        <input type="date" id="scheduleDate">
+        <select id="scheduleCaregiverSelect" style="margin-top:8px;">
+          <option value="">-- เลือกผู้ดูแล --</option>
         </select>
+        <select id="schedulePatientSelect" style="margin-top:8px;">
+          <option value="">-- เลือกคนไข้ --</option>
+        </select>
+        <select id="scheduleShiftSelect" style="margin-top:8px;">
+          <option value="">-- เลือกเวร --</option>
+          <option value="เวรเช้า 8 ชั่วโมง">เวรเช้า 8 ชั่วโมง</option>
+          <option value="เวรเช้า 10 ชั่วโมง">เวรเช้า 10 ชั่วโมง</option>
+          <option value="เวรเช้า 12 ชั่วโมง">เวรเช้า 12 ชั่วโมง</option>
+          <option value="เวรดึก 8 ชั่วโมง">เวรดึก 8 ชั่วโมง</option>
+          <option value="เวรดึก 10 ชั่วโมง">เวรดึก 10 ชั่วโมง</option>
+          <option value="เวรดึก 12 ชั่วโมง">เวรดึก 12 ชั่วโมง</option>
+          <option value="เวรทั้งวัน 24 ชั่วโมง">เวรทั้งวัน 24 ชั่วโมง</option>
+        </select>
+        <input type="text" id="scheduleNote" placeholder="หมายเหตุ (ไม่บังคับ)" style="margin-top:8px;">
+        <button onclick="addSchedule_()">เพิ่มเวร</button>
+        <div id="scheduleAddMsg"></div>
+
+        <label style="margin-top:18px;">ดูตารางเวรที่จัดไว้</label>
+        <div class="date-range-row">
+          <input type="date" id="scheduleViewFrom">
+          <span class="date-range-sep">ถึง</span>
+          <input type="date" id="scheduleViewTo">
+        </div>
+        <button class="secondary" onclick="loadScheduleView_()">ดูตาราง</button>
+        <div id="scheduleView"></div>
+        <div id="scheduleViewMsg" class="sub" style="margin-top:8px;margin-bottom:0;"></div>
       </div>
-      <button class="secondary no-print" onclick="printLog_()">🖨️ พิมพ์รายการนี้</button>
-      <div id="logPrintHeader" class="log-print-header"></div>
-      <div id="logReportView"></div>
-      <div id="logMsg" class="sub no-print" style="margin-top:8px;margin-bottom:0;"></div>
-    </div>
 
-    <div class="card no-print">
-      <label>การเช็คอินเข้างาน</label>
-      <div class="sub" style="margin-bottom:8px;">รูปถ่ายและเวรที่ผู้ดูแลแจ้งไว้ตอนเช็คอิน เรียงล่าสุดก่อน</div>
-      <div id="checkinRecordsView"></div>
-      <div id="checkinRecordsMsg" class="sub" style="margin-top:8px;margin-bottom:0;"></div>
-    </div>
-
-    <div class="card no-print">
-      <label>จัดตารางเวรล่วงหน้า</label>
-      <input type="date" id="scheduleDate">
-      <select id="scheduleCaregiverSelect" style="margin-top:8px;">
-        <option value="">-- เลือกผู้ดูแล --</option>
-      </select>
-      <select id="schedulePatientSelect" style="margin-top:8px;">
-        <option value="">-- เลือกคนไข้ --</option>
-      </select>
-      <select id="scheduleShiftSelect" style="margin-top:8px;">
-        <option value="">-- เลือกเวร --</option>
-        <option value="เวรเช้า 8 ชั่วโมง">เวรเช้า 8 ชั่วโมง</option>
-        <option value="เวรเช้า 10 ชั่วโมง">เวรเช้า 10 ชั่วโมง</option>
-        <option value="เวรเช้า 12 ชั่วโมง">เวรเช้า 12 ชั่วโมง</option>
-        <option value="เวรดึก 8 ชั่วโมง">เวรดึก 8 ชั่วโมง</option>
-        <option value="เวรดึก 10 ชั่วโมง">เวรดึก 10 ชั่วโมง</option>
-        <option value="เวรดึก 12 ชั่วโมง">เวรดึก 12 ชั่วโมง</option>
-        <option value="เวรทั้งวัน 24 ชั่วโมง">เวรทั้งวัน 24 ชั่วโมง</option>
-      </select>
-      <input type="text" id="scheduleNote" placeholder="หมายเหตุ (ไม่บังคับ)" style="margin-top:8px;">
-      <button onclick="addSchedule_()">เพิ่มเวร</button>
-      <div id="scheduleAddMsg"></div>
-
-      <label style="margin-top:18px;">ดูตารางเวรที่จัดไว้</label>
-      <div class="date-range-row">
-        <input type="date" id="scheduleViewFrom">
-        <span class="date-range-sep">ถึง</span>
-        <input type="date" id="scheduleViewTo">
+      <div class="card no-print">
+        <label>ลงทะเบียนผู้ดูแลใหม่</label>
+        <input type="text" id="newCaregiverCode" placeholder="ตั้งรหัสผู้ดูแล (ตัวเลข/ตัวอักษรก็ได้)" inputmode="numeric">
+        <input type="text" id="newCaregiverName" placeholder="ชื่อผู้ดูแล" style="margin-top:8px;">
+        <label style="margin-top:12px;">มอบหมายคนไข้ (ไม่เลือกเลย = ดูแลได้ทุกคนไข้)</label>
+        <div class="chip-row" id="assignPatientChips"></div>
+        <button onclick="registerCaregiver_()">ลงทะเบียนผู้ดูแล</button>
+        <div id="registerCaregiverMsg"></div>
       </div>
-      <button class="secondary" onclick="loadScheduleView_()">ดูตาราง</button>
-      <div id="scheduleView"></div>
-      <div id="scheduleViewMsg" class="sub" style="margin-top:8px;margin-bottom:0;"></div>
+
+      <div class="card no-print">
+        <label>ลงทะเบียนคนไข้ใหม่</label>
+        <input type="text" id="newPatientName" placeholder="ชื่อคนไข้">
+        <input type="text" id="newPatientZone" placeholder="โซน/พื้นที่ (ไม่บังคับ)" style="margin-top:8px;">
+        <label style="margin-top:12px;">หมวดที่บันทึกให้คนไข้คนนี้ (ไม่เลือกเลย = ทุกหมวด)</label>
+        <div class="chip-row" id="newPatientCategoryChips"></div>
+        <label style="margin-top:12px;">ช่องทางแจ้งเหตุฉุกเฉินถึงญาติ (ไม่บังคับ)</label>
+        <input type="text" id="newPatientFamilyEmail" placeholder="อีเมลญาติ">
+        <input type="text" id="newPatientFamilyLineToken" placeholder="LINE Notify Token ของญาติ" style="margin-top:8px;">
+        <button onclick="registerPatient_()">ลงทะเบียนคนไข้</button>
+        <div id="registerPatientMsg"></div>
+      </div>
     </div>
 
-    <div class="card no-print">
-      <label>ลงทะเบียนผู้ดูแลใหม่</label>
-      <input type="text" id="newCaregiverCode" placeholder="ตั้งรหัสผู้ดูแล (ตัวเลข/ตัวอักษรก็ได้)" inputmode="numeric">
-      <input type="text" id="newCaregiverName" placeholder="ชื่อผู้ดูแล" style="margin-top:8px;">
-      <label style="margin-top:12px;">มอบหมายคนไข้ (ไม่เลือกเลย = ดูแลได้ทุกคนไข้)</label>
-      <div class="chip-row" id="assignPatientChips"></div>
-      <button onclick="registerCaregiver_()">ลงทะเบียนผู้ดูแล</button>
-      <div id="registerCaregiverMsg"></div>
-    </div>
-
-    <div class="card no-print">
-      <label>ลงทะเบียนคนไข้ใหม่</label>
-      <input type="text" id="newPatientName" placeholder="ชื่อคนไข้">
-      <input type="text" id="newPatientZone" placeholder="โซน/พื้นที่ (ไม่บังคับ)" style="margin-top:8px;">
-      <label style="margin-top:12px;">หมวดที่บันทึกให้คนไข้คนนี้ (ไม่เลือกเลย = ทุกหมวด)</label>
-      <div class="chip-row" id="newPatientCategoryChips"></div>
-      <label style="margin-top:12px;">ช่องทางแจ้งเหตุฉุกเฉินถึงญาติ (ไม่บังคับ)</label>
-      <input type="text" id="newPatientFamilyEmail" placeholder="อีเมลญาติ">
-      <input type="text" id="newPatientFamilyLineToken" placeholder="LINE Notify Token ของญาติ" style="margin-top:8px;">
-      <button onclick="registerPatient_()">ลงทะเบียนคนไข้</button>
-      <div id="registerPatientMsg"></div>
+    <div class="admin-tabbar no-print">
+      <button type="button" class="admin-tab-btn active" data-tab="overview" onclick="switchAdminTab_('overview')">
+        <span class="admin-tab-icon">🏠</span><span>ภาพรวม</span>
+        <span class="admin-tab-badge hidden" id="adminTabBadge"></span>
+      </button>
+      <button type="button" class="admin-tab-btn" data-tab="reports" onclick="switchAdminTab_('reports')">
+        <span class="admin-tab-icon">📄</span><span>รายงาน</span>
+      </button>
+      <button type="button" class="admin-tab-btn" data-tab="log" onclick="switchAdminTab_('log')">
+        <span class="admin-tab-icon">🕐</span><span>ประวัติ</span>
+      </button>
+      <button type="button" class="admin-tab-btn" data-tab="checkin" onclick="switchAdminTab_('checkin')">
+        <span class="admin-tab-icon">📍</span><span>เช็คอิน</span>
+      </button>
+      <button type="button" class="admin-tab-btn" data-tab="team" onclick="switchAdminTab_('team')">
+        <span class="admin-tab-icon">👥</span><span>ทีมงาน</span>
+      </button>
     </div>
   </div>
 
@@ -723,6 +853,9 @@
     <span class="sos-fab-label">SOS</span>
   </div>
   <div id="sosToast" class="sos-toast hidden no-print"></div>
+
+  <!-- พื้นที่ซ่อนไว้เฉพาะตอนพิมพ์ 1 ช่วงเวลา (ไม่โชว์บนจอ) -->
+  <div id="timeDetailPrintArea" class="card hidden print-time-only"></div>
 
   <div id="pdfModal" class="pdf-modal hidden no-print">
     <div class="pdf-modal-inner">
@@ -940,6 +1073,7 @@
         document.getElementById('checkinLoginCard').classList.add('hidden');
         hideLandingIntro_();
         document.getElementById('adminSection').classList.remove('hidden');
+        document.body.classList.add('admin-tabs-active');
         document.getElementById('adminReportDateFrom').value = todayStr();
         document.getElementById('adminReportDateTo').value = todayStr();
         loadAdminPatients();
@@ -951,6 +1085,9 @@
         document.getElementById('scheduleViewFrom').value = todayStr();
         document.getElementById('scheduleViewTo').value = todayStr();
         loadScheduleView_();
+        loadPayRates_();
+        document.getElementById('payrollFrom').value = todayStr();
+        document.getElementById('payrollTo').value = todayStr();
       } else {
         showMsg('adminLoginMsg', res.message || 'รหัสไม่ถูกต้อง', 'err');
       }
@@ -1202,6 +1339,11 @@
   function renderEmergencies_(records){
     const el = document.getElementById('emergencyView');
     el.innerHTML = '';
+
+    const badge = document.getElementById('adminTabBadge');
+    const unacked = records.filter(function(r){ return r.status !== 'รับทราบแล้ว'; }).length;
+    if(badge) badge.classList.toggle('hidden', unacked === 0);
+
     if(records.length === 0){
       el.innerHTML = '<div class="sub" style="margin:0;">ไม่มีการแจ้งเหตุฉุกเฉิน</div>';
       return;
@@ -1238,6 +1380,131 @@
       if(res.success){ loadEmergencies_(); }
       else { alert(res.message || 'ดำเนินการไม่สำเร็จ'); }
     }).catch(function(err){ alert('เชื่อมต่อไม่ได้: '+err.message); });
+  }
+
+  // ---------------- แอดมิน: บัญชี · ค่าตอบแทนผู้ดูแล ----------------
+  function loadPayRates_(){
+    gasGet_({ action: 'payRates' }).then(function(res){
+      if(!res.success){ showMsg('payRatesMsg', res.message || 'โหลดไม่สำเร็จ', 'err'); return; }
+      renderPayRates_(res.rates || []);
+    }).catch(function(err){
+      showMsg('payRatesMsg', 'เชื่อมต่อไม่ได้: '+err.message, 'err');
+    });
+  }
+
+  function renderPayRates_(rates){
+    const el = document.getElementById('payRatesView');
+    el.innerHTML = '';
+    rates.forEach(function(r){
+      const row = document.createElement('div');
+      row.className = 'payrate-row';
+      const label = document.createElement('label');
+      label.textContent = r.shiftType;
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.inputMode = 'decimal';
+      input.dataset.shiftType = r.shiftType;
+      input.value = r.rate;
+      row.appendChild(label);
+      row.appendChild(input);
+      el.appendChild(row);
+    });
+  }
+
+  function savePayRates_(){
+    const rates = Array.from(document.querySelectorAll('#payRatesView input')).map(function(inp){
+      return { shiftType: inp.dataset.shiftType, rate: parseFloat(inp.value) || 0 };
+    });
+    if(rates.length === 0){ showMsg('payRatesMsg','ไม่มีข้อมูลอัตราให้บันทึก','err'); return; }
+
+    showMsg('payRatesMsg','<span class="spinner-dark"></span>กำลังบันทึก...','ok');
+    gasPost_({ action: 'savePayRates', payload: { adminCode: adminCodeValue, rates: rates } }).then(function(res){
+      if(res.success){ showMsg('payRatesMsg','บันทึกอัตราค่าตอบแทนสำเร็จ','ok'); }
+      else { showMsg('payRatesMsg', res.message || 'บันทึกไม่สำเร็จ', 'err'); }
+    }).catch(function(err){
+      showMsg('payRatesMsg', 'เชื่อมต่อไม่ได้: '+err.message, 'err');
+    });
+  }
+
+  let lastPayrollResult_ = null;
+
+  function loadPayrollSummary_(){
+    const from = document.getElementById('payrollFrom').value || todayStr();
+    const to = document.getElementById('payrollTo').value || from;
+    document.getElementById('payrollMsg').textContent = 'กำลังคำนวณ...';
+    gasGet_({ action: 'payrollSummary', dateFrom: from, dateTo: to }).then(function(res){
+      if(!res.success){
+        document.getElementById('payrollMsg').textContent = res.message || 'คำนวณไม่สำเร็จ';
+        return;
+      }
+      lastPayrollResult_ = res;
+      renderPayrollSummary_(res);
+      document.getElementById('payrollMsg').textContent = '';
+    }).catch(function(err){
+      document.getElementById('payrollMsg').textContent = 'เชื่อมต่อไม่ได้: '+err.message;
+    });
+  }
+
+  function renderPayrollSummary_(res){
+    const el = document.getElementById('payrollView');
+    el.innerHTML = '';
+    const rows = res.rows || [];
+    if(rows.length === 0){
+      el.innerHTML = '<div class="sub" style="margin:8px 0 0;">ไม่มีข้อมูลเช็คอินในช่วงนี้</div>';
+      return;
+    }
+    rows.forEach(function(r){
+      const row = document.createElement('div');
+      row.className = 'payroll-row';
+      const detailHtml = r.shifts.map(function(s){
+        return escapeHtml_(s.shiftType) + ' × ' + s.count + ' = ' + s.subtotal.toLocaleString() + ' บาท';
+      }).join('<br>');
+      row.innerHTML =
+        '<div class="payroll-row-top">' +
+          '<span class="payroll-row-name">'+escapeHtml_(r.caregiverName)+'</span>' +
+          '<span class="payroll-row-total">'+r.total.toLocaleString()+' บาท</span>' +
+        '</div>' +
+        '<div class="payroll-row-detail">'+detailHtml+'</div>';
+      el.appendChild(row);
+    });
+    const grand = document.createElement('div');
+    grand.className = 'payroll-grand-total';
+    grand.textContent = 'รวมทั้งหมด ' + (res.grandTotal || 0).toLocaleString() + ' บาท';
+    el.appendChild(grand);
+  }
+
+  function downloadPayrollCsv_(){
+    if(!lastPayrollResult_ || !lastPayrollResult_.rows || lastPayrollResult_.rows.length === 0){
+      alert('กรุณากด "คำนวณค่าตอบแทน" ก่อน');
+      return;
+    }
+    const from = document.getElementById('payrollFrom').value;
+    const to = document.getElementById('payrollTo').value;
+    let csv = '\uFEFF'; // BOM กันภาษาไทยเพี้ยนตอนเปิดด้วย Excel
+    csv += 'ชื่อผู้ดูแล,เวร,จำนวนครั้ง,อัตรา/เวร,รวมย่อย\n';
+    lastPayrollResult_.rows.forEach(function(r){
+      r.shifts.forEach(function(s){
+        csv += [r.caregiverName, s.shiftType, s.count, s.rate, s.subtotal].map(csvCell_).join(',') + '\n';
+      });
+      csv += [r.caregiverName, 'รวม', '', '', r.total].map(csvCell_).join(',') + '\n';
+    });
+    csv += ',,,,\n';
+    csv += ['รวมทั้งหมด','','','', lastPayrollResult_.grandTotal].map(csvCell_).join(',') + '\n';
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ค่าตอบแทนผู้ดูแล_' + from + '_' + to + '.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function csvCell_(v){
+    const s = String(v == null ? '' : v);
+    return '"' + s.replace(/"/g, '""') + '"';
   }
 
   function loadScheduleCaregivers_(){
@@ -1365,11 +1632,105 @@
     });
   }
 
+  // ---------------- ผู้ดูแล: ประวัติการบันทึกของวันที่เลือก (แก้ไข/พิมพ์ย้อนหลังตามเวลา) ----------------
+  function loadDailyTimes_(){
+    const el = document.getElementById('dailyTimesView');
+    const msgEl = document.getElementById('dailyTimesMsg');
+    if(!currentPatient){ el.innerHTML=''; msgEl.textContent=''; return; }
+    const date = document.getElementById('recordDate').value || todayStr();
+    msgEl.textContent = 'กำลังโหลด...';
+    gasGet_({ action: 'dailyTimesSummary', patientName: currentPatient.name, date: date }).then(function(res){
+      if(!res.success){ msgEl.textContent = res.message || 'โหลดไม่สำเร็จ'; el.innerHTML=''; return; }
+      renderDailyTimes_(res.times || []);
+      msgEl.textContent = '';
+    }).catch(function(err){
+      msgEl.textContent = 'เชื่อมต่อไม่ได้: '+err.message;
+    });
+  }
+
+  function renderDailyTimes_(times){
+    const el = document.getElementById('dailyTimesView');
+    el.innerHTML = '';
+    if(times.length === 0){
+      el.innerHTML = '<div class="sub" style="margin:0;">ยังไม่มีบันทึกของวันนี้</div>';
+      return;
+    }
+    times.forEach(function(t){
+      const row = document.createElement('div');
+      row.className = 'daily-time-entry';
+      row.innerHTML =
+        '<div class="daily-time-entry-info">' +
+          '<div class="daily-time-entry-time">เวลา '+escapeHtml_(t.time)+' น.</div>' +
+          '<div class="daily-time-entry-count">'+t.count+' รายการ</div>' +
+        '</div>' +
+        '<div class="daily-time-entry-actions">' +
+          '<button type="button" class="daily-time-btn" data-act="edit">✏️ แก้ไข</button>' +
+          '<button type="button" class="daily-time-btn" data-act="print">🖨️ พิมพ์</button>' +
+        '</div>';
+      row.querySelector('[data-act="edit"]').onclick = function(){ editTimeBlock_(t.time); };
+      row.querySelector('[data-act="print"]').onclick = function(){ printTimeBlock_(t.time); };
+      el.appendChild(row);
+    });
+  }
+
+  function editTimeBlock_(time){
+    document.getElementById('recordTime').value = time;
+    loadExistingForTime_();
+    document.getElementById('checklistCard').scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  function printTimeBlock_(time){
+    if(!currentPatient) return;
+    const date = document.getElementById('recordDate').value || todayStr();
+    gasGet_({ action: 'existingRecords', patientName: currentPatient.name, date: date, time: time }).then(function(res){
+      if(!res.success || !res.items || res.items.length === 0){ alert('ไม่พบข้อมูลของเวลานี้'); return; }
+      renderTimeDetailPrint_(currentPatient.name, date, time, res.items);
+      document.body.classList.add('print-time');
+      window.print();
+    }).catch(function(err){
+      alert('เชื่อมต่อไม่ได้: '+err.message);
+    });
+  }
+
+  function renderTimeDetailPrint_(patientName, date, time, items){
+    const el = document.getElementById('timeDetailPrintArea');
+    const logoSrc = document.querySelector('.brand-logo').getAttribute('src');
+    let html =
+      '<div class="report-header">' +
+        '<div class="report-brand"><img class="brand-logo" src="'+logoSrc+'" alt="CMCC">' +
+        '<div><div class="report-brand-name">CMCC Home Care by CMNH</div>' +
+        '<div class="report-brand-sub">บันทึกการดูแล ณ ช่วงเวลาที่เลือก</div></div></div>' +
+        '<div class="report-docinfo">วันที่ <b>'+escapeHtml_(formatThaiDateClient_(date))+'</b><br>เวลา <b>'+escapeHtml_(time)+' น.</b></div>' +
+      '</div>' +
+      '<div class="report-patient-box" style="margin-bottom:12px;"><b>คนไข้:</b> '+escapeHtml_(patientName)+'</div>' +
+      '<div class="time-group open"><div class="time-group-items">';
+    items.forEach(function(it){
+      const parts = it.detail ? it.detail.split('  —  ').map(function(s){ return s.trim(); }).filter(Boolean) : [];
+      html += '<div class="report-item"><span class="cat">'+reportCategoryIcon_(it.category)+'</span> <b>'+escapeHtml_(it.item)+'</b>';
+      if(parts.length === 1){ html += '  —  '+escapeHtml_(parts[0]); }
+      else if(parts.length > 1){ html += '<div class="detail-sub-list">'+parts.map(function(p){ return '<div class="detail-sub">•  '+escapeHtml_(p)+'</div>'; }).join('')+'</div>'; }
+      html += '<div class="by">บันทึกโดย '+escapeHtml_(it.caregiver||caregiverName)+'</div></div>';
+    });
+    html += '</div></div><div class="report-thanks">ขอบคุณที่ไว้วางใจให้ CMCC Home Care by CMNH ดูแลคนที่คุณรัก</div>';
+    el.innerHTML = html;
+  }
+
 
 
   function adminLogout(){
     if(!confirm('ต้องการออกจากระบบแอดมินหรือไม่?')) return;
     location.reload();
+  }
+
+  // ---------------- แอดมิน: สลับแท็บล่าง (แทนการเลื่อนหน้ายาวๆ) ----------------
+  function switchAdminTab_(name){
+    document.querySelectorAll('.admin-tab-panel').forEach(function(p){
+      p.classList.toggle('active', p.dataset.tab === name);
+    });
+    document.querySelectorAll('.admin-tab-btn').forEach(function(b){
+      b.classList.toggle('active', b.dataset.tab === name);
+    });
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
   // ---------------- แอดมิน: เลือกคนไข้เพื่อดูรายงาน ----------------
@@ -1524,7 +1885,8 @@
 
         const h = document.createElement('div');
         h.className = 'time-group-header';
-        h.innerHTML = '<span class="cat">'+reportCategoryIcon_(grp.category)+'</span> '+escapeHtml_(grp.item);
+        h.innerHTML = '<span><span class="cat">'+reportCategoryIcon_(grp.category)+'</span> '+escapeHtml_(grp.item)+'</span><span class="tg-chevron">▾</span>';
+        h.onclick = function(){ wrap.classList.toggle('open'); };
         wrap.appendChild(h);
 
         const itemsWrap = document.createElement('div');
@@ -1760,7 +2122,8 @@
 
           const h = document.createElement('div');
           h.className = 'time-group-header';
-          h.innerHTML = '<span class="cat">'+reportCategoryIcon_(grp.category)+'</span> '+escapeHtml_(grp.item);
+          h.innerHTML = '<span><span class="cat">'+reportCategoryIcon_(grp.category)+'</span> '+escapeHtml_(grp.item)+'</span><span class="tg-chevron">▾</span>';
+          h.onclick = function(){ wrap.classList.toggle('open'); };
           wrap.appendChild(h);
 
           const itemsWrap = document.createElement('div');
@@ -1821,6 +2184,7 @@
   }
   window.addEventListener('afterprint', function(){
     document.body.classList.remove('print-log');
+    document.body.classList.remove('print-time');
   });
 
   document.addEventListener('DOMContentLoaded', function(){
@@ -1856,6 +2220,7 @@
       saveBar.classList.add('hidden');
       document.body.classList.remove('has-savebar');
       document.body.style.paddingBottom = '';
+      document.getElementById('dailyTimesView').innerHTML = '';
       return;
     }
     renderChecklist(currentPatient);
@@ -1863,6 +2228,7 @@
     saveBar.classList.remove('hidden');
     document.body.classList.add('has-savebar');
     adjustSaveBarSpacing_();
+    loadDailyTimes_();
   }
 
   // กันปุ่ม/ข้อความซ้อนกัน: ปรับระยะห่างล่างของหน้าให้พอดีกับความสูงจริงของแถบบันทึกเสมอ
@@ -1889,6 +2255,7 @@
     if(dateInput){
       dateInput.addEventListener('change', function(){
         if(currentPatient) renderChecklist(currentPatient);
+        loadDailyTimes_();
       });
     }
   });
@@ -2181,6 +2548,7 @@
         clearDraft_();
         updateAllBadges();
         updateGlobalCount();
+        loadDailyTimes_();
       } else {
         showMsg('submitMsg', res.message || 'บันทึกไม่สำเร็จ', 'err');
       }
