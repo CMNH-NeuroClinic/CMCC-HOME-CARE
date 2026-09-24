@@ -509,6 +509,9 @@
     @media print{
       body{max-width:100%;padding:0;background:#fff;}
       .no-print{display:none !important;}
+      /* บั๊กที่เจอจากมือถือจริง: หน้าผู้ดูแล/เช็คอินไม่เคยถูกกันไว้ตอนพิมพ์เลย ทำให้ทั้งหน้า (การ์ด, ปุ่ม, badge)
+         ติดไปในกระดาษด้วย ทั้งที่ควรเห็นแค่ #timeDetailPrintArea/#printArea/#logCard ตามโหมดที่กด */
+      #mainSection, #saveBar, #checkinSection{display:none !important;}
       .admin-tab-panel{display:block !important;}
       .print-log-only{display:none !important;}
       .print-time-only{display:none !important;}
@@ -1317,8 +1320,10 @@
 
   // แปลงลิงก์ Drive ปกติ (.../file/d/ID/view...) เป็นลิงก์รูปที่ฝังตรงใน <img> ได้ (ต่างจาก toPdfPreviewUrl_ ที่ใช้กับ iframe PDF)
   function toDriveImageUrl_(url){
+    // uc?export=view เชื่อถือไม่ได้ (Google มักเด้งหน้ายืนยัน/บล็อกตอนฝังเป็น <img> ข้ามโดเมน)
+    // ใช้ endpoint thumbnail แทน ซึ่งออกแบบมาสำหรับฝังรูปโดยเฉพาะ เสถียรกว่ามาก
     const m = String(url || '').match(/\/file\/d\/([^/]+)/);
-    return m ? ('https://drive.google.com/uc?export=view&id=' + m[1]) : url;
+    return m ? ('https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w480') : url;
   }
 
   function renderCheckInRecords_(records){
