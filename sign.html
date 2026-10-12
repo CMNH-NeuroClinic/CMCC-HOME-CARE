@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>ลงนามเอกสาร · CMCC Home Care by CMNH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brand: #2F6F62;
+    --ink: #1C2B2A; --ink-2: #4A5A58; --line: #D5DFDB; --mist: #EEF3F1; --paper: #FFFFFF;
+    --warn-bg: #FFF4DC; --warn: #7A4E00; --bad: #A6192E; --bad-bg: #FCE8EB;
+    --sans: "IBM Plex Sans Thai", "Noto Sans Thai", "Sukhumvit Set", Tahoma, sans-serif;
+    --serif: "Noto Serif Thai", "IBM Plex Sans Thai", serif;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; font-family: var(--sans); font-size: 1.125rem; line-height: 1.7; color: var(--ink); background: var(--mist); }
+  h1, h2, h3, p { margin: 0; }
+  :focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; }
+  .hidden { display: none !important; }
+  .wrap { max-width: 680px; margin: 0 auto; padding: 0 18px; }
+
+  header { background: var(--paper); border-bottom: 1px solid var(--line); padding: calc(12px + env(safe-area-inset-top, 0px)) 0 12px; }
+  header .wrap { display: flex; align-items: center; gap: 12px; }
+  header img { width: 44px; height: 44px; border-radius: 12px; object-fit: contain; flex: none; background: var(--mist); }
+  header b { display: block; font-weight: 600; line-height: 1.3; }
+  header span { font-size: .9rem; color: var(--ink-2); }
+
+  main { padding: 20px 0 calc(120px + env(safe-area-inset-bottom, 0px)); }
+  .sheet { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 26px 22px; }
+  .sheet + .sheet { margin-top: 14px; }
+  .center { text-align: center; }
+  .muted { color: var(--ink-2); }
+
+  /* เอกสาร */
+  .doc-kind { font-size: .95rem; color: var(--brand); font-weight: 600; }
+  .doc-title { font-family: var(--serif); font-size: 1.55rem; line-height: 1.45; margin-top: 2px; }
+  .doc-no { color: var(--ink-2); font-size: .95rem; margin-top: 4px; }
+  .facts { width: 100%; border-collapse: collapse; margin-top: 18px; font-size: 1rem; }
+  .facts th, .facts td { text-align: left; vertical-align: top; padding: 9px 0; border-top: 1px solid var(--line); }
+  .facts th { width: 38%; font-weight: 500; color: var(--ink-2); padding-right: 12px; }
+  .clauses { margin-top: 10px; }
+  .clauses h3 { font-family: var(--serif); font-size: 1.12rem; margin: 22px 0 4px; color: var(--ink); }
+  .clauses p { margin: 6px 0; }
+  .pdpa { background: var(--mist); border-radius: 12px; padding: 16px 18px; margin-top: 22px; }
+  .pdpa h3 { font-family: var(--serif); font-size: 1.12rem; margin: 0 0 6px; }
+  .pdpa p { margin: 6px 0; font-size: 1.02rem; }
+
+  /* ประวัติผู้ดูแล (เอกสารแนบท้าย) — พื้นหลังลายน้ำวงกลมของแบรนด์ */
+  .staff-page { position: relative; overflow: hidden; background: var(--paper) no-repeat center 62% / 88%; }
+  .staff-head { display: flex; justify-content: space-between; gap: 10px; font-size: .9rem; color: var(--ink-2); }
+  .staff-photo { width: 124px; height: 124px; border-radius: 50%; object-fit: cover; display: block; margin: 18px auto 10px; border: 4px solid var(--brand); background: var(--mist); }
+  .staff-name { font-family: var(--serif); font-size: 1.45rem; text-align: center; line-height: 1.4; }
+  .staff-role { text-align: center; color: var(--brand); font-weight: 600; }
+  .staff-bio { text-align: center; font-style: italic; margin: 12px auto 0; max-width: 34em; }
+  .staff-page .facts th { width: 42%; }
+  .staff-note { font-size: .9rem; color: var(--ink-2); margin-top: 14px; }
+
+  /* ฟอร์ม */
+  label.lbl { display: block; font-weight: 600; margin-bottom: 6px; }
+  input[type=text], input[type=tel] { width: 100%; font: inherit; font-size: 1.2rem; padding: 12px 14px; border: 2px solid #9FB3AE; border-radius: 12px; background: var(--paper); color: var(--ink); }
+  .code { text-align: center; letter-spacing: .45em; font-size: 1.9rem !important; font-weight: 600; }
+  .btn { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 58px; border: 0; border-radius: 14px; font: 600 1.2rem var(--sans); background: var(--brand); color: #fff; cursor: pointer; margin-top: 18px; text-decoration: none; }
+  .btn[disabled] { opacity: .45; cursor: default; }
+  .btn.ghost { background: var(--paper); color: var(--brand); border: 2px solid var(--brand); }
+  .err { color: var(--bad); background: var(--bad-bg); border-radius: 10px; padding: 10px 12px; font-weight: 600; margin-top: 12px; font-size: 1rem; }
+  .who { display: grid; gap: 10px; margin-top: 6px; }
+  .who label { display: flex; gap: 12px; align-items: center; border: 2px solid var(--line); border-radius: 12px; padding: 12px 14px; cursor: pointer; font-weight: 500; }
+  .who label:has(input:checked) { border-color: var(--brand); background: var(--mist); }
+  .who input { width: 22px; height: 22px; accent-color: var(--brand); flex: none; }
+  .field { margin-top: 18px; }
+  .field.two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .field.two > div { min-width: 0; }
+  textarea { width: 100%; font: inherit; font-size: 1.1rem; padding: 12px 14px; border: 2px solid #9FB3AE; border-radius: 12px; background: var(--paper); color: var(--ink); resize: vertical; }
+  .idmsg { display: block; font-size: .95rem; margin-top: 4px; font-weight: 600; }
+  .idmsg.ok { color: #23661A; } .idmsg.bad { color: var(--bad); }
+  .bankbox summary { cursor: pointer; font-weight: 600; color: var(--brand); padding: 8px 0; }
+  @media (max-width: 420px) { .field.two { grid-template-columns: 1fr; } }
+
+  /* เส้นลงนาม — จุดเด่นเดียวของหน้า: ให้รู้สึกเหมือนเซ็นบนกระดาษจริง */
+  .sigline { position: relative; margin-top: 8px; border-radius: 12px; background: #FBFCFB; border: 1px solid var(--line); }
+  #pad { display: block; width: 100%; height: 200px; touch-action: none; border-radius: 12px; }
+  .sigline::after { content: ""; position: absolute; left: 44px; right: 22px; bottom: 50px; border-bottom: 2px solid var(--ink); pointer-events: none; }
+  .sigline .x { position: absolute; left: 18px; bottom: 46px; font-family: var(--serif); font-size: 1.5rem; color: var(--ink); pointer-events: none; line-height: 1; }
+  .sigline .hint { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; color: var(--ink-2); font-size: .95rem; pointer-events: none; }
+  .sigtools { display: flex; justify-content: flex-end; margin-top: 4px; }
+  .sigtools button { font: inherit; font-size: 1rem; background: none; border: 0; color: var(--brand); font-weight: 600; padding: 8px 4px; cursor: pointer; text-decoration: underline; }
+  .agree { display: flex; gap: 12px; align-items: flex-start; margin-top: 16px; font-size: 1.02rem; }
+  .agree input { width: 26px; height: 26px; flex: none; margin-top: 3px; accent-color: var(--brand); }
+
+  /* แถบล่าง: พาไปลงนาม */
+  .dock { position: fixed; left: 0; right: 0; bottom: 0; background: var(--paper); border-top: 1px solid var(--line); padding: 10px 0 calc(10px + env(safe-area-inset-bottom, 0px)); }
+  .dock .btn { margin-top: 0; min-height: 52px; }
+
+  .done-mark { width: 88px; height: 88px; border-radius: 50%; background: var(--brand); display: grid; place-items: center; margin: 6px auto 16px; }
+  .done-mark svg { width: 48px; height: 48px; stroke: #fff; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  @media (prefers-reduced-motion: no-preference) { .done-mark { animation: pop .35s ease-out; } }
+  @keyframes pop { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* =====================================================================
+   ธีม Frutiger Aero — ให้เข้าชุดกับหลังบ้าน แต่ยังอ่านง่ายสำหรับผู้ใหญ่ (ตัวใหญ่ คอนทราสต์สูง)
+   ===================================================================== */
+:root{
+  --sans:"Anuphan","Noto Sans Thai","Segoe UI","Frutiger","Myriad Pro",Tahoma,sans-serif;
+  --serif:var(--sans);
+  --ink:#10324A; --ink-2:#4B6A80; --line:rgba(30,155,224,.22); --mist:rgba(225,245,255,.7);
+  --aqua:#1E9BE0; --aqua-2:#0B6FB8;
+  --glass:rgba(255,255,255,.62);
+  --glass-shadow:0 10px 30px rgba(20,90,150,.18),0 2px 6px rgba(20,90,150,.10);
+  --gloss:inset 0 1px 0 rgba(255,255,255,.95);
+}
+body{
+  color:var(--ink);
+  background:
+    radial-gradient(900px 420px at 80% -10%,rgba(255,255,255,.95),rgba(255,255,255,0) 60%),
+    linear-gradient(180deg,#8FD3F7 0%,#CDEFFF 38%,#F2FBFF 70%,#EAF9E4 100%);
+  background-attachment:fixed;
+}
+body::before,body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0}
+body::before{
+  background:
+    radial-gradient(circle at 30% 30%,rgba(255,255,255,.95) 0 6%,rgba(255,255,255,.2) 7%,rgba(160,220,255,.25) 55%,rgba(255,255,255,.55) 70%,transparent 71%) 6% 30%/90px 90px no-repeat,
+    radial-gradient(circle at 30% 30%,rgba(255,255,255,.95) 0 6%,rgba(255,255,255,.2) 7%,rgba(160,220,255,.22) 55%,rgba(255,255,255,.5) 70%,transparent 71%) 94% 62%/140px 140px no-repeat,
+    radial-gradient(circle at 30% 30%,rgba(255,255,255,.95) 0 8%,rgba(170,235,210,.25) 55%,rgba(255,255,255,.5) 70%,transparent 71%) 80% 18%/50px 50px no-repeat;
+}
+body::after{
+  top:auto;height:160px;opacity:.55;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 200' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23B8EB7E'/%3E%3Cstop offset='1' stop-color='%236CC43C'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23D8F7B0'/%3E%3Cstop offset='1' stop-color='%2398DB62'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 120 C240 60 480 150 760 104 C1040 58 1240 70 1440 110 V200 H0Z' fill='url(%23b)' opacity='.75'/%3E%3Cpath d='M0 160 C300 110 600 190 900 150 C1150 118 1300 140 1440 150 V200 H0Z' fill='url(%23a)' opacity='.8'/%3E%3C/svg%3E") bottom/100% 100% no-repeat;
+}
+header,main,.dock{position:relative;z-index:1}
+.dock{position:fixed}
+
+/* หัวหน้า: แถบกระจก */
+header{background:rgba(255,255,255,.55);border-bottom:1px solid rgba(255,255,255,.9);box-shadow:0 4px 18px rgba(20,90,150,.12),var(--gloss)}
+header img{background:#fff;box-shadow:0 0 0 2px #fff,0 3px 10px rgba(20,90,150,.25)}
+header b{color:var(--aqua-2)}
+
+/* แผ่นกระจก — เนื้อหาสัญญาใช้กระจกทึบกว่าเพื่อให้อ่านง่าย */
+.sheet{background:var(--glass);border:1px solid rgba(255,255,255,.9);border-radius:20px;box-shadow:var(--glass-shadow),var(--gloss);position:relative;overflow:hidden}
+article.sheet:not(.staff-page){background:rgba(255,255,255,.86)}
+@supports ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){
+  header,.sheet,.dock{-webkit-backdrop-filter:blur(16px) saturate(1.5);backdrop-filter:blur(16px) saturate(1.5)}
+}
+.sheet::before{content:"";position:absolute;left:0;right:0;top:0;height:50px;background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(255,255,255,0));pointer-events:none}
+.sheet>*{position:relative}
+.sheet h2,.doc-title,.clauses h3,.pdpa h3{color:var(--aqua-2)}
+.doc-kind{color:#2E8B1E}
+.facts th{color:var(--ink-2)}
+.facts th,.facts td{border-top:1px solid var(--line)}
+.pdpa{background:linear-gradient(180deg,rgba(240,250,255,.95),rgba(214,240,255,.85));border:1px solid rgba(255,255,255,.95);box-shadow:inset 0 1px 2px rgba(20,90,150,.1)}
+
+/* หน้าประวัติผู้ดูแล: คงลายน้ำวงกลมไว้ด้านหลัง */
+.staff-page{background-color:rgba(255,255,255,.88)!important;background-repeat:no-repeat!important;background-position:center 62%!important;background-size:88%!important}
+.staff-photo{border-color:#fff!important;box-shadow:0 0 0 3px rgba(80,190,255,.7),0 8px 18px rgba(20,90,150,.25)}
+.staff-role{color:var(--aqua-2)}
+
+/* ช่องกรอก */
+input[type=text],input[type=tel],textarea{border:1px solid #8EC3E3;border-radius:14px;background:linear-gradient(180deg,#F4FBFF,#FFFFFF 40%);box-shadow:inset 0 2px 3px rgba(20,90,150,.10)}
+input[type=text]:focus,input[type=tel]:focus,textarea:focus{outline:none;border-color:#39A9EE;box-shadow:inset 0 2px 3px rgba(20,90,150,.08),0 0 0 4px rgba(80,190,255,.35)}
+.code{color:var(--aqua-2)}
+
+/* ปุ่มเจลวาว */
+.btn{position:relative;overflow:hidden;isolation:isolate;border-radius:999px;border:1px solid #0E75BE;color:#fff;text-shadow:0 -1px 0 rgba(0,60,110,.45);
+  background:linear-gradient(180deg,#8FDCFF 0%,#3AB0F0 49%,#1586D6 50%,#2AA3EA 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 4px 14px rgba(21,134,214,.35)}
+.btn::after{content:"";position:absolute;left:7%;right:7%;top:1px;height:46%;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(255,255,255,.05));pointer-events:none;z-index:-1}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{color:var(--aqua-2);text-shadow:0 1px 0 #fff;border-color:rgba(30,155,224,.55);background:linear-gradient(180deg,#FFFFFF 0%,#F0FAFF 49%,#DDF2FF 50%,#EFF9FF 100%)}
+/* ปุ่มลงนาม = ปุ่มเขียวใบไม้ ให้เด่นที่สุดในหน้า */
+#submitBtn{border-color:#2E8B1E;text-shadow:0 -1px 0 rgba(20,70,10,.45);background:linear-gradient(180deg,#C9F59B 0%,#78CF47 49%,#4AAE22 50%,#62C236 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 5px 16px rgba(74,174,34,.4)}
+
+/* เลือกผู้ลงนาม */
+.who label{border:1px solid rgba(142,195,227,.9);border-radius:16px;background:rgba(255,255,255,.75)}
+.who label:has(input:checked){border-color:#39A9EE;background:linear-gradient(180deg,#F1FAFF,#CFEEFF);box-shadow:0 0 0 3px rgba(80,190,255,.25)}
+.who input,.agree input{accent-color:var(--aqua)}
+
+/* ช่องลายเซ็น: กระดาษขาวบนกระจก */
+.sigline{background:#fff;border:1px solid rgba(142,195,227,.9);border-radius:16px;box-shadow:inset 0 2px 6px rgba(20,90,150,.10)}
+.sigtools button{color:var(--aqua-2)}
+
+.err{background:linear-gradient(180deg,#FFE9EC,#FFC9D0);border:1px solid #FFB3BE;border-radius:14px}
+.dock{background:rgba(255,255,255,.6);border-top:1px solid rgba(255,255,255,.9);box-shadow:0 -6px 20px rgba(20,90,150,.12)}
+
+/* เสร็จแล้ว: ลูกแก้วเขียว */
+.done-mark{background:radial-gradient(circle at 35% 28%,#E9FFD2 0 12%,#8BDB55 40%,#3FA41C 75%,#2E8B1E);box-shadow:inset 0 -6px 12px rgba(20,80,10,.35),0 10px 24px rgba(74,174,34,.45),0 0 0 4px #fff}
+.done-mark svg{filter:drop-shadow(0 1px 1px rgba(20,70,10,.5))}
+
+@media print{body::before,body::after{display:none}body{background:#fff}}
+
+/* ===== UX: ขยายตัวอักษร, แถบความคืบหน้า, ปุ่มโทรหาร้าน ===== */
+header .wrap{position:relative}
+.fs-btn{margin-left:auto;flex:none;border:1px solid rgba(142,195,227,.9);background:linear-gradient(180deg,#fff,#E3F4FD);border-radius:999px;min-width:56px;height:40px;padding:0 12px;font:700 1rem var(--sans);color:var(--aqua-2);cursor:pointer;box-shadow:inset 0 1px 0 #fff,0 2px 6px rgba(20,90,150,.18)}
+.progress{position:sticky;top:0;z-index:5;display:flex;gap:6px;padding:8px 0 10px}
+.progress button{flex:1;border:1px solid rgba(255,255,255,.9);background:rgba(255,255,255,.72);border-radius:999px;padding:6px 8px;font:500 .9rem var(--sans);color:#3E5D73;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;box-shadow:0 2px 8px rgba(20,90,150,.12)}
+.progress i{font-style:normal;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:#DDF0FB;color:var(--aqua-2);font-weight:700;font-size:.8rem;flex:none}
+.progress button.on{border-color:#39A9EE;background:linear-gradient(180deg,#F1FAFF,#CFEEFF);color:var(--ink)}
+.progress button.on i{background:linear-gradient(180deg,#5FC2F4,#0A68B0);color:#fff}
+.progress button.done i{background:linear-gradient(180deg,#9BDD66,#2A8016);color:#fff}
+@supports ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){.progress button{-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}}
+.callfab{position:fixed;right:16px;bottom:calc(86px + env(safe-area-inset-bottom,0px));z-index:6;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;text-decoration:none;
+  background:radial-gradient(circle at 35% 28%,#E9FFD2 0 10%,#7FD24C 42%,#2E8B1E 80%);box-shadow:inset 0 -5px 10px rgba(20,80,10,.35),0 8px 20px rgba(46,139,30,.45),0 0 0 3px #fff}
+.callfab svg{width:26px;height:26px;fill:#fff;filter:drop-shadow(0 1px 1px rgba(20,70,10,.5))}
+.callfab.nodock{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+</style>
+</head>
+<body>
+
+<header><div class="wrap">
+  <img id="logo" alt="" src="data:image/png;base64,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">
+  <div><b id="company">CMCC Home Care by CMNH</b><span>ลงนามเอกสารบริการทางออนไลน์</span></div>
+  <button class="fs-btn" id="fsBtn" type="button" aria-label="เปลี่ยนขนาดตัวอักษร">ก+</button>
+</div></header>
+
+<main class="wrap">
+
+  <section id="vLoad" class="sheet center"><p class="muted">กำลังเปิดเอกสาร…</p></section>
+
+  <section id="vCode" class="sheet hidden">
+    <h2 style="font-family:var(--serif);font-size:1.35rem">ใส่รหัสเปิดเอกสาร</h2>
+    <p class="muted" style="margin:6px 0 16px">รหัส 6 หลักที่ส่งมาพร้อมลิงก์นี้</p>
+    <input id="codeIn" class="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••" aria-label="รหัสเปิดเอกสาร">
+    <button class="btn" id="codeBtn" type="button">เปิดเอกสาร</button>
+    <p class="err hidden" id="codeErr" role="alert"></p>
+  </section>
+
+  <div id="vDoc" class="hidden">
+    <nav class="progress" id="prog" aria-label="ขั้นตอน"></nav>
+    <article class="sheet">
+      <div class="doc-kind" id="dKind"></div>
+      <h1 class="doc-title" id="dTitle"></h1>
+      <div class="doc-no" id="dNo"></div>
+      <table class="facts" id="dFacts"></table>
+      <div class="clauses" id="dClauses"></div>
+      <div class="pdpa">
+        <h3 id="pdpaTitle">ความยินยอมเรื่องข้อมูลส่วนบุคคลและข้อมูลสุขภาพ</h3>
+        <div id="dPdpa"></div>
+      </div>
+    </article>
+
+    <div id="dStaff"></div>
+
+    <section class="sheet" id="signBox">
+      <h2 style="font-family:var(--serif);font-size:1.35rem">ลงนาม</h2>
+
+      <div class="field" id="whoBox">
+        <span class="lbl">ผู้ลงนามคือ</span>
+        <div class="who">
+          <label><input type="radio" name="role" value="self"> <span id="selfLabel">ตัวผู้รับบริการเอง</span></label>
+          <label><input type="radio" name="role" value="representative" checked> ญาติหรือผู้แทนผู้รับบริการ</label>
+        </div>
+      </div>
+      <div class="field" id="relBox">
+        <label class="lbl" for="relIn">ความสัมพันธ์กับผู้รับบริการ</label>
+        <input id="relIn" type="text" placeholder="เช่น ลูก, หลาน, คู่สมรส">
+      </div>
+      <div class="field">
+        <label class="lbl" for="nameIn">ชื่อ-นามสกุลผู้ลงนาม</label>
+        <input id="nameIn" type="text" autocomplete="name">
+      </div>
+      <div class="field hidden" id="idBox">
+        <label class="lbl" for="idIn">เลขประจำตัวประชาชน 13 หลัก</label>
+        <input id="idIn" type="text" inputmode="numeric" autocomplete="off" maxlength="17" placeholder="x-xxxx-xxxxx-xx-x">
+        <span class="idmsg" id="idMsg"></span>
+      </div>
+      <div class="hidden" id="empBox">
+        <div class="field"><label class="lbl" for="exAddr">ที่อยู่ปัจจุบัน</label><textarea id="exAddr" rows="3"></textarea></div>
+        <div class="field two"><div><label class="lbl" for="exPhone">เบอร์โทรศัพท์</label><input id="exPhone" type="tel" autocomplete="tel"></div><div><label class="lbl" for="exLine">LINE ID (ถ้ามี)</label><input id="exLine" type="text"></div></div>
+        <div class="field"><label class="lbl" for="exNat">สัญชาติ</label><input id="exNat" type="text" value="ไทย"></div>
+        <details class="field bankbox"><summary>บัญชีรับเงินเดือน (กรอกตอนนี้หรือแจ้งฝ่ายบุคคลภายหลังก็ได้)</summary>
+          <div class="field two"><div><label class="lbl" for="exBank">ธนาคาร</label><input id="exBank" type="text"></div><div><label class="lbl" for="exBranch">สาขา</label><input id="exBranch" type="text"></div></div>
+          <div class="field"><label class="lbl" for="exAccName">ชื่อบัญชี</label><input id="exAccName" type="text"></div>
+          <div class="field"><label class="lbl" for="exAccNo">เลขที่บัญชี</label><input id="exAccNo" type="text" inputmode="numeric"></div>
+        </details>
+      </div>
+      <div class="field">
+        <span class="lbl">ลายเซ็น</span>
+        <div class="sigline"><canvas id="pad" aria-label="ช่องลายเซ็น ใช้นิ้วเซ็นบนเส้น"></canvas><span class="x">×</span><span class="hint" id="sigHint">ใช้นิ้วเซ็นบนเส้น</span></div>
+        <div class="sigtools"><button type="button" id="sigClear">ล้างลายเซ็น</button></div>
+      </div>
+
+      <label class="agree"><input type="checkbox" id="agree"><span id="agreeLbl">ข้าพเจ้าได้อ่านเอกสารนี้ทั้งหมดรวมถึงเอกสารแนบท้ายแล้ว และตกลงตามเงื่อนไข โดยให้ใช้ลายเซ็นอิเล็กทรอนิกส์นี้แทนลายมือชื่อบนกระดาษ</span></label>
+      <label class="agree"><input type="checkbox" id="pdpa"><span id="pdpaLbl">ข้าพเจ้าให้ความยินยอมเรื่องข้อมูลส่วนบุคคลและข้อมูลสุขภาพ ตามข้อความในกรอบด้านบน</span></label>
+      <label class="agree hidden" id="pcBox"><input type="checkbox" id="pcIn"><span><b>(ไม่บังคับ)</b> ข้าพเจ้ายินยอมให้<span id="pcText"></span></span></label>
+
+      <button class="btn" id="submitBtn" type="button">ลงนามเอกสาร</button>
+      <p class="err hidden" id="subErr" role="alert"></p>
+    </section>
+  </div>
+
+  <section id="vDone" class="sheet center hidden">
+    <div class="done-mark"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <h2 style="font-family:var(--serif);font-size:1.5rem">ลงนามเรียบร้อยแล้ว</h2>
+    <p class="muted" style="margin-top:8px">ผู้ให้บริการได้รับเอกสารเลขที่ <b id="doneNo"></b> แล้ว</p>
+    <a class="btn ghost hidden" id="donePdf" target="_blank" rel="noopener">เปิดสำเนาเอกสาร (PDF)</a>
+  </section>
+
+  <section id="vBad" class="sheet center hidden">
+    <h2 style="font-family:var(--serif);font-size:1.4rem" id="badTitle">เปิดเอกสารไม่ได้</h2>
+    <p class="muted" style="margin-top:8px" id="badMsg"></p>
+    <a class="btn ghost hidden" id="badCall">โทรหาผู้ให้บริการ</a>
+  </section>
+</main>
+
+<a class="callfab hidden" id="callFab" aria-label="โทรหาผู้ให้บริการ"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></a>
+<div class="dock hidden" id="dock"><div class="wrap"><button class="btn" id="goSign" type="button">อ่านครบแล้ว ไปลงนาม</button></div></div>
+
+<script src="config.js"></script>
+<script>
+/* ===== วางลิงก์เว็บแอปของ Apps Script (ลงท้าย /exec) ตรงนี้ — ต้องเป็นลิงก์เดียวกับ admin.html ===== */
+var API_URL = window.HCS_API_URL || 'PASTE_YOUR_APPS_SCRIPT_EXEC_URL_HERE';
+
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+
+  // เก็บ token ไว้ในแท็บนี้ แล้วลบออกจากแถบที่อยู่ กันลิงก์หลุดเวลาแคปหน้าจอ
+  var qs = new URLSearchParams(location.search);
+  var token = qs.get('t') || '';
+  try {
+    if (token) { sessionStorage.setItem('sign_t', token); history.replaceState(null, '', location.pathname); }
+    else token = sessionStorage.getItem('sign_t') || '';
+  } catch (e) {}
+  var code = '', hash = '', busy = false, phone = '', S_KIND = 'customer', S_ASKID = false;
+  function thaiIdOk(id) { id = String(id || '').replace(/\D/g, ''); if (id.length !== 13) return false; var s = 0; for (var i = 0; i < 12; i++) s += +id.charAt(i) * (13 - i); return (11 - s % 11) % 10 === +id.charAt(12); }
+
+  var views = ['vLoad', 'vCode', 'vDoc', 'vDone', 'vBad'];
+  function show(id) {
+    views.forEach(function (v) { $(v).classList.toggle('hidden', v !== id); }); $('dock').classList.toggle('hidden', id !== 'vDoc'); window.scrollTo(0, 0);
+    var fab = $('callFab'); fab.classList.toggle('hidden', !phone || (id !== 'vDoc' && id !== 'vCode')); fab.classList.toggle('nodock', id !== 'vDoc');
+  }
+  /* ขนาดตัวอักษร 3 ระดับ (จำไว้ในเครื่อง) */
+  var FS = [100, 115, 130], fsI = 0;
+  try { fsI = Math.max(0, FS.indexOf(+localStorage.getItem('sign_fs'))); } catch (e) {}
+  function applyFs() { document.documentElement.style.fontSize = FS[fsI] + '%'; $('fsBtn').textContent = fsI === 2 ? 'ก−' : 'ก+'; $('fsBtn').setAttribute('aria-label', 'ขนาดตัวอักษร ระดับ ' + (fsI + 1) + ' จาก 3'); }
+  $('fsBtn').addEventListener('click', function () { fsI = (fsI + 1) % FS.length; try { localStorage.setItem('sign_fs', FS[fsI]); } catch (e) {} applyFs(); if (!ink && !$('vDoc').classList.contains('hidden')) sizeCanvas(); });
+  applyFs();
+  /* แถบขั้นตอน: อ่านเอกสาร → ประวัติผู้ดูแล → ลงนาม */
+  function buildProgress(hasStaff) {
+    var steps = [['dFacts', S_KIND === 'employment' ? 'อ่านสัญญาจ้าง' : 'อ่านเอกสาร']].concat(hasStaff ? [['dStaff', 'ประวัติผู้ดูแล']] : []).concat([['signBox', 'ลงนาม']]);
+    $('prog').innerHTML = steps.map(function (st, i) { return '<button type="button" data-to="' + st[0] + '"><i>' + (i + 1) + '</i>' + st[1] + '</button>'; }).join('');
+    var btns = [].slice.call($('prog').querySelectorAll('button'));
+    btns.forEach(function (b) { b.onclick = function () { var el = $(b.dataset.to); var y = el.getBoundingClientRect().top + window.scrollY - 70; window.scrollTo({ top: y, behavior: 'smooth' }); }; });
+    function mark() {
+      var cur = 0; steps.forEach(function (st, i) { if ($(st[0]).getBoundingClientRect().top < window.innerHeight * 0.45) cur = i; });
+      btns.forEach(function (b, i) { b.classList.toggle('on', i === cur); b.classList.toggle('done', i < cur); });
+    }
+    window.addEventListener('scroll', function () { if (!mark._r) { mark._r = requestAnimationFrame(function () { mark._r = 0; mark(); }); } }, { passive: true });
+    mark();
+  }
+  function bad(title, msg) {
+    $('badTitle').textContent = title; $('badMsg').textContent = msg;
+    if (phone) { $('badCall').href = 'tel:' + phone.replace(/[^\d+]/g, ''); $('badCall').textContent = 'โทร ' + phone; $('badCall').classList.remove('hidden'); }
+    show('vBad');
+  }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+
+  function api(action, data) {
+    if (!API_URL || API_URL.indexOf('PASTE_') === 0) return Promise.reject(new Error('ระบบยังไม่ได้ตั้งค่าลิงก์ (API_URL)'));
+    return fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: action, data: data }) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { if (!j.ok) { var e = new Error(j.error || j.message || 'เกิดข้อผิดพลาด'); e.code = j.code; throw e; } return j; });
+  }
+
+  function applyBrand(b) {
+    if (!b) return;
+    $('company').textContent = b.companyName || '';
+    document.title = 'ลงนามเอกสาร · ' + (b.companyName || '');
+    if (b.logo) $('logo').src = b.logo;
+    if (b.brandColor && /^#[0-9a-f]{6}$/i.test(b.brandColor)) document.documentElement.style.setProperty('--brand', b.brandColor);
+    phone = b.companyPhone || '';
+    if (phone) { $('callFab').href = 'tel:' + phone.replace(/[^\d+]/g, ''); $('callFab').setAttribute('aria-label', 'โทรหา ' + (b.companyName || 'ผู้ให้บริการ') + ' ' + phone); }
+    var vis = ['vDoc', 'vCode'].some(function (v) { return !$(v).classList.contains('hidden'); });
+    $('callFab').classList.toggle('hidden', !phone || !vis);
+  }
+
+  function load() {
+    if (!token) return bad('ลิงก์ไม่ครบ', 'กรุณาเปิดลิงก์จากข้อความที่ผู้ให้บริการส่งให้อีกครั้ง');
+    api('sign.get', { token: token, code: code }).then(function (r) {
+      applyBrand(r.brand);
+      if (r.needCode) { show('vCode'); $('codeIn').focus(); return; }
+      renderDoc(r);
+    }).catch(function (e) {
+      if (e.code === 'BADCODE' || e.code === 'LOCKED') { $('codeErr').textContent = e.message; $('codeErr').classList.remove('hidden'); show('vCode'); $('codeIn').select(); return; }
+      if (e.code === 'SIGNED') return bad('ลงนามเรียบร้อยแล้ว', 'เอกสารนี้ได้รับการลงนามแล้ว ไม่ต้องทำอะไรเพิ่ม');
+      if (e.code === 'EXPIRED') return bad('ลิงก์หมดอายุ', e.message);
+      bad('เปิดเอกสารไม่ได้', e.message);
+    });
+    api('public.branding', {}).then(function (r) { applyBrand(r); }).catch(function () {});
+  }
+
+  function renderDoc(r) {
+    hash = r.hash;
+    $('dKind').textContent = r.typeLabel || '';
+    $('dTitle').textContent = r.title;
+    $('dNo').textContent = 'เลขที่ ' + r.no;
+    $('dFacts').innerHTML = r.summary.map(function (row) { return '<tr><th scope="row">' + esc(row[0]) + '</th><td>' + esc(row[1]) + '</td></tr>'; }).join('');
+    $('dClauses').innerHTML = r.blocks.map(function (b) { return b.h !== undefined ? '<h3>' + esc(b.h) + '</h3>' : '<p>' + esc(b.p) + '</p>'; }).join('');
+    $('dPdpa').innerHTML = (r.pdpa || []).map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('');
+    S_KIND = r.kind || 'customer'; S_ASKID = !!r.askId;
+    if (r.privacyTitle) $('pdpaTitle').textContent = r.privacyTitle;
+    $('idBox').classList.toggle('hidden', !S_ASKID);
+    var emp = S_KIND === 'employment';
+    $('whoBox').classList.toggle('hidden', emp); $('relBox').classList.toggle('hidden', emp);
+    $('empBox').classList.toggle('hidden', !emp); $('pcBox').classList.toggle('hidden', !emp || !r.profileConsentText);
+    if (emp) {
+      $('pcText').textContent = r.profileConsentText || '';
+      $('pdpaLbl').textContent = 'ข้าพเจ้ารับทราบประกาศความเป็นส่วนตัวสำหรับลูกจ้างตามข้อความในกรอบด้านบนแล้ว';
+      $('agreeLbl').textContent = 'ข้าพเจ้าได้อ่านสัญญาจ้างและเอกสารแนบท้ายทั้งหมดแล้ว และตกลงตามเงื่อนไข โดยให้ใช้ลายเซ็นอิเล็กทรอนิกส์นี้แทนลายมือชื่อบนกระดาษ';
+      if (r.signerHint && r.signerHint.phone) $('exPhone').value = r.signerHint.phone;
+    }
+    $('dStaff').innerHTML = (r.staff || []).map(function (p) {
+      function row(k, v) { return v ? '<tr><th scope="row">' + esc(k) + '</th><td>' + v + '</td></tr>' : ''; }
+      function list(a) { return (a || []).map(esc).join('<br>'); }
+      return '<article class="sheet staff-page" style="background-image:url(\'' + (r.watermark || '') + '\')">' +
+        '<div class="staff-head"><span>เอกสารแนบท้าย ' + esc(r.no) + '</span><span>ประวัติผู้ดูแล</span></div>' +
+        (p.photo ? '<img class="staff-photo" alt="" src="' + p.photo + '">' : '<div style="height:18px"></div>') +
+        '<h2 class="staff-name">' + esc(p.name) + (p.nickname ? ' (' + esc(p.nickname) + ')' : '') + '</h2>' +
+        '<div class="staff-role">' + esc(p.role || 'ผู้ดูแล') + ' · ' + esc(p.duty) + '</div>' +
+        (p.bio ? '<p class="staff-bio">“' + esc(p.bio) + '”</p>' : '') +
+        '<table class="facts">' + row('อายุ', p.age ? esc(p.age) + ' ปี' : '') + row('ประสบการณ์', p.experienceYears ? esc(p.experienceYears) + ' ปี' : '') +
+        row('การศึกษา', esc(p.education)) + row('ใบอนุญาต/ประกาศนียบัตร', list(p.licenses)) + row('การอบรม', list(p.trainings)) +
+        row('ทักษะ', list(p.skills)) + row('ภาษา', esc((p.languages || []).join(', '))) + row('ร่วมงานกับเราตั้งแต่', esc(p.since)) +
+        row('ตรวจประวัติแล้วเมื่อ', esc(p.backgroundCheck)) + row('เบอร์ติดต่อ', esc(p.phone)) + '</table>' +
+        '<p class="staff-note">เจ้าหน้าที่ยินยอมเปิดเผยประวัตินี้เพื่อประกอบการตัดสินใจของผู้รับบริการ ห้ามนำไปเผยแพร่ต่อ</p></article>';
+    }).join('');
+    var hint = r.signerHint || {};
+    if (hint.clientName) $('selfLabel').textContent = 'ตัวผู้รับบริการเอง (' + hint.clientName + ')';
+    if (hint.name) $('nameIn').value = hint.name;
+    if (hint.relation) $('relIn').value = hint.relation;
+    show('vDoc');
+    buildProgress((r.staff || []).length > 0);
+    sizeCanvas();
+  }
+
+  $('codeBtn').addEventListener('click', function () {
+    var v = $('codeIn').value.replace(/\D/g, '');
+    if (v.length !== 6) { $('codeErr').textContent = 'กรุณาใส่รหัส 6 หลัก'; $('codeErr').classList.remove('hidden'); return; }
+    code = v; $('codeErr').classList.add('hidden'); show('vLoad'); load();
+  });
+  $('codeIn').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('codeBtn').click(); });
+
+  $('idIn').addEventListener('input', function () {
+    var d = this.value.replace(/\D/g, '').slice(0, 13), f = '';
+    [1, 4, 5, 2, 1].reduce(function (pos, n, i) { var part = d.slice(pos, pos + n); if (part) f += (i ? '-' : '') + part; return pos + n; }, 0);
+    this.value = f; var m = $('idMsg');
+    if (d.length < 13) { m.textContent = d.length ? 'อีก ' + (13 - d.length) + ' หลัก' : ''; m.className = 'idmsg'; }
+    else { var ok = thaiIdOk(d); m.textContent = ok ? '✓ เลขถูกต้อง' : '✗ เลขไม่ถูกต้อง ตรวจสอบอีกครั้ง'; m.className = 'idmsg ' + (ok ? 'ok' : 'bad'); }
+  });
+  $('goSign').addEventListener('click', function () { $('signBox').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+  new IntersectionObserver(function (en) { $('dock').classList.toggle('hidden', en[0].isIntersecting || $('vDoc').classList.contains('hidden')); }).observe($('signBox'));
+
+  document.querySelectorAll('input[name=role]').forEach(function (r) {
+    r.addEventListener('change', function () { $('relBox').classList.toggle('hidden', r.value === 'self' && r.checked); });
+  });
+
+  /* ---------- ช่องลายเซ็น ---------- */
+  var pad = $('pad'), ctx = pad.getContext('2d'), drawing = false, ink = false, last = null, strokes = 0;
+  function sizeCanvas() {
+    var rect = pad.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    pad.width = Math.round(rect.width * dpr); pad.height = Math.round(rect.height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.lineWidth = 2.8; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#10201E';
+    ink = false; strokes = 0; $('sigHint').classList.remove('hidden');
+  }
+  function pt(e) { var rect = pad.getBoundingClientRect(); return { x: e.clientX - rect.left, y: e.clientY - rect.top }; }
+  pad.addEventListener('pointerdown', function (e) {
+    e.preventDefault(); pad.setPointerCapture(e.pointerId); drawing = true; last = pt(e); strokes++;
+    ctx.beginPath(); ctx.arc(last.x, last.y, 1.4, 0, 6.3); ctx.fillStyle = '#10201E'; ctx.fill();
+    ink = true; $('sigHint').classList.add('hidden'); $('subErr').classList.add('hidden');
+  });
+  pad.addEventListener('pointermove', function (e) {
+    if (!drawing) return; e.preventDefault();
+    var p = pt(e); ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.stroke(); last = p;
+  });
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (ev) { pad.addEventListener(ev, function () { drawing = false; }); });
+  $('sigClear').addEventListener('click', sizeCanvas);
+  window.addEventListener('resize', function () { if (!ink && !$('vDoc').classList.contains('hidden')) sizeCanvas(); });
+
+  /* ---------- ส่ง ---------- */
+  $('submitBtn').addEventListener('click', function () {
+    if (busy) return;
+    var err = $('subErr');
+    function fail(m, focusEl) { err.textContent = m; err.classList.remove('hidden'); (focusEl || err).scrollIntoView({ block: 'center', behavior: 'smooth' }); if (focusEl && focusEl.focus) focusEl.focus(); }
+    err.classList.add('hidden');
+    var emp = S_KIND === 'employment';
+    var role = emp ? 'employee' : document.querySelector('input[name=role]:checked').value;
+    var name = $('nameIn').value.trim(), rel = $('relIn').value.trim();
+    if (!emp && role === 'representative' && !rel) return fail('กรุณาระบุความสัมพันธ์กับผู้รับบริการ', $('relIn'));
+    if (name.length < 2) return fail('กรุณาพิมพ์ชื่อ-นามสกุลผู้ลงนาม', $('nameIn'));
+    var idNo = $('idIn').value.replace(/\D/g, '');
+    if (S_ASKID && !thaiIdOk(idNo)) return fail('เลขประจำตัวประชาชนไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง', $('idIn'));
+    var extra = null;
+    if (emp) {
+      extra = { address: $('exAddr').value.trim(), phone: $('exPhone').value.trim(), line: $('exLine').value.trim(), nationality: $('exNat').value.trim(),
+        bankName: $('exBank').value.trim(), bankBranch: $('exBranch').value.trim(), accountName: $('exAccName').value.trim(), accountNo: $('exAccNo').value.trim() };
+      if (extra.address.length < 8) return fail('กรุณากรอกที่อยู่ให้ครบ', $('exAddr'));
+      if (extra.phone.replace(/\D/g, '').length < 9) return fail('กรุณากรอกเบอร์โทรศัพท์', $('exPhone'));
+    }
+    if (!ink) return fail('กรุณาเซ็นชื่อบนเส้นในช่องลายเซ็น');
+    if (!$('agree').checked) return fail('กรุณาติ๊กยืนยันว่าได้อ่านและตกลงตามเอกสาร', $('agree'));
+    if (!$('pdpa').checked) return fail(emp ? 'กรุณาติ๊กรับทราบประกาศความเป็นส่วนตัว' : 'กรุณาติ๊กให้ความยินยอมเรื่องข้อมูลส่วนบุคคลและข้อมูลสุขภาพ', $('pdpa'));
+    busy = true; $('submitBtn').disabled = true; $('submitBtn').textContent = 'กำลังบันทึก…';
+    api('sign.submit', { token: token, code: code, name: name, role: role, relation: role === 'representative' ? rel : '', idNo: idNo, extra: extra, profileConsent: emp && $('pcIn').checked, agree: true, pdpa: true, signature: pad.toDataURL('image/png'), hash: hash, ua: navigator.userAgent })
+      .then(function (r) {
+        try { sessionStorage.removeItem('sign_t'); } catch (e) {}
+        $('doneNo').textContent = r.no;
+        if (r.pdfUrl) { $('donePdf').href = r.pdfUrl; $('donePdf').classList.remove('hidden'); }
+        show('vDone');
+      })
+      .catch(function (e) { fail(e.message); })
+      .then(function () { busy = false; $('submitBtn').disabled = false; $('submitBtn').textContent = 'ลงนามเอกสาร'; });
+  });
+
+  load();
+})();
+</script>
+</body>
+</html>
